@@ -1865,7 +1865,7 @@
 
                 cloudinaryPreset: 'cupones_preestablecidos',
 
-                cloudinaryCloudName: 'decztju9',
+                cloudinaryCloudName: 'decztjlu9',
 
 
                 // =====================================================
@@ -3371,148 +3371,104 @@
                 // CLOUDINARY
                 // =====================================================
 
-                async subirCloudinary(e) {
+             async subirCloudinary(e) {
 
-                    const file =
-                        e.target.files[0];
+    const file = e.target.files[0];
 
+    if (!file) return;
 
-                    if (!file) return;
+    this.subiendo = true;
 
+    const formData = new FormData();
 
-                    this.subiendo =
-                        true;
+    formData.append('file', file);
+    formData.append('upload_preset', this.cloudinaryPreset);
 
+    try {
 
-                    const formData =
-                        new FormData();
+        console.log('Cloudinary Cloud Name:', this.cloudinaryCloudName);
+        console.log('Cloudinary Upload Preset:', this.cloudinaryPreset);
+        console.log('Archivo:', file.name, file.type, file.size);
 
+        const url =
+            `https://api.cloudinary.com/v1_1/${this.cloudinaryCloudName}/image/upload`;
 
-                    formData.append(
-                        'file',
-                        file
-                    );
+        console.log('URL:', url);
 
+        const res = await fetch(url, {
+            method: 'POST',
+            body: formData
+        });
 
-                    formData.append(
-                        'upload_preset',
-                        this.cloudinaryPreset
-                    );
+        console.log('HTTP Status:', res.status);
+        console.log('HTTP OK:', res.ok);
 
+        const text = await res.text();
 
-                    try {
+        console.log('Respuesta RAW de Cloudinary:', text);
 
-                        const res =
-                            await fetch(
+        let data;
 
-                                `https://api.cloudinary.com/v1_1/${this.cloudinaryCloudName}/image/upload`,
+        try {
+            data = JSON.parse(text);
+        } catch {
+            data = {};
+        }
 
-                                {
+        console.log('Respuesta JSON:', data);
 
-                                    method:
-                                        'POST',
+        if (!res.ok) {
 
-                                    body:
-                                        formData
+            const mensaje =
+                data?.error?.message ||
+                text ||
+                `HTTP ${res.status}`;
 
-                                }
+            throw new Error(mensaje);
+        }
 
-                            );
+        if (data.secure_url) {
 
+            this.formProducto.imagenUrl =
+                data.secure_url;
 
-                        if (!res.ok)
-                            throw new Error(
-                                'Carga fallida'
-                            );
+            this.notificarToast(
+                'success',
+                'Imagen cargada con éxito'
+            );
 
+        } else {
 
-                        const data =
-                            await res.json();
-
-
-                        if (
-                            data.secure_url
-                        ) {
-
-                            this.formProducto.imagenUrl =
-                                data.secure_url;
-
-
-                            this.notificarToast(
-                                'success',
-                                'Imagen cargada con éxito'
-                            );
-
-                        }
-
-                    }
-
-                    catch (err) {
-
-                        console.error(
-                            err
-                        );
-
-
-                        Swal.fire(
-                            'Error',
-                            'No se pudo subir la imagen a Cloudinary.',
-                            'error'
-                        );
-
-                    }
-
-                    finally {
-
-                        this.subiendo =
-                            false;
-
-
-                        e.target.value =
-                            '';
-
-                    }
-
-                },
-
-
-                // =====================================================
-                // TOAST
-                // =====================================================
-
-                notificarToast(
-                    icon,
-                    title
-                ) {
-
-                    Swal.fire({
-
-                        toast:
-                            true,
-
-                        position:
-                            'top-end',
-
-                        icon:
-                            icon,
-
-                        title:
-                            title,
-
-                        showConfirmButton:
-                            false,
-
-                        timer:
-                            1800
-
-                    });
-
-                }
-
-            }
+            throw new Error(
+                'Cloudinary no devolvió una URL de imagen.'
+            );
 
         }
 
+    } catch (err) {
+
+        console.error(
+            'ERROR REAL DE CLOUDINARY:',
+            err
+        );
+
+        Swal.fire(
+            'Error de Cloudinary',
+            err.message ||
+            'No se pudo subir la imagen.',
+            'error'
+        );
+
+    } finally {
+
+        this.subiendo = false;
+
+        e.target.value = '';
+
+    }
+}
+}
+}
     </script>
 
 </body>
