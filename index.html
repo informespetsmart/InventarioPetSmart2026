@@ -3371,106 +3371,171 @@
                 // CLOUDINARY
                 // =====================================================
 
-             async subirCloudinary(e) {
+            async subirCloudinary(e) {
 
-    const file = e.target.files[0];
+                    const file = e.target.files[0];
 
-    if (!file) return;
+                    if (!file) return;
 
-    this.subiendo = true;
+                    this.subiendo = true;
 
-    const formData = new FormData();
+                    const formData = new FormData();
 
-    formData.append('file', file);
-    formData.append('upload_preset', this.cloudinaryPreset);
+                    formData.append('file', file);
+                    formData.append('upload_preset', this.cloudinaryPreset);
 
-    try {
+                    try {
 
-        console.log('Cloudinary Cloud Name:', this.cloudinaryCloudName);
-        console.log('Cloudinary Upload Preset:', this.cloudinaryPreset);
-        console.log('Archivo:', file.name, file.type, file.size);
+                        console.log(
+                            'Cloudinary Cloud Name:',
+                            this.cloudinaryCloudName
+                        );
 
-        const url =
-            `https://api.cloudinary.com/v1_1/${this.cloudinaryCloudName}/image/upload`;
+                        console.log(
+                            'Cloudinary Upload Preset:',
+                            this.cloudinaryPreset
+                        );
 
-        console.log('URL:', url);
+                        console.log(
+                            'Archivo:',
+                            file.name,
+                            file.type,
+                            file.size
+                        );
 
-        const res = await fetch(url, {
-            method: 'POST',
-            body: formData
-        });
+                        const url =
+                            `https://api.cloudinary.com/v1_1/${this.cloudinaryCloudName}/image/upload`;
 
-        console.log('HTTP Status:', res.status);
-        console.log('HTTP OK:', res.ok);
+                        console.log('URL:', url);
 
-        const text = await res.text();
+                        const res = await fetch(url, {
+                            method: 'POST',
+                            body: formData
+                        });
 
-        console.log('Respuesta RAW de Cloudinary:', text);
+                        console.log(
+                            'HTTP Status:',
+                            res.status
+                        );
 
-        let data;
+                        console.log(
+                            'HTTP OK:',
+                            res.ok
+                        );
 
-        try {
-            data = JSON.parse(text);
-        } catch {
-            data = {};
+                        const text = await res.text();
+
+                        console.log(
+                            'Respuesta RAW de Cloudinary:',
+                            text
+                        );
+
+                        let data;
+
+                        try {
+
+                            data = JSON.parse(text);
+
+                        } catch {
+
+                            data = {};
+
+                        }
+
+                        console.log(
+                            'Respuesta JSON:',
+                            data
+                        );
+
+                        if (!res.ok) {
+
+                            const mensaje =
+                                data?.error?.message ||
+                                text ||
+                                `HTTP ${res.status}`;
+
+                            throw new Error(mensaje);
+
+                        }
+
+                        if (data.secure_url) {
+
+                            this.formProducto.imagenUrl =
+                                data.secure_url;
+
+                            this.notificarToast(
+                                'success',
+                                'Imagen cargada con éxito'
+                            );
+
+                        } else {
+
+                            throw new Error(
+                                'Cloudinary no devolvió una URL de imagen.'
+                            );
+
+                        }
+
+                    }
+
+                    catch (err) {
+
+                        console.error(
+                            'ERROR REAL DE CLOUDINARY:',
+                            err
+                        );
+
+                        Swal.fire(
+                            'Error de Cloudinary',
+                            err.message ||
+                            'No se pudo subir la imagen.',
+                            'error'
+                        );
+
+                    }
+
+                    finally {
+
+                        this.subiendo = false;
+
+                        e.target.value = '';
+
+                    }
+
+                },
+
+
+                // =====================================================
+                // SWEETALERT TOAST
+                // =====================================================
+
+                notificarToast(icon, title) {
+
+                    Swal.fire({
+
+                        toast: true,
+
+                        position: 'top-end',
+
+                        icon: icon,
+
+                        title: title,
+
+                        showConfirmButton: false,
+
+                        timer: 1800,
+
+                        timerProgressBar: true
+
+                    });
+
+                }
+
+            }
+
         }
 
-        console.log('Respuesta JSON:', data);
-
-        if (!res.ok) {
-
-            const mensaje =
-                data?.error?.message ||
-                text ||
-                `HTTP ${res.status}`;
-
-            throw new Error(mensaje);
-        }
-
-        if (data.secure_url) {
-
-            this.formProducto.imagenUrl =
-                data.secure_url;
-
-            this.notificarToast(
-                'success',
-                'Imagen cargada con éxito'
-            );
-
-        } else {
-
-            throw new Error(
-                'Cloudinary no devolvió una URL de imagen.'
-            );
-
-        }
-
-    } catch (err) {
-
-        console.error(
-            'ERROR REAL DE CLOUDINARY:',
-            err
-        );
-
-        Swal.fire(
-            'Error de Cloudinary',
-            err.message ||
-            'No se pudo subir la imagen.',
-            'error'
-        );
-
-    } finally {
-
-        this.subiendo = false;
-
-        e.target.value = '';
-
-    }
-}
-}
-}
     </script>
-
 </body>
 
 </html>
