@@ -74,6 +74,15 @@
 
 
     <!-- =========================================================
+         QR CODE
+    ========================================================== -->
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+
+
+    <!-- =========================================================
          ESTILOS
     ========================================================== -->
 
@@ -113,6 +122,62 @@
             height: auto;
             object-fit: contain;
             display: block;
+        }
+
+        .sku-label-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .sku-label {
+            min-height: 150px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 10px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            break-inside: avoid;
+        }
+
+        .sku-label-qr {
+            width: 82px;
+            height: 82px;
+            flex: 0 0 82px;
+        }
+
+        .sku-label-qr img, .sku-label-qr canvas {
+            width: 82px !important;
+            height: 82px !important;
+        }
+
+        @media print {
+            body * { visibility: hidden !important; }
+            #printSkuArea, #printSkuArea * { visibility: visible !important; }
+            #printSkuArea {
+                position: absolute !important;
+                inset: 0 !important;
+                width: 100% !important;
+                background: white !important;
+                padding: 10mm !important;
+            }
+            .print-sku-actions { display: none !important; }
+            .sku-label-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5mm;
+            }
+            .sku-label {
+                border: 1px solid #000;
+                border-radius: 0;
+                min-height: 32mm;
+                padding: 3mm;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sku-label-grid { grid-template-columns: 1fr; }
         }
 
     </style>
@@ -363,6 +428,15 @@
                     </template>
 
 
+                </button>
+
+
+                <button
+                    @click="abrirPlantillaSKU()"
+                    class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-lg flex items-center gap-2"
+                    title="Crear plantilla imprimible de etiquetas SKU">
+                    <i class="fa-solid fa-tags"></i>
+                    Etiquetas SKU
                 </button>
 
 
@@ -738,101 +812,6 @@
 
             </div>
 
-
-            <!-- DISPONIBLES -->
-
-            <div
-                class="
-                    bg-white
-                    dark:bg-slate-800/80
-                    p-6
-                    rounded-2xl
-                    border
-                    border-slate-200
-                    dark:border-slate-700
-                    shadow-lg
-                ">
-
-                <div
-                    class="
-                        flex
-                        items-center
-                        justify-between
-                        mb-2
-                    ">
-
-
-                    <span
-                        class="
-                            text-xs
-                            font-bold
-                            uppercase
-                            tracking-wider
-                            text-slate-500
-                            dark:text-slate-400
-                        ">
-
-                        Disponibles
-
-                    </span>
-
-
-                    <span
-                        class="
-                            p-2
-                            bg-blue-500/10
-                            text-blue-600
-                            dark:text-blue-400
-                            rounded-lg
-                        ">
-
-                        <i
-                            class="
-                                fa-solid
-                                fa-box
-                                text-xl
-                            ">
-                        </i>
-
-                    </span>
-
-
-                </div>
-
-
-                <div
-                    class="
-                        text-2xl
-                        font-black
-                        text-slate-800
-                        dark:text-white
-                    ">
-
-                    <span
-                        x-text="totalUnidades">
-                    </span>
-
-                    uds.
-
-                </div>
-
-
-                <div
-                    class="
-                        text-[11px]
-                        text-slate-500
-                        dark:text-slate-400
-                        mt-2
-                    ">
-
-                    Unidades actualmente disponibles.
-
-                </div>
-
-
-            </div>
-
-
             <!-- VENTAS -->
 
             <div
@@ -929,7 +908,7 @@
 
 
         <!-- =====================================================
-             SEGUNDO RESUMEN
+             INDICADORES DE VENTAS
         ====================================================== -->
 
         <div
@@ -940,150 +919,52 @@
                 gap-4
             ">
 
-
-            <div
-                class="
-                    bg-white
-                    dark:bg-slate-800
-                    p-5
-                    rounded-2xl
-                    border
-                    border-slate-200
-                    dark:border-slate-700
-                ">
-
-                <div
-                    class="
-                        text-xs
-                        text-slate-500
-                        dark:text-slate-400
-                        font-bold
-                        uppercase
-                    ">
-
-                    Ventas del período
-
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-20 h-20 rounded-full bg-blue-500/10 -translate-y-6 translate-x-6"></div>
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider">Perfil Facebook líder</div>
+                        <div class="text-xs text-slate-400 mt-0.5">En el período seleccionado</div>
+                    </div>
                 </div>
-
-
-                <div
-                    class="
-                        text-xl
-                        font-black
-                        text-blue-600
-                        dark:text-blue-400
-                        mt-1
-                    ">
-
-                    S/
-
-                    <span
-                        x-text="
-                            formatMonto(
-                                ventasFiltradas
-                            )
-                        ">
-                    </span>
-
-                </div>
-
+                <div class="text-lg font-black text-slate-800 dark:text-white truncate" x-text="perfilFacebookMasVendido.nombre"></div>
+                <div class="text-xs font-bold text-blue-600 dark:text-blue-400 mt-1" x-text="perfilFacebookMasVendido.cantidad + (perfilFacebookMasVendido.cantidad === 1 ? ' venta' : ' ventas')"></div>
             </div>
 
-
-            <div
-                class="
-                    bg-white
-                    dark:bg-slate-800
-                    p-5
-                    rounded-2xl
-                    border
-                    border-slate-200
-                    dark:border-slate-700
-                ">
-
-                <div
-                    class="
-                        text-xs
-                        text-slate-500
-                        dark:text-slate-400
-                        font-bold
-                        uppercase
-                    ">
-
-                    Costo vendido
-
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-20 h-20 rounded-full bg-emerald-500/10 -translate-y-6 translate-x-6"></div>
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider">Producto más vendido</div>
+                        <div class="text-xs text-slate-400 mt-0.5">Por unidades vendidas</div>
+                    </div>
                 </div>
-
-
-                <div
-                    class="
-                        text-xl
-                        font-black
-                        text-amber-600
-                        dark:text-amber-400
-                        mt-1
-                    ">
-
-                    S/
-
-                    <span
-                        x-text="
-                            formatMonto(
-                                costoVendidoFiltrado
-                            )
-                        ">
-                    </span>
-
-                </div>
-
+                <div class="text-lg font-black text-slate-800 dark:text-white truncate" x-text="productoMasVendido.nombre"></div>
+                <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-1" x-text="productoMasVendido.cantidad + (productoMasVendido.cantidad === 1 ? ' unidad' : ' unidades')"></div>
             </div>
 
-
-            <div
-                class="
-                    bg-white
-                    dark:bg-slate-800
-                    p-5
-                    rounded-2xl
-                    border
-                    border-slate-200
-                    dark:border-slate-700
-                ">
-
-                <div
-                    class="
-                        text-xs
-                        text-slate-500
-                        dark:text-slate-400
-                        font-bold
-                        uppercase
-                    ">
-
-                    Productos por reponer
-
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-20 h-20 rounded-full bg-rose-500/10 -translate-y-6 translate-x-6"></div>
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider">Distrito líder</div>
+                        <div class="text-xs text-slate-400 mt-0.5">Por cantidad de ventas</div>
+                    </div>
                 </div>
-
-
-                <div
-                    class="
-                        text-xl
-                        font-black
-                        text-rose-600
-                        dark:text-rose-400
-                        mt-1
-                    ">
-
-                    <span
-                        x-text="productosBajoStock">
-                    </span>
-
-                </div>
-
+                <div class="text-lg font-black text-slate-800 dark:text-white truncate" x-text="distritoMasVendido.nombre"></div>
+                <div class="text-xs font-bold text-rose-600 dark:text-rose-400 mt-1" x-text="distritoMasVendido.cantidad + (distritoMasVendido.cantidad === 1 ? ' venta' : ' ventas')"></div>
             </div>
-
 
         </div>
-
 
         <!-- =====================================================
              INVENTARIO
@@ -1458,21 +1339,13 @@
 
 
                             <th
-                                class="py-3 px-4">
-
-                                Categoría
-
-                            </th>
-
-
-                            <th
                                 class="
                                     py-3
                                     px-4
                                     text-center
                                 ">
 
-                                Talla / Color
+                                Talla
 
                             </th>
 
@@ -1593,8 +1466,8 @@
 
                                     <div
                                         class="
-                                            w-12
-                                            h-12
+                                            w-16
+                                            h-16
                                             rounded-xl
                                             bg-slate-200
                                             dark:bg-slate-700
@@ -1717,51 +1590,19 @@
                                     </template>
 
 
-                                    <div
-                                        class="
-                                            text-[11px]
-                                            text-slate-500
-                                            dark:text-slate-400
-                                            mt-1
-                                        ">
-
-                                        SKU:
-
-                                        <span
-                                            x-text="
-                                                item.sku ||
-                                                'N/A'
-                                            ">
-                                        </span>
-
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <div class="text-[11px] text-slate-500 dark:text-slate-400 font-mono truncate">
+                                            SKU: <span x-text="item.sku || 'N/A'"></span>
+                                        </div>
+                                        <template x-if="item.sku">
+                                            <button
+                                                @click.stop="abrirQR(item)"
+                                                class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 text-[10px] font-black shrink-0"
+                                                title="Generar QR del producto">
+                                                <i class="fa-solid fa-qrcode"></i> QR
+                                            </button>
+                                        </template>
                                     </div>
-
-
-                                </td>
-
-
-                                <!-- CATEGORIA -->
-
-                                <td
-                                    class="py-3 px-4">
-
-
-                                    <span
-                                        class="
-                                            px-2.5
-                                            py-1
-                                            text-xs
-                                            font-semibold
-                                            rounded-full
-                                            bg-slate-200
-                                            dark:bg-slate-700
-                                            text-slate-700
-                                            dark:text-slate-300
-                                        "
-                                        x-text="
-                                            item.categoria
-                                        ">
-                                    </span>
 
 
                                 </td>
@@ -1793,42 +1634,6 @@
                                             'Única'
                                         ">
                                     </span>
-
-
-                                    <template
-                                        x-if="
-                                            item.color
-                                        ">
-
-
-                                        <div
-                                            class="
-                                                text-[10px]
-                                                text-slate-500
-                                                dark:text-slate-400
-                                                mt-1
-                                            ">
-
-
-                                            <i
-                                                class="
-                                                    fa-solid
-                                                    fa-palette
-                                                ">
-                                            </i>
-
-
-                                            <span
-                                                x-text="
-                                                    item.color
-                                                ">
-                                            </span>
-
-
-                                        </div>
-
-
-                                    </template>
 
 
                                 </td>
@@ -2328,46 +2133,16 @@
                                         </template>
 
 
-                                        <template
-                                            x-if="
-                                                item.estado ===
-                                                'vendido'
-                                            ">
-
-
-                                            <button
-
-                                                @click="
-                                                    verVenta(
-                                                        item
-                                                    )
-                                                "
-
-                                                class="
-                                                    p-1.5
-                                                    bg-blue-500/10
-                                                    text-blue-600
-                                                    dark:text-blue-400
-                                                    hover:bg-blue-500/20
-                                                    rounded-lg
-                                                "
-
-                                                title="Ver venta">
-
-
-                                                <i
-                                                    class="
-                                                        fa-solid
-                                                        fa-eye
-                                                    ">
-                                                </i>
-
-
-                                            </button>
-
-
+                                        <template x-if="item.estado === 'vendido'">
+                                            <div class="flex items-center justify-center gap-1.5">
+                                                <button @click="verVenta(item)" class="p-1.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 rounded-lg" title="Ver venta">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </button>
+                                                <button @click="editarVenta(item)" class="p-1.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 rounded-lg" title="Editar venta">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </button>
+                                            </div>
                                         </template>
-
 
                                         <template
                                             x-if="
@@ -2676,115 +2451,6 @@
                     "
                     class="space-y-4">
 
-
-                    <!-- =================================================
-                         PRODUCTO NUEVO
-                    ================================================== -->
-
-                    <div
-                        class="
-                            bg-slate-50
-                            dark:bg-slate-900/50
-                            p-3
-                            rounded-xl
-                            border
-                            border-slate-200
-                            dark:border-slate-700
-                            flex
-                            items-center
-                            justify-between
-                        ">
-
-
-                        <div>
-
-                            <span
-                                class="
-                                    block
-                                    text-sm
-                                    font-bold
-                                ">
-
-                                <i
-                                    class="
-                                        fa-solid
-                                        fa-boxes-stacked
-                                        text-amber-500
-                                        mr-2
-                                    ">
-                                </i>
-
-                                Unidad nueva / sin venta
-
-                            </span>
-
-
-                            <span
-                                class="
-                                    text-[11px]
-                                    text-slate-500
-                                    dark:text-slate-400
-                                    mt-0.5
-                                    block
-                                ">
-
-                                Se registra como una unidad individual disponible.
-
-                            </span>
-
-
-                        </div>
-
-
-                        <label
-                            class="
-                                relative
-                                inline-flex
-                                items-center
-                                cursor-pointer
-                            ">
-
-
-                            <input
-
-                                type="checkbox"
-
-                                x-model="
-                                    formProducto.esNuevo
-                                "
-
-                                class="sr-only peer">
-
-
-                            <div
-                                class="
-                                    w-11
-                                    h-6
-                                    bg-slate-300
-                                    dark:bg-slate-600
-                                    rounded-full
-                                    peer-checked:after:translate-x-full
-                                    after:content-['']
-                                    after:absolute
-                                    after:top-[2px]
-                                    after:left-[2px]
-                                    after:bg-white
-                                    after:border
-                                    after:rounded-full
-                                    after:h-5
-                                    after:w-5
-                                    after:transition-all
-                                    peer-checked:bg-emerald-500
-                                ">
-                            </div>
-
-
-                        </label>
-
-
-                    </div>
-
-
                     <!-- =================================================
                          NOMBRE / SKU
                     ================================================== -->
@@ -2860,27 +2526,16 @@
                             </label>
 
 
-                            <input
-
-                                type="text"
-
-                                x-model="
-                                    formProducto.sku
-                                "
-
-                                placeholder="Automático"
-
-                                class="
-                                    w-full
-                                    bg-slate-100
-                                    dark:bg-slate-900
-                                    border
-                                    border-slate-300
-                                    dark:border-slate-700
-                                    rounded-xl
-                                    px-4
-                                    py-2
-                                ">
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    x-model="formProducto.sku"
+                                    readonly
+                                    placeholder="Se generará al guardar"
+                                    class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 pr-10 font-mono text-xs font-black tracking-wide cursor-not-allowed">
+                                <i class="fa-solid fa-wand-magic-sparkles absolute right-3 top-3 text-indigo-500"></i>
+                            </div>
+                            <div class="text-[10px] text-slate-400 mt-1">Generado automáticamente y único. No se edita manualmente.</div>
 
 
                         </div>
@@ -2918,7 +2573,7 @@
                             "
 
                             placeholder="
-                                Ej: Puerta metálica, color azul...
+                                Ej: Puerta metálica, diseño, material o característica especial...
                             "
 
                             class="
@@ -2938,330 +2593,6 @@
                     </div>
 
 
-                    <!-- =================================================
-                         COLOR
-                    ================================================== -->
-
-                    <div>
-
-
-                        <label
-                            class="
-                                block
-                                text-xs
-                                font-semibold
-                                mb-1
-                            ">
-
-                            Color
-
-                        </label>
-
-
-                        <input
-
-                            type="text"
-
-                            x-model="
-                                formProducto.color
-                            "
-
-                            placeholder="
-                                Ej: Azul pastel
-                            "
-
-                            class="
-                                w-full
-                                bg-slate-100
-                                dark:bg-slate-900
-                                border
-                                border-slate-300
-                                dark:border-slate-700
-                                rounded-xl
-                                px-4
-                                py-2
-                                text-xs
-                            ">
-
-
-                    </div>
-
-
-                    <!-- =================================================
-                         CANAL ORIGINARIO
-                    ================================================== -->
-
-                    <div>
-
-
-                        <label
-                            class="
-                                block
-                                text-xs
-                                font-bold
-                                mb-1
-                                text-amber-600
-                                dark:text-amber-400
-                            ">
-
-                            Canal de Venta Originario
-
-                        </label>
-
-
-                        <select
-
-                            x-model="
-                                formProducto.canalVenta
-                            "
-
-                            :disabled="
-                                formProducto.esNuevo
-                            "
-
-                            class="
-                                w-full
-                                border
-                                rounded-xl
-                                px-3
-                                py-2.5
-                                text-xs
-                                font-bold
-                            "
-
-                            :class="
-
-                                formProducto.esNuevo
-
-                                ?
-
-                                'bg-slate-200 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-400'
-
-                                :
-
-                                'bg-slate-100 dark:bg-slate-900 border-amber-500 text-slate-800 dark:text-slate-100'
-
-                            ">
-
-
-                            <option value="WhatsApp">
-                                WhatsApp
-                            </option>
-
-
-                            <option value="Facebook">
-                                Facebook
-                            </option>
-
-
-                            <option value="Rappi">
-                                Rappi
-                            </option>
-
-
-                            <option value="Falabella">
-                                Seller Falabella
-                            </option>
-
-
-                        </select>
-
-
-                        <div
-                            x-show="
-                                formProducto.esNuevo
-                            "
-                            class="
-                                text-[10px]
-                                text-slate-400
-                                mt-1
-                            ">
-
-                            Este campo se habilitará al desactivar
-                            “Unidad nueva / sin venta”.
-
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- =================================================
-                         FALABELLA
-                    ================================================== -->
-
-                    <template
-                        x-if="
-                            formProducto.canalVenta ===
-                            'Falabella'
-                            &&
-                            !formProducto.esNuevo
-                        ">
-
-
-                        <div
-                            class="
-                                p-4
-                                bg-purple-500/10
-                                border
-                                border-purple-500/30
-                                rounded-xl
-                                space-y-4
-                            ">
-
-
-                            <div
-                                class="
-                                    text-xs
-                                    font-black
-                                    text-purple-700
-                                    dark:text-purple-300
-                                ">
-
-                                <i
-                                    class="
-                                        fa-solid
-                                        fa-store
-                                        mr-1
-                                    ">
-                                </i>
-
-                                Costos Seller Falabella
-
-                            </div>
-
-
-                            <div
-                                class="
-                                    grid
-                                    grid-cols-2
-                                    gap-3
-                                ">
-
-
-                                <!-- COMISION -->
-
-                                <div>
-
-
-                                    <label
-                                        class="
-                                            block
-                                            text-[11px]
-                                            font-bold
-                                            text-purple-600
-                                            dark:text-purple-400
-                                            mb-1
-                                        ">
-
-                                        Comisión Seller (S/)
-
-                                    </label>
-
-
-                                    <input
-
-                                        type="number"
-
-                                        step="0.01"
-
-                                        min="0"
-
-                                        x-model.number="
-                                            formProducto.comision
-                                        "
-
-                                        placeholder="0.00"
-
-                                        class="
-                                            w-full
-                                            bg-slate-100
-                                            dark:bg-slate-900
-                                            border
-                                            border-purple-300
-                                            rounded-lg
-                                            px-3
-                                            py-2
-                                            text-xs
-                                            font-bold
-                                        ">
-
-
-                                </div>
-
-
-                                <!-- LOGISTICA -->
-
-                                <div>
-
-
-                                    <label
-                                        class="
-                                            block
-                                            text-[11px]
-                                            font-bold
-                                            text-purple-600
-                                            dark:text-purple-400
-                                            mb-1
-                                        ">
-
-                                        Conf. Logístico (S/)
-
-                                    </label>
-
-
-                                    <input
-
-                                        type="number"
-
-                                        step="0.01"
-
-                                        min="0"
-
-                                        x-model.number="
-                                            formProducto.confLogistico
-                                        "
-
-                                        placeholder="0.00"
-
-                                        class="
-                                            w-full
-                                            bg-slate-100
-                                            dark:bg-slate-900
-                                            border
-                                            border-purple-300
-                                            rounded-lg
-                                            px-3
-                                            py-2
-                                            text-xs
-                                            font-bold
-                                        ">
-
-
-                                </div>
-
-
-                            </div>
-
-
-                            <div
-                                class="
-                                    text-[10px]
-                                    text-purple-600
-                                    dark:text-purple-300
-                                ">
-
-                                Estos costos se descontarán
-                                automáticamente al calcular la ganancia
-                                de una venta Seller Falabella.
-
-                            </div>
-
-
-                        </div>
-
-
-                    </template>
 
 
                     <!-- =================================================
@@ -3742,6 +3073,19 @@
 
 
                     <!-- =================================================
+                         DATOS DEL CLIENTE (EDITAR VENTA)
+                    ================================================== -->
+                    <div x-show="editandoId && formProducto.estado === 'vendido'" x-transition class="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/30 space-y-4">
+                        <div><div class="text-xs font-black text-blue-700 dark:text-blue-300 flex items-center gap-2"><i class="fa-solid fa-user-pen"></i> Datos de la venta</div><div class="text-[10px] text-slate-400 mt-1">Puedes corregir los datos del cliente de una venta ya registrada.</div></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div><label class="block text-[11px] font-bold mb-1">Cliente</label><input type="text" x-model="formProducto.clienteNombre" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm"></div>
+                            <div><label class="block text-[11px] font-bold mb-1">Teléfono</label><input type="text" x-model="formProducto.clienteTelefono" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm"></div>
+                        </div>
+                        <div><label class="block text-[11px] font-bold mb-1">Distrito</label><input type="text" x-model="formProducto.distrito" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm"></div>
+                    </div>
+
+
+                    <!-- =================================================
                          BOTONES
                     ================================================== -->
 
@@ -3832,1092 +3176,198 @@
         ====================================================== -->
 
         <div
-
             x-show="modalVenta"
-
             x-transition.opacity
-
-            class="
-                fixed
-                inset-0
-                bg-black/80
-                backdrop-blur-sm
-                flex
-                items-center
-                justify-center
-                p-4
-                z-50
-            "
-
+            class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50"
             style="display:none;">
 
+            <div class="bg-white dark:bg-slate-800 w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 max-h-[94vh] overflow-y-auto">
 
-            <div
-                class="
-                    bg-white
-                    dark:bg-slate-800
-                    w-full
-                    max-w-lg
-                    rounded-2xl
-                    p-6
-                    shadow-2xl
-                    border
-                    border-slate-200
-                    dark:border-slate-700
-                    max-h-[92vh]
-                    overflow-y-auto
-                ">
-
-
-                <div
-                    class="
-                        flex
-                        justify-between
-                        items-center
-                        mb-5
-                    ">
-
-
-                    <div>
-
-                        <h3
-                            class="
-                                text-xl
-                                font-black
-                                text-emerald-600
-                                dark:text-emerald-400
-                            ">
-
-
-                            <i
-                                class="
-                                    fa-solid
-                                    fa-cart-shopping
-                                    mr-2
-                                ">
-                            </i>
-
-                            Registrar Venta
-
-                        </h3>
-
-
-                        <p
-                            class="
-                                text-xs
-                                text-slate-500
-                                dark:text-slate-400
-                                mt-1
-                            ">
-
-                            Registra los datos de la venta
-                            de esta unidad.
-
-                        </p>
-
+                <div class="p-6 md:p-7 border-b border-slate-200 dark:border-slate-700">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-3">
+                                <i class="fa-solid fa-circle-check"></i> Nueva venta
+                            </div>
+                            <h3 class="text-2xl font-black text-slate-900 dark:text-white">Registrar Venta</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Completa los datos del cliente y confirma la operación.</p>
+                        </div>
+                        <button @click="modalVenta = false" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-400 hover:text-rose-500 flex items-center justify-center"><i class="fa-solid fa-xmark text-xl"></i></button>
                     </div>
 
-
-                    <button
-                        @click="
-                            modalVenta = false
-                        "
-                        class="
-                            text-slate-400
-                            hover:text-rose-500
-                        ">
-
-
-                        <i
-                            class="
-                                fa-solid
-                                fa-xmark
-                                text-xl
-                            ">
-                        </i>
-
-
-                    </button>
-
-
+                    <div x-show="productoVenta" class="mt-5 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-700 flex-shrink-0 flex items-center justify-center">
+                                <template x-if="productoVenta?.imagenUrl"><img :src="productoVenta.imagenUrl" :alt="productoVenta.nombre" class="w-full h-full object-cover"></template>
+                                <template x-if="!productoVenta?.imagenUrl"><i class="fa-solid fa-paw text-slate-400 text-xl"></i></template>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div class="font-black text-slate-900 dark:text-white truncate" x-text="productoVenta?.nombre"></div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">SKU: <span x-text="productoVenta?.sku || 'N/A'"></span> · Costo: S/ <span x-text="formatMonto(productoVenta?.costoUnitario)"></span></div>
+                            </div>
+                            <div class="text-right"><div class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Precio</div><div class="text-xl font-black text-emerald-600 dark:text-emerald-400">S/ <span x-text="formatMonto(productoVenta?.precioVenta)"></span></div></div>
+                        </div>
+                    </div>
                 </div>
 
-
-                <!-- PRODUCTO -->
-
-                <div
-                    x-show="productoVenta"
-                    class="
-                        bg-slate-100
-                        dark:bg-slate-900
-                        p-4
-                        rounded-xl
-                        mb-4
-                    ">
-
-
-                    <div
-                        class="
-                            font-bold
-                            text-slate-800
-                            dark:text-white
-                        "
-                        x-text="
-                            productoVenta?.nombre
-                        ">
+                <form @submit.prevent="confirmarVenta()" class="p-6 md:p-7 space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Cliente *</label><input type="text" x-model="ventaForm.clienteNombre" required placeholder="Nombre completo" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium"></div>
+                        <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Teléfono</label><input type="tel" x-model="ventaForm.clienteTelefono" placeholder="999 999 999" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium"></div>
                     </div>
 
+                    <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Distrito</label><input type="text" x-model="ventaForm.distrito" placeholder="Ej: Miraflores" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium"></div>
 
-                    <div
-                        class="
-                            text-xs
-                            text-slate-500
-                            dark:text-slate-400
-                            mt-1
-                        ">
-
-                        SKU:
-
-                        <span
-                            x-text="
-                                productoVenta?.sku ||
-                                'N/A'
-                            ">
-                        </span>
-
-                        ·
-
-                        Costo:
-
-                        S/
-
-                        <span
-                            x-text="
-                                formatMonto(
-                                    productoVenta?.costoUnitario
-                                )
-                            ">
-                        </span>
-
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Canal de Venta *</label><select x-model="ventaForm.canalVenta" required class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold"><option value="WhatsApp">WhatsApp</option><option value="Facebook">Facebook</option><option value="Rappi">Rappi</option><option value="Falabella">Seller Falabella</option></select></div>
+                        <div x-show="ventaForm.canalVenta === 'Facebook'" x-transition><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Perfil que realizó la venta *</label><select x-model="ventaForm.perfilFacebook" :required="ventaForm.canalVenta === 'Facebook'" class="w-full bg-blue-50 dark:bg-slate-900 border border-blue-300 dark:border-blue-700 rounded-xl px-4 py-3 text-sm font-bold"><option value="">Seleccionar perfil</option><option value="Rouss Huamani">Rouss Huamani</option><option value="Katy Avril">Katy Avril</option><option value="Simon Sebastian">Simon Sebastian</option><option value="Jennifer Medina">Jennifer Medina</option><option value="Rouss Mery">Rouss Mery</option></select></div>
                     </div>
 
-
-                    <template
-                        x-if="
-                            productoVenta?.canalVenta ===
-                            'Falabella'
-                        ">
-
-
-                        <div
-                            class="
-                                mt-3
-                                text-[11px]
-                                text-purple-600
-                                font-bold
-                            ">
-
-                            Seller Falabella
-
-                            · Comisión:
-
-                            S/
-
-                            <span
-                                x-text="
-                                    formatMonto(
-                                        productoVenta?.comision
-                                    )
-                                ">
-                            </span>
-
-                            · Logística:
-
-                            S/
-
-                            <span
-                                x-text="
-                                    formatMonto(
-                                        productoVenta?.confLogistico
-                                    )
-                                ">
-                            </span>
-
-                        </div>
-
-
-                    </template>
-
-
-                </div>
-
-
-                <form
-                    @submit.prevent="
-                        confirmarVenta()
-                    "
-                    class="space-y-4">
-
-
-                    <!-- CLIENTE -->
-
-                    <div>
-
-
-                        <label
-                            class="
-                                block
-                                text-xs
-                                font-bold
-                                text-slate-700
-                                dark:text-slate-300
-                                mb-1
-                            ">
-
-                            Cliente *
-
-                        </label>
-
-
-                        <input
-
-                            type="text"
-
-                            x-model="
-                                ventaForm.clienteNombre
-                            "
-
-                            required
-
-                            placeholder="
-                                Nombre del cliente
-                            "
-
-                            class="
-                                w-full
-                                bg-slate-100
-                                dark:bg-slate-900
-                                border
-                                border-slate-300
-                                dark:border-slate-700
-                                rounded-xl
-                                px-4
-                                py-2.5
-                                text-sm
-                            ">
-
-
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Medio de pago</label><div class="w-full bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800 rounded-xl px-4 py-3 text-sm font-black text-violet-700 dark:text-violet-300 flex items-center gap-2"><i class="fa-solid fa-mobile-screen-button"></i> Yape</div></div>
+                        <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Precio final</label><input type="number" step="0.01" x-model.number="ventaForm.precioVenta" readonly class="w-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-300 dark:border-emerald-800 rounded-xl px-4 py-3 text-sm font-black text-emerald-700 dark:text-emerald-300 cursor-not-allowed"><div class="text-[10px] text-slate-400 mt-1">Tomado automáticamente del precio del producto.</div></div>
+                        <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Fecha de venta *</label><input type="date" x-model="ventaForm.fechaVenta" required class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-3 text-sm"></div>
                     </div>
 
+                    <template x-if="ventaForm.canalVenta === 'Falabella'"><div class="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30 space-y-3"><div class="text-xs font-black text-purple-700 dark:text-purple-300">Costos Seller Falabella</div><div class="grid grid-cols-2 gap-3"><div><label class="block text-[11px] font-bold text-purple-600 dark:text-purple-400 mb-1">Comisión (S/)</label><input type="number" step="0.01" min="0" x-model.number="ventaForm.comision" class="w-full bg-slate-100 dark:bg-slate-900 border border-purple-300 rounded-lg px-3 py-2 text-xs font-bold"></div><div><label class="block text-[11px] font-bold text-purple-600 dark:text-purple-400 mb-1">Conf. Logístico (S/)</label><input type="number" step="0.01" min="0" x-model.number="ventaForm.confLogistico" class="w-full bg-slate-100 dark:bg-slate-900 border border-purple-300 rounded-lg px-3 py-2 text-xs font-bold"></div></div></div></template>
 
-                    <!-- TELEFONO -->
+                    <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Detalle de la venta</label><textarea x-model="ventaForm.observacion" rows="3" placeholder="Ej: Entrega coordinada, referencia del domicilio, horario acordado, confirmación de pago o cualquier información adicional." class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm resize-none"></textarea></div>
 
-                    <div>
+                    <div class="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden"><div class="bg-slate-900 text-white px-4 py-3 flex items-center gap-2"><i class="fa-solid fa-receipt text-emerald-400"></i><span class="text-xs font-black uppercase tracking-widest">Resumen de la operación</span></div><div class="p-4 bg-slate-50 dark:bg-slate-900/50 grid grid-cols-2 md:grid-cols-5 gap-4"><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Cliente</div><div class="text-sm font-black mt-1 truncate" x-text="ventaForm.clienteNombre || 'Pendiente'"></div></div><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Distrito</div><div class="text-sm font-black mt-1 truncate" x-text="ventaForm.distrito || 'No indicado'"></div></div><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Canal</div><div class="text-sm font-black mt-1" x-text="ventaForm.canalVenta"></div></div><div x-show="ventaForm.canalVenta === 'Facebook'"><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Perfil</div><div class="text-sm font-black mt-1 truncate" x-text="ventaForm.perfilFacebook || 'Pendiente'"></div></div><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Total · Yape</div><div class="text-lg font-black text-emerald-600 mt-0.5">S/ <span x-text="formatMonto(ventaForm.precioVenta)"></span></div></div></div></div>
 
+                    <div class="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-4 flex justify-between items-center"><div><div class="text-xs font-black">Ganancia real estimada</div><div class="text-[10px] text-slate-400 mt-1">Precio final − costo − comisión − logística.</div></div><div class="text-xl font-black text-blue-600 dark:text-blue-400">S/ <span x-text="formatMonto(calcularGananciaVenta())"></span></div></div>
 
-                        <label
-                            class="
-                                block
-                                text-xs
-                                font-bold
-                                text-slate-700
-                                dark:text-slate-300
-                                mb-1
-                            ">
-
-                            Teléfono del cliente
-
-                        </label>
-
-
-                        <input
-
-                            type="text"
-
-                            x-model="
-                                ventaForm.clienteTelefono
-                            "
-
-                            placeholder="
-                                Ej: 999 999 999
-                            "
-
-                            class="
-                                w-full
-                                bg-slate-100
-                                dark:bg-slate-900
-                                border
-                                border-slate-300
-                                dark:border-slate-700
-                                rounded-xl
-                                px-4
-                                py-2.5
-                                text-sm
-                            ">
-
-
-                    </div>
-
-
-                    <!-- CANAL / MEDIO -->
-
-                    <div
-                        class="
-                            grid
-                            grid-cols-2
-                            gap-3
-                        ">
-
-
-                        <div>
-
-
-                            <label
-                                class="
-                                    block
-                                    text-xs
-                                    font-bold
-                                    mb-1
-                                ">
-
-                                Canal de Venta *
-
-                            </label>
-
-
-                            <select
-
-                                x-model="
-                                    ventaForm.canalVenta
-                                "
-
-                                required
-
-                                class="
-                                    w-full
-                                    bg-slate-100
-                                    dark:bg-slate-900
-                                    border
-                                    border-slate-300
-                                    dark:border-slate-700
-                                    rounded-xl
-                                    px-3
-                                    py-2.5
-                                    text-sm
-                                    font-bold
-                                ">
-
-
-                                <option value="WhatsApp">
-                                    WhatsApp
-                                </option>
-
-                                <option value="Facebook">
-                                    Facebook
-                                </option>
-
-                                <option value="Rappi">
-                                    Rappi
-                                </option>
-
-                                <option value="Falabella">
-                                    Seller Falabella
-                                </option>
-
-
-                            </select>
-
-
-                        </div>
-
-
-                        <div>
-
-
-                            <label
-                                class="
-                                    block
-                                    text-xs
-                                    font-bold
-                                    mb-1
-                                ">
-
-                                Medio de Pago *
-
-                            </label>
-
-
-                            <select
-
-                                x-model="
-                                    ventaForm.medioPago
-                                "
-
-                                required
-
-                                class="
-                                    w-full
-                                    bg-slate-100
-                                    dark:bg-slate-900
-                                    border
-                                    border-slate-300
-                                    dark:border-slate-700
-                                    rounded-xl
-                                    px-3
-                                    py-2.5
-                                    text-sm
-                                    font-bold
-                                ">
-
-
-                                <option value="Yape">
-                                    Yape
-                                </option>
-
-                                <option value="Plin">
-                                    Plin
-                                </option>
-
-                                <option value="Transferencia">
-                                    Transferencia
-                                </option>
-
-                                <option value="Efectivo">
-                                    Efectivo
-                                </option>
-
-                                <option value="Tarjeta">
-                                    Tarjeta
-                                </option>
-
-                                <option value="Otro">
-                                    Otro
-                                </option>
-
-
-                            </select>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- PRECIO / FECHA -->
-
-                    <div
-                        class="
-                            grid
-                            grid-cols-2
-                            gap-3
-                        ">
-
-
-                        <div>
-
-
-                            <label
-                                class="
-                                    block
-                                    text-xs
-                                    font-bold
-                                    mb-1
-                                ">
-
-                                Precio final *
-
-                            </label>
-
-
-                            <input
-
-                                type="number"
-
-                                step="0.01"
-
-                                min="0"
-
-                                x-model.number="
-                                    ventaForm.precioVenta
-                                "
-
-                                required
-
-                                class="
-                                    w-full
-                                    bg-slate-100
-                                    dark:bg-slate-900
-                                    border
-                                    border-slate-300
-                                    dark:border-slate-700
-                                    rounded-xl
-                                    px-4
-                                    py-2.5
-                                    text-sm
-                                    font-bold
-                                ">
-
-
-                        </div>
-
-
-                        <div>
-
-
-                            <label
-                                class="
-                                    block
-                                    text-xs
-                                    font-bold
-                                    mb-1
-                                ">
-
-                                Fecha de Venta *
-
-                            </label>
-
-
-                            <input
-
-                                type="date"
-
-                                x-model="
-                                    ventaForm.fechaVenta
-                                "
-
-                                required
-
-                                class="
-                                    w-full
-                                    bg-slate-100
-                                    dark:bg-slate-900
-                                    border
-                                    border-slate-300
-                                    dark:border-slate-700
-                                    rounded-xl
-                                    px-3
-                                    py-2.5
-                                    text-sm
-                                ">
-
-
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- FALABELLA -->
-
-                    <template
-                        x-if="
-                            ventaForm.canalVenta ===
-                            'Falabella'
-                        ">
-
-
-                        <div
-                            class="
-                                p-4
-                                rounded-xl
-                                bg-purple-500/10
-                                border
-                                border-purple-500/30
-                            ">
-
-
-                            <div
-                                class="
-                                    text-xs
-                                    font-black
-                                    text-purple-700
-                                    dark:text-purple-300
-                                    mb-3
-                                ">
-
-                                Costos Seller Falabella
-
-                            </div>
-
-
-                            <div
-                                class="
-                                    grid
-                                    grid-cols-2
-                                    gap-3
-                                ">
-
-
-                                <div>
-
-
-                                    <label
-                                        class="
-                                            block
-                                            text-[11px]
-                                            font-bold
-                                            text-purple-600
-                                            dark:text-purple-400
-                                            mb-1
-                                        ">
-
-                                        Comisión
-
-                                    </label>
-
-
-                                    <input
-
-                                        type="number"
-
-                                        step="0.01"
-
-                                        min="0"
-
-                                        x-model.number="
-                                            ventaForm.comision
-                                        "
-
-                                        class="
-                                            w-full
-                                            bg-slate-100
-                                            dark:bg-slate-900
-                                            border
-                                            border-purple-300
-                                            rounded-lg
-                                            px-3
-                                            py-2
-                                            text-xs
-                                        ">
-
-
-                                </div>
-
-
-                                <div>
-
-
-                                    <label
-                                        class="
-                                            block
-                                            text-[11px]
-                                            font-bold
-                                            text-purple-600
-                                            dark:text-purple-400
-                                            mb-1
-                                        ">
-
-                                        Conf. Logístico
-
-                                    </label>
-
-
-                                    <input
-
-                                        type="number"
-
-                                        step="0.01"
-
-                                        min="0"
-
-                                        x-model.number="
-                                            ventaForm.confLogistico
-                                        "
-
-                                        class="
-                                            w-full
-                                            bg-slate-100
-                                            dark:bg-slate-900
-                                            border
-                                            border-purple-300
-                                            rounded-lg
-                                            px-3
-                                            py-2
-                                            text-xs
-                                        ">
-
-
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
-
-
-                    </template>
-
-
-                    <!-- DESCUENTO -->
-
-                    <div>
-
-
-                        <label
-                            class="
-                                block
-                                text-xs
-                                font-bold
-                                mb-1
-                            ">
-
-                            Descuento (S/)
-
-                        </label>
-
-
-                        <input
-
-                            type="number"
-
-                            step="0.01"
-
-                            min="0"
-
-                            x-model.number="
-                                ventaForm.descuento
-                            "
-
-                            class="
-                                w-full
-                                bg-slate-100
-                                dark:bg-slate-900
-                                border
-                                border-slate-300
-                                dark:border-slate-700
-                                rounded-xl
-                                px-4
-                                py-2.5
-                                text-sm
-                                font-bold
-                            ">
-
-
-                    </div>
-
-
-                    <!-- OBSERVACION -->
-
-                    <div>
-
-
-                        <label
-                            class="
-                                block
-                                text-xs
-                                font-bold
-                                mb-1
-                            ">
-
-                            Observación
-
-                        </label>
-
-
-                        <textarea
-
-                            x-model="
-                                ventaForm.observacion
-                            "
-
-                            rows="2"
-
-                            placeholder="
-                                Información adicional de la venta...
-                            "
-
-                            class="
-                                w-full
-                                bg-slate-100
-                                dark:bg-slate-900
-                                border
-                                border-slate-300
-                                dark:border-slate-700
-                                rounded-xl
-                                px-4
-                                py-2.5
-                                text-sm
-                                resize-none
-                            ">
-                        </textarea>
-
-
-                    </div>
-
-
-                    <!-- RESUMEN -->
-
-                    <div
-                        class="
-                            bg-emerald-500/10
-                            border
-                            border-emerald-500/30
-                            rounded-xl
-                            p-4
-                            space-y-2
-                        ">
-
-
-                        <div
-                            class="
-                                flex
-                                justify-between
-                                text-sm
-                            ">
-
-
-                            <span>
-                                Subtotal
-                            </span>
-
-
-                            <span>
-
-                                S/
-
-                                <span
-                                    x-text="
-                                        formatMonto(
-                                            ventaForm.precioVenta
-                                        )
-                                    ">
-                                </span>
-
-
-                            </span>
-
-
-                        </div>
-
-
-                        <div
-                            class="
-                                flex
-                                justify-between
-                                text-sm
-                                text-rose-600
-                            ">
-
-
-                            <span>
-                                Descuento
-                            </span>
-
-
-                            <span>
-
-                                - S/
-
-                                <span
-                                    x-text="
-                                        formatMonto(
-                                            ventaForm.descuento
-                                        )
-                                    ">
-                                </span>
-
-
-                            </span>
-
-
-                        </div>
-
-
-                        <div
-                            class="
-                                pt-2
-                                border-t
-                                border-emerald-500/20
-                                flex
-                                justify-between
-                                items-center
-                            ">
-
-
-                            <span
-                                class="font-black">
-
-
-                                Total
-
-
-                            </span>
-
-
-                            <span
-                                class="
-                                    text-xl
-                                    font-black
-                                    text-emerald-600
-                                    dark:text-emerald-400
-                                ">
-
-                                S/
-
-                                <span
-                                    x-text="
-                                        formatMonto(
-                                            totalVentaActual()
-                                        )
-                                    ">
-                                </span>
-
-
-                            </span>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- GANANCIA -->
-
-                    <div
-                        class="
-                            bg-blue-500/10
-                            border
-                            border-blue-500/30
-                            rounded-xl
-                            p-4
-                            flex
-                            justify-between
-                            items-center
-                        ">
-
-
-                        <div>
-
-
-                            <div
-                                class="
-                                    text-xs
-                                    font-bold
-                                ">
-
-                                Ganancia real estimada
-
-                            </div>
-
-
-                            <div
-                                class="
-                                    text-[10px]
-                                    text-slate-400
-                                    mt-1
-                                ">
-
-                                Total - costo - comisiones -
-                                logística.
-
-                            </div>
-
-
-                        </div>
-
-
-                        <div
-                            class="
-                                text-xl
-                                font-black
-                                text-blue-600
-                                dark:text-blue-400
-                            ">
-
-                            S/
-
-                            <span
-                                x-text="
-                                    formatMonto(
-                                        calcularGananciaVenta()
-                                    )
-                                ">
-                            </span>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- BOTONES -->
-
-                    <div
-                        class="
-                            flex
-                            justify-end
-                            gap-3
-                            pt-3
-                        ">
-
-
-                        <button
-
-                            type="button"
-
-                            @click="
-                                modalVenta = false
-                            "
-
-                            class="
-                                px-4
-                                py-2
-                                rounded-xl
-                                bg-slate-200
-                                dark:bg-slate-700
-                                text-slate-700
-                                dark:text-slate-300
-                                font-semibold
-                            ">
-
-                            Cancelar
-
-                        </button>
-
-
-                        <button
-
-                            type="submit"
-
-                            class="
-                                px-5
-                                py-2
-                                rounded-xl
-                                bg-violet-600
-                                hover:bg-violet-500
-                                text-white
-                                font-black
-                            ">
-
-
-                            <i
-                                class="
-                                    fa-solid
-                                    fa-file-invoice
-                                    mr-1
-                                ">
-                            </i>
-
-
-                            Generar comprobante
-
-
-                        </button>
-
-
-                    </div>
-
-
+                    <div class="flex justify-end gap-3 pt-2"><button type="button" @click="modalVenta = false" class="px-5 py-3 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold">Cancelar</button><button type="submit" class="px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-black shadow-lg flex items-center gap-2"><i class="fa-solid fa-file-invoice"></i> Registrar venta</button></div>
                 </form>
-
-
             </div>
+        </div>
+
+        <!-- =====================================================
+             MODAL EDITAR VENTA
+        ====================================================== -->
+
+        <div x-show="modalEditarVenta" x-transition.opacity class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-[60]" style="display:none;">
+            <div class="bg-white dark:bg-slate-800 w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 max-h-[94vh] overflow-y-auto">
+                <div class="p-6 md:p-7 border-b border-slate-200 dark:border-slate-700">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-black uppercase tracking-widest mb-3"><i class="fa-solid fa-pen-to-square"></i> Corrección de registro</div>
+                            <h3 class="text-2xl font-black text-slate-900 dark:text-white">Editar venta</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Corrige cualquier dato de la venta sin generar un nuevo comprobante.</p>
+                        </div>
+                        <button @click="modalEditarVenta = false" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-400 hover:text-rose-500 flex items-center justify-center"><i class="fa-solid fa-xmark text-xl"></i></button>
+                    </div>
+                </div>
+
+                <form @submit.prevent="guardarVentaEditada()" class="p-6 md:p-7 space-y-5">
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-700 flex items-center justify-center flex-shrink-0">
+                                <template x-if="ventaEditando?.imagenUrl"><img :src="ventaEditando.imagenUrl" class="w-full h-full object-cover"></template>
+                                <template x-if="!ventaEditando?.imagenUrl"><i class="fa-solid fa-paw text-slate-400"></i></template>
+                            </div>
+                            <div class="min-w-0 flex-1"><div class="font-black truncate" x-text="ventaEditando?.nombre || ''"></div><div class="text-[11px] text-slate-400 mt-1">SKU: <span x-text="ventaEditando?.sku || 'N/A'"></span></div></div>
+                            <div class="text-right"><div class="text-[9px] uppercase tracking-wider text-slate-400 font-black">Comprobante</div><div class="text-xs font-black text-violet-600" x-text="ventaEditando?.comprobanteNumero || 'Sin número'"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-xs font-black mb-1.5">Cliente *</label><input type="text" x-model="ventaEditando.clienteNombre" required class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm"></div>
+                        <div><label class="block text-xs font-black mb-1.5">Teléfono</label><input type="tel" x-model="ventaEditando.clienteTelefono" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-xs font-black mb-1.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>Distrito</label><input type="text" x-model="ventaEditando.distrito" placeholder="Ej: Miraflores" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm"></div>
+                        <div><label class="block text-xs font-black mb-1.5"><i class="fa-solid fa-calendar-days text-blue-500 mr-1"></i>Fecha de venta *</label><input type="date" x-model="ventaEditando.fechaVenta" required class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-3 text-sm"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-xs font-black mb-1.5">Canal de venta *</label><select x-model="ventaEditando.canalVenta" required class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold"><option value="WhatsApp">WhatsApp</option><option value="Facebook">Facebook</option><option value="Rappi">Rappi</option><option value="Falabella">Seller Falabella</option></select></div>
+                        <div x-show="ventaEditando.canalVenta === 'Facebook'"><label class="block text-xs font-black mb-1.5">Perfil de Facebook *</label><select x-model="ventaEditando.perfilFacebook" :required="ventaEditando.canalVenta === 'Facebook'" class="w-full bg-blue-50 dark:bg-slate-900 border border-blue-300 dark:border-blue-700 rounded-xl px-4 py-3 text-sm font-bold"><option value="">Seleccionar perfil</option><option value="Rouss Huamani">Rouss Huamani</option><option value="Katy Avril">Katy Avril</option><option value="Simon Sebastian">Simon Sebastian</option><option value="Jennifer Medina">Jennifer Medina</option><option value="Rouss Mery">Rouss Mery</option></select></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div><label class="block text-xs font-black mb-1.5">Medio de pago</label><div class="w-full bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800 rounded-xl px-4 py-3 text-sm font-black text-violet-700 dark:text-violet-300"><i class="fa-solid fa-mobile-screen-button mr-2"></i>Yape</div></div>
+                        <div><label class="block text-xs font-black mb-1.5">Precio final (S/)</label><input type="number" step="0.01" min="0" x-model.number="ventaEditando.precioVenta" required class="w-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-300 dark:border-emerald-800 rounded-xl px-4 py-3 text-sm font-black text-emerald-700 dark:text-emerald-300"></div>
+                        <div><label class="block text-xs font-black mb-1.5">Ganancia actual</label><div class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-black text-emerald-600">S/ <span x-text="formatMonto(calcularGananciaReal(ventaEditando || {}))"></span></div></div>
+                    </div>
+
+                    <div x-show="ventaEditando?.canalVenta === 'Falabella'" x-transition class="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30 space-y-3">
+                        <div class="text-xs font-black text-purple-700 dark:text-purple-300">Costos Seller Falabella</div>
+                        <div class="grid grid-cols-2 gap-3"><div><label class="block text-[11px] font-bold mb-1">Comisión (S/)</label><input type="number" step="0.01" min="0" x-model.number="ventaEditando.comision" class="w-full bg-slate-100 dark:bg-slate-900 border border-purple-300 rounded-lg px-3 py-2 text-xs font-bold"></div><div><label class="block text-[11px] font-bold mb-1">Conf. Logístico (S/)</label><input type="number" step="0.01" min="0" x-model.number="ventaEditando.confLogistico" class="w-full bg-slate-100 dark:bg-slate-900 border border-purple-300 rounded-lg px-3 py-2 text-xs font-bold"></div></div>
+                    </div>
+
+                    <div><label class="block text-xs font-black mb-1.5">Detalle de la venta / Observación</label><textarea x-model="ventaEditando.observacion" rows="4" placeholder="Entrega, coordinación, referencia, confirmación de pago, etc." class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm resize-none"></textarea></div>
+
+                    <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-200 flex gap-3"><i class="fa-solid fa-circle-info mt-0.5"></i><span>Los cambios se guardarán tanto en el registro de inventario como en el comprobante asociado.</span></div>
+
+                    <div class="flex justify-end gap-3 pt-2 border-t border-slate-200 dark:border-slate-700"><button type="button" @click="modalEditarVenta = false" class="px-5 py-3 rounded-xl bg-slate-200 dark:bg-slate-700 font-bold">Cancelar</button><button type="submit" class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-white font-black shadow-lg flex items-center gap-2"><i class="fa-solid fa-floppy-disk"></i>Guardar cambios</button></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- =====================================================
+             MODAL QR PRODUCTO
+        ====================================================== -->
+        <div x-show="modalQR" x-transition.opacity class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-[90]" style="display:none;">
+            <div class="w-full max-w-md bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                <div class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white p-6">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <div class="text-[10px] uppercase tracking-[0.2em] font-black opacity-80">Identificación digital</div>
+                            <h3 class="text-xl font-black mt-1">Código QR del producto</h3>
+                        </div>
+                        <button @click="modalQR=false" class="w-10 h-10 rounded-xl bg-white/15 hover:bg-white/25 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <div class="p-6 text-center">
+                    <div class="text-sm font-black text-slate-800 dark:text-white" x-text="qrProducto?.nombre || ''"></div>
+                    <div class="text-xs font-mono text-indigo-600 dark:text-indigo-400 mt-1" x-text="qrProducto?.sku || ''"></div>
+                    <div class="my-5 mx-auto w-[230px] h-[230px] rounded-3xl bg-white border border-slate-200 shadow-inner flex items-center justify-center p-4">
+                        <div id="qrProductoCanvas"></div>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Al escanearlo desde un celular se abrirá el inventario y se buscará automáticamente este SKU.</p>
+                    <div class="flex gap-3 mt-5">
+                        <button @click="descargarQR()" class="flex-1 px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black flex items-center justify-center gap-2"><i class="fa-solid fa-download"></i> Guardar QR</button>
+                        <button @click="modalQR=false" class="px-5 py-3 rounded-xl bg-slate-200 dark:bg-slate-700 font-bold">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
+        <!-- =====================================================
+             MODAL ETIQUETAS SKU
+        ====================================================== -->
+        <div x-show="modalEtiquetasSKU" x-transition.opacity class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6 z-[85]" style="display:none;">
+            <div class="w-full max-w-6xl max-h-[95vh] overflow-y-auto bg-white dark:bg-slate-800 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700">
+                <div class="print-sku-actions sticky top-0 z-10 bg-white/95 dark:bg-slate-800/95 backdrop-blur border-b border-slate-200 dark:border-slate-700 p-5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div>
+                        <div class="text-[10px] uppercase tracking-[0.2em] font-black text-indigo-600">Etiquetado de inventario</div>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white">Plantilla de etiquetas SKU</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1"><span x-text="productosConSKU.length"></span> productos · cada etiqueta incluye SKU y QR.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button @click="imprimirEtiquetasSKU()" class="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black flex items-center gap-2"><i class="fa-solid fa-print"></i> Imprimir</button>
+                        <button @click="modalEtiquetasSKU=false" class="px-5 py-3 rounded-xl bg-slate-200 dark:bg-slate-700 font-bold">Cerrar</button>
+                    </div>
+                </div>
+                <div id="printSkuArea" class="p-5 md:p-7">
+                    <div class="sku-label-grid">
+                        <template x-for="item in productosConSKU" :key="item.id">
+                            <div class="sku-label">
+                                <div class="sku-label-qr" :id="'labelQR-' + item.id"></div>
+                                <div class="min-w-0">
+                                    <div class="text-[8px] uppercase tracking-widest font-black text-slate-400">PetSmart · Inventario</div>
+                                    <div class="text-sm font-black text-slate-900 mt-1 leading-tight break-words" x-text="item.nombre"></div>
+                                    <div class="font-mono text-[12px] font-black tracking-wide text-indigo-700 mt-2 break-all" x-text="item.sku"></div>
+                                    <div class="text-[9px] text-slate-500 mt-1" x-text="'Talla: ' + (item.talla || 'Única')"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
@@ -6261,7 +4711,7 @@
                                     ">
 
 
-                                    Comprobante interno
+                                    Comprobante
 
 
                                 </div>
@@ -6416,6 +4866,12 @@
                                         ">
                                     </div>
 
+                                    <div
+                                        x-show="comprobanteActual?.distrito"
+                                        class="text-xs text-slate-500 mt-1">
+                                        Distrito: <span x-text="comprobanteActual?.distrito"></span>
+                                    </div>
+
 
                                 </div>
 
@@ -6455,6 +4911,12 @@
                                             comprobanteActual?.canalVenta ||
                                             '—'
                                         ">
+                                    </div>
+
+                                    <div
+                                        x-show="comprobanteActual?.canalVenta === 'Facebook' && comprobanteActual?.perfilFacebook"
+                                        class="text-xs text-blue-600 mt-2 font-bold">
+                                        Perfil: <span x-text="comprobanteActual?.perfilFacebook"></span>
                                     </div>
 
 
@@ -6771,32 +5233,7 @@
 
 
                                         </span>
-
-
-                                        <span
-                                            x-show="
-                                                comprobanteActual?.color
-                                            "
-                                            class="
-                                                px-2
-                                                py-1
-                                                rounded-md
-                                                bg-blue-50
-                                                text-blue-700
-                                                text-[9px]
-                                                font-bold
-                                            ">
-
-                                            Color:
-
-                                            <span
-                                                x-text="
-                                                    comprobanteActual?.color
-                                                ">
-                                            </span>
-
-
-                                        </span>
+</span>
 
 
                                     </div>
@@ -6931,48 +5368,6 @@
                                             x-text="
                                                 formatMonto(
                                                     comprobanteActual?.precioVenta
-                                                )
-                                            ">
-                                        </span>
-
-
-                                    </span>
-
-
-                                </div>
-
-
-                                <div
-                                    x-show="
-                                        Number(
-                                            comprobanteActual?.descuento ||
-                                            0
-                                        ) > 0
-                                    "
-                                    class="
-                                        flex
-                                        justify-between
-                                        text-sm
-                                        text-rose-600
-                                        py-2
-                                    ">
-
-
-                                    <span>
-                                        Descuento
-                                    </span>
-
-
-                                    <span>
-
-
-                                        - S/
-
-
-                                        <span
-                                            x-text="
-                                                formatMonto(
-                                                    comprobanteActual?.descuento
                                                 )
                                             ">
                                         </span>
@@ -7155,15 +5550,8 @@
                                 ">
 
 
-                                Documento interno de venta
-                                generado automáticamente.
-
-
-                                <br>
-
-
-                                No constituye una
-                                boleta/factura electrónica SUNAT.
+                                Gracias por elegirnos.
+                                Conserva este comprobante como constancia de tu compra.
 
 
                             </div>
@@ -7325,16 +5713,31 @@
                 modalVenta:
                     false,
 
+                modalEditarVenta:
+                    false,
+
                 modalAdmin:
                     false,
 
                 modalComprobante:
                     false,
 
+                modalQR:
+                    false,
+
+                modalEtiquetasSKU:
+                    false,
+
+                qrProducto:
+                    null,
+
                 editandoId:
                     null,
 
                 productoVenta:
+                    null,
+
+                ventaEditando:
                     null,
 
                 comprobanteActual:
@@ -7518,78 +5921,11 @@
                 // =================================================
 
                 formProducto: {
-
-                    esNuevo:
-                        true,
-
-                    nombre:
-                        '',
-
-                    sku:
-                        '',
-
-                    detalle:
-                        '',
-
-                    color:
-                        '',
-
-                    canalVenta:
-                        'WhatsApp',
-
-                    comision:
-                        0,
-
-                    confLogistico:
-                        0,
-
-                    categoria:
-                        'Transportadores',
-
-                    talla:
-                        'Única',
-
-                    costoUnitario:
-                        0,
-
-                    precioVenta:
-                        0,
-
-                    fechaIngreso:
-                        new Date()
-                            .toISOString()
-                            .split('T')[0],
-
-                    imagenUrl:
-                        '',
-
-                    estado:
-                        'disponible',
-
-                    fechaVenta:
-                        '',
-
-                    clienteNombre:
-                        '',
-
-                    clienteTelefono:
-                        '',
-
-                    observacion:
-                        '',
-
-                    medioPago:
-                        '',
-
-                    descuento:
-                        0,
-
-                    comprobanteNumero:
-                        '',
-
-                    comprobanteId:
-                        ''
-
+                    nombre: '', sku: '', detalle: '', categoria: 'Transportadores', talla: 'Única',
+                    costoUnitario: 0, precioVenta: 0, fechaIngreso: new Date().toISOString().split('T')[0],
+                    imagenUrl: '', estado: 'disponible', fechaVenta: '', clienteNombre: '', clienteTelefono: '',
+                    distrito: '', observacion: '', medioPago: 'Yape', canalVenta: '', perfilFacebook: '',
+                    comision: 0, confLogistico: 0, comprobanteNumero: '', comprobanteId: ''
                 },
 
 
@@ -7598,39 +5934,9 @@
                 // =================================================
 
                 ventaForm: {
-
-                    clienteNombre:
-                        '',
-
-                    clienteTelefono:
-                        '',
-
-                    canalVenta:
-                        'WhatsApp',
-
-                    medioPago:
-                        'Yape',
-
-                    precioVenta:
-                        0,
-
-                    fechaVenta:
-                        new Date()
-                            .toISOString()
-                            .split('T')[0],
-
-                    comision:
-                        0,
-
-                    confLogistico:
-                        0,
-
-                    observacion:
-                        '',
-
-                    descuento:
-                        0
-
+                    clienteNombre: '', clienteTelefono: '', distrito: '', canalVenta: 'WhatsApp', perfilFacebook: '',
+                    medioPago: 'Yape', precioVenta: 0, fechaVenta: new Date().toISOString().split('T')[0],
+                    comision: 0, confLogistico: 0, observacion: ''
                 },
 
 
@@ -7642,9 +5948,10 @@
                 // =================================================
 
                 init() {
-
+                    const params = new URLSearchParams(window.location.search);
+                    const skuURL = params.get('sku');
+                    if (skuURL) this.busqueda = skuURL.trim();
                     this.inicializarFirebase();
-
                 },
 
 
@@ -7792,6 +6099,8 @@
 
                                 );
 
+                            this.asignarSKUsFaltantes();
+
 
                         },
 
@@ -7869,6 +6178,14 @@
                         p.clienteTelefono ??
                         '';
 
+                    p.distrito =
+                        p.distrito ??
+                        '';
+
+                    p.perfilFacebook =
+                        p.perfilFacebook ??
+                        '';
+
 
                     p.fechaVenta =
                         p.fechaVenta ??
@@ -7899,13 +6216,6 @@
                         );
 
 
-                    p.descuento =
-                        Number(
-                            p.descuento ||
-                            0
-                        );
-
-
                     p.comprobanteNumero =
                         p.comprobanteNumero ??
                         '';
@@ -7920,6 +6230,97 @@
 
                 },
 
+
+                async asignarSKUsFaltantes() {
+                    if (!this.productos.length || !window.db || !window.fb) return;
+                    const usados = new Set(this.productos.map(item => String(item.sku || '').toUpperCase()).filter(Boolean));
+                    const pendientes = [];
+                    for (const item of this.productos) {
+                        if (item.sku) continue;
+                        let sku = '';
+                        for (let i = 0; i < 30; i++) {
+                            const familia = this.codigoFamiliaSKU(item.categoria);
+                            const variante = this.normalizarCodigoSKU(item.talla) || 'U';
+                            sku = `PS-ART-${familia}-${this.generarIdentificadorInternoSKU()}-${variante}`;
+                            if (!usados.has(sku)) break;
+                        }
+                        usados.add(sku);
+                        pendientes.push({ id: item.id, sku });
+                    }
+                    if (!pendientes.length) return;
+                    const updates = {};
+                    pendientes.forEach(item => {
+                        updates[`productos/${item.id}/sku`] = item.sku;
+                    });
+                    try {
+                        await window.fb.update(window.fb.ref(window.db), updates);
+                    } catch (error) {
+                        console.error('No se pudieron asignar SKUs faltantes:', error);
+                    }
+                },
+
+                get productosConSKU() {
+                    return this.productos.filter(item => item.sku);
+                },
+
+                construirURLProducto(sku) {
+                    const url = new URL(window.location.href);
+                    url.search = '';
+                    url.hash = '';
+                    url.searchParams.set('sku', sku);
+                    return url.toString();
+                },
+
+                abrirQR(item) {
+                    if (!item?.sku) return;
+                    this.qrProducto = item;
+                    this.modalQR = true;
+                    this.$nextTick(() => this.generarQRVisual(item.sku, 'qrProductoCanvas', 210));
+                },
+
+                generarQRVisual(sku, contenedorId, size = 210) {
+                    const contenedor = document.getElementById(contenedorId);
+                    if (!contenedor || !window.QRCode || !sku) return;
+                    contenedor.innerHTML = '';
+                    new QRCode(contenedor, {
+                        text: this.construirURLProducto(sku),
+                        width: size,
+                        height: size,
+                        colorDark: '#111827',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                },
+
+                descargarQR() {
+                    const contenedor = document.getElementById('qrProductoCanvas');
+                    const img = contenedor?.querySelector('img');
+                    const canvas = contenedor?.querySelector('canvas');
+                    if (!img && !canvas) return;
+                    const enlace = document.createElement('a');
+                    enlace.download = `${this.qrProducto?.sku || 'producto'}-QR.png`;
+                    enlace.href = img?.src || canvas.toDataURL('image/png');
+                    enlace.click();
+                },
+
+                abrirPlantillaSKU() {
+                    if (!this.productosConSKU.length) {
+                        Swal.fire('Sin productos', 'Todavía no hay productos con SKU para imprimir.', 'info');
+                        return;
+                    }
+                    this.modalEtiquetasSKU = true;
+                    this.$nextTick(() => {
+                        setTimeout(() => {
+                            this.productosConSKU.forEach(item => this.generarQRVisual(item.sku, `labelQR-${item.id}`, 82));
+                        }, 80);
+                    });
+                },
+
+                imprimirEtiquetasSKU() {
+                    this.$nextTick(() => {
+                        setTimeout(() => window.print(), 120);
+                    });
+                },
 
                 // =================================================
                 // CONFIG
@@ -8281,101 +6682,69 @@
 
 
                 // =================================================
-                // SKU
+                // SKU AUTOMÁTICO
+                // Formato: PS-ART-TRA-X7K4-L
                 // =================================================
 
-                generarSKU() {
-
-                    const nombre =
-
-                        (
-                            this.formProducto.nombre ||
-                            ''
-                        )
-                        .trim()
-                        .toUpperCase();
-
-
-                    if (!nombre) {
-
-                        return;
-
-                    }
-
-
-                    const categoria =
-
-                        (
-                            this.formProducto.categoria ||
-                            'GEN'
-                        )
-                        .trim()
-                        .toUpperCase();
-
-
-                    const talla =
-
-                        (
-                            this.formProducto.talla ||
-                            'U'
-                        )
-                        .trim()
-                        .toUpperCase();
-
-
-                    const iniciales =
-
-                        nombre
-
-                            .replace(
-                                /[^A-ZÁÉÍÓÚÑ0-9 ]/g,
-                                ''
-                            )
-
-                            .split(/\s+/)
-
-                            .filter(Boolean)
-
-                            .slice(
-                                0,
-                                3
-                            )
-
-                            .map(
-
-                                p =>
-
-                                    p.substring(
-                                        0,
-                                        3
-                                    )
-
-                            )
-
-                            .join('');
-
-
-                    const codigoCategoria =
-
-                        categoria
-
-                            .replace(
-                                /[^A-ZÁÉÍÓÚÑ0-9]/g,
-                                ''
-                            )
-
-                            .substring(
-                                0,
-                                3
-                            );
-
-
-                    this.formProducto.sku =
-
-                        `${codigoCategoria}-${iniciales || 'PRO'}-${talla}`;
-
+                normalizarCodigoSKU(valor) {
+                    return String(valor || '')
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '')
+                        .toUpperCase()
+                        .replace(/[^A-Z0-9]/g, '');
                 },
 
+                codigoFamiliaSKU(categoria) {
+                    const mapa = {
+                        'TRANSPORTADORES': 'TRA',
+                        'RASCADORES': 'RAS',
+                        'ACCESORIOS': 'ACC',
+                        'OTROS': 'OTR'
+                    };
+                    const limpio = this.normalizarCodigoSKU(categoria);
+                    return mapa[limpio] || (limpio.substring(0, 3) || 'GEN');
+                },
+
+                generarIdentificadorInternoSKU() {
+                    const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                    let codigo = '';
+                    if (window.crypto?.getRandomValues) {
+                        const valores = new Uint32Array(4);
+                        window.crypto.getRandomValues(valores);
+                        for (let i = 0; i < 4; i++) codigo += caracteres[valores[i] % caracteres.length];
+                    } else {
+                        for (let i = 0; i < 4; i++) codigo += caracteres[Math.floor(Math.random() * caracteres.length)];
+                    }
+                    return codigo;
+                },
+
+                construirSKU(idInterno = '') {
+                    const familia = this.codigoFamiliaSKU(this.formProducto.categoria);
+                    const variante = this.normalizarCodigoSKU(this.formProducto.talla) || 'U';
+                    const interno = this.normalizarCodigoSKU(idInterno) || this.generarIdentificadorInternoSKU();
+                    return `PS-ART-${familia}-${interno}-${variante}`;
+                },
+
+                async skuExiste(sku, excluirId = null) {
+                    const buscado = String(sku || '').toUpperCase();
+                    return this.productos.some(item => item.id !== excluirId && String(item.sku || '').toUpperCase() === buscado);
+                },
+
+                async generarSKUUnico(excluirId = null) {
+                    let intentos = 0;
+                    while (intentos < 30) {
+                        const sku = this.construirSKU();
+                        if (!(await this.skuExiste(sku, excluirId))) return sku;
+                        intentos++;
+                    }
+                    throw new Error('No fue posible generar un SKU único.');
+                },
+
+                generarSKU() {
+                    if (this.editandoId && this.formProducto.sku) return this.formProducto.sku;
+                    this.formProducto.sku = this.construirSKU();
+                    return this.formProducto.sku;
+                },
 
                 // =================================================
                 // GANANCIA UNITARIA
@@ -8466,13 +6835,6 @@
                         ) || 0;
 
 
-                    const descuento =
-
-                        Number(
-                            item.descuento
-                        ) || 0;
-
-
                     let comision =
 
                         Number(
@@ -8504,10 +6866,6 @@
                     return (
 
                         precio
-
-                        -
-
-                        descuento
 
                         -
 
@@ -8545,13 +6903,6 @@
 
                         Number(
                             this.ventaForm.precioVenta
-                        ) || 0;
-
-
-                    const descuento =
-
-                        Number(
-                            this.ventaForm.descuento
                         ) || 0;
 
 
@@ -8597,10 +6948,6 @@
                     return (
 
                         precio
-
-                        -
-
-                        descuento
 
                         -
 
@@ -9059,114 +7406,50 @@
 
 
                 // =================================================
-                // VENTAS
+                // INDICADORES DE VENTAS
                 // =================================================
 
-                get ventasFiltradas() {
-
-                    return this.productos
-
-                        .filter(
-                            item =>
-                                item.estado ===
-                                'vendido'
-                        )
-
-                        .filter(
-
-                            item =>
-
-                                this.filtroMes ===
-                                'todos'
-
-                                ||
-
-                                (
-                                    item.fechaVenta
-                                    &&
-                                    item.fechaVenta.startsWith(
-                                        this.filtroMes
-                                    )
-                                )
-
-                        )
-
-                        .reduce(
-
-                            (
-                                total,
-                                item
-                            ) =>
-
-                                total +
-
-                                (
-                                    Number(
-                                        item.precioVenta
-                                    ) ||
-                                    0
-                                ),
-
-                            0
-
-                        );
-
+                get ventasDelPeriodo() {
+                    return this.productos.filter(item =>
+                        item.estado === 'vendido' &&
+                        (this.filtroMes === 'todos' || (item.fechaVenta && item.fechaVenta.startsWith(this.filtroMes)))
+                    );
                 },
 
+                get perfilFacebookMasVendido() {
+                    const conteo = {};
+                    this.ventasDelPeriodo.forEach(item => {
+                        if (item.canalVenta === 'Facebook' && item.perfilFacebook) {
+                            const key = String(item.perfilFacebook).trim();
+                            if (key) conteo[key] = (conteo[key] || 0) + 1;
+                        }
+                    });
+                    const ganador = Object.entries(conteo).sort((a,b) => b[1] - a[1])[0];
+                    return ganador ? { nombre: ganador[0], cantidad: ganador[1] } : { nombre: 'Sin ventas registradas', cantidad: 0 };
+                },
 
-                // =================================================
-                // COSTO VENDIDO
-                // =================================================
+                get productoMasVendido() {
+                    const conteo = {};
+                    this.ventasDelPeriodo.forEach(item => {
+                        const key = String(item.nombre || 'Producto sin nombre').trim();
+                        conteo[key] = (conteo[key] || 0) + 1;
+                    });
+                    const ganador = Object.entries(conteo).sort((a,b) => b[1] - a[1])[0];
+                    return ganador ? { nombre: ganador[0], cantidad: ganador[1] } : { nombre: 'Sin ventas registradas', cantidad: 0 };
+                },
 
-                get costoVendidoFiltrado() {
-
-                    return this.productos
-
-                        .filter(
-                            item =>
-                                item.estado ===
-                                'vendido'
-                        )
-
-                        .filter(
-
-                            item =>
-
-                                this.filtroMes ===
-                                'todos'
-
-                                ||
-
-                                (
-                                    item.fechaVenta
-                                    &&
-                                    item.fechaVenta.startsWith(
-                                        this.filtroMes
-                                    )
-                                )
-
-                        )
-
-                        .reduce(
-
-                            (
-                                total,
-                                item
-                            ) =>
-
-                                total +
-
-                                (
-                                    Number(
-                                        item.costoUnitario
-                                    ) ||
-                                    0
-                                ),
-
-                            0
-
-                        );
-
+                get distritoMasVendido() {
+                    const conteo = {};
+                    this.ventasDelPeriodo.forEach(item => {
+                        const key = String(item.distrito || '').trim();
+                        if (key) {
+                            const normalizado = key.toLowerCase().replace(/\s+/g, ' ');
+                            if (!conteo[normalizado]) conteo[normalizado] = { nombre: key, cantidad: 0 };
+                            conteo[normalizado].cantidad++;
+                        }
+                    });
+                    const ganador = Object.values(conteo).sort((a,b) => b.cantidad - a.cantidad)[0];
+                    return ganador || { nombre: 'Sin distrito registrado', cantidad: 0 };
                 },
 
 
@@ -9226,97 +7509,14 @@
                 // =================================================
 
                 abrirModalProducto() {
-
-                    this.editandoId =
-                        null;
-
-
+                    this.editandoId = null;
                     this.formProducto = {
-
-                        esNuevo:
-                            true,
-
-                        nombre:
-                            '',
-
-                        sku:
-                            '',
-
-                        detalle:
-                            '',
-
-                        color:
-                            '',
-
-                        canalVenta:
-                            'WhatsApp',
-
-                        comision:
-                            0,
-
-                        confLogistico:
-                            0,
-
-                        categoria:
-
-                            this.listaCategorias[0]
-                            ||
-                            'Otros',
-
-                        talla:
-
-                            this.listaTallas[0]
-                            ||
-                            'Única',
-
-                        costoUnitario:
-                            0,
-
-                        precioVenta:
-                            0,
-
-                        fechaIngreso:
-
-                            new Date()
-                            .toISOString()
-                            .split('T')[0],
-
-                        imagenUrl:
-                            '',
-
-                        estado:
-                            'disponible',
-
-                        fechaVenta:
-                            '',
-
-                        clienteNombre:
-                            '',
-
-                        clienteTelefono:
-                            '',
-
-                        observacion:
-                            '',
-
-                        medioPago:
-                            '',
-
-                        descuento:
-                            0,
-
-                        comprobanteNumero:
-                            '',
-
-                        comprobanteId:
-                            ''
-
+                        nombre: '', sku: '', detalle: '', categoria: this.listaCategorias[0] || 'Otros', talla: this.listaTallas[0] || 'Única',
+                        costoUnitario: 0, precioVenta: 0, fechaIngreso: new Date().toISOString().split('T')[0], imagenUrl: '',
+                        estado: 'disponible', fechaVenta: '', clienteNombre: '', clienteTelefono: '', distrito: '', observacion: '',
+                        medioPago: 'Yape', canalVenta: '', perfilFacebook: '', comision: 0, confLogistico: 0, comprobanteNumero: '', comprobanteId: ''
                     };
-
-
-                    this.modalProducto =
-                        true;
-
+                    this.modalProducto = true;
                 },
 
 
@@ -9325,45 +7525,14 @@
                 // =================================================
 
                 editarProducto(item) {
-
-                    this.editandoId =
-                        item.id;
-
-
-                    this.formProducto =
-
-                        JSON.parse(
-
-                            JSON.stringify(
-                                item
-                            )
-
-                        );
-
-
-                    this.formProducto.esNuevo =
-                        false;
-
-
-                    this.formProducto.comision =
-
-                        Number(
-                            this.formProducto.comision ||
-                            0
-                        );
-
-
-                    this.formProducto.confLogistico =
-
-                        Number(
-                            this.formProducto.confLogistico ||
-                            0
-                        );
-
-
-                    this.modalProducto =
-                        true;
-
+                    this.editandoId = item.id;
+                    this.formProducto = JSON.parse(JSON.stringify(item));
+                    this.formProducto.distrito = this.formProducto.distrito || '';
+                    this.formProducto.perfilFacebook = this.formProducto.perfilFacebook || '';
+                    this.formProducto.medioPago = 'Yape';
+                    this.formProducto.comision = Number(this.formProducto.comision || 0);
+                    this.formProducto.confLogistico = Number(this.formProducto.confLogistico || 0);
+                    this.modalProducto = true;
                 },
 
 
@@ -9372,80 +7541,15 @@
                 // =================================================
 
                 duplicarProducto(item) {
-
-                    this.editandoId =
-                        null;
-
-
-                    this.formProducto =
-
-                        JSON.parse(
-
-                            JSON.stringify(
-                                item
-                            )
-
-                        );
-
-
+                    this.editandoId = null;
+                    this.formProducto = JSON.parse(JSON.stringify(item));
                     delete this.formProducto.id;
-
-
-                    this.formProducto.esNuevo =
-                        false;
-
-
-                    this.formProducto.estado =
-                        'disponible';
-
-
-                    this.formProducto.fechaVenta =
-                        '';
-
-
-                    this.formProducto.clienteNombre =
-                        '';
-
-
-                    this.formProducto.clienteTelefono =
-                        '';
-
-
-                    this.formProducto.observacion =
-                        '';
-
-
-                    this.formProducto.medioPago =
-                        '';
-
-
-                    this.formProducto.descuento =
-                        0;
-
-
-                    this.formProducto.comprobanteNumero =
-                        '';
-
-
-                    this.formProducto.comprobanteId =
-                        '';
-
-
-                    this.formProducto.nombre =
-
-                        `${item.nombre} (Copia)`;
-
-
-                    this.formProducto.sku =
-                        '';
-
-
-                    this.generarSKU();
-
-
-                    this.modalProducto =
-                        true;
-
+                    this.formProducto.estado = 'disponible'; this.formProducto.fechaVenta = '';
+                    this.formProducto.clienteNombre = ''; this.formProducto.clienteTelefono = ''; this.formProducto.distrito = '';
+                    this.formProducto.observacion = ''; this.formProducto.medioPago = 'Yape'; this.formProducto.canalVenta = '';
+                    this.formProducto.perfilFacebook = ''; this.formProducto.comprobanteNumero = ''; this.formProducto.comprobanteId = '';
+                    this.formProducto.nombre = `${item.nombre} (Copia)`; this.formProducto.sku = '';
+                    this.modalProducto = true;
                 },
 
 
@@ -9454,332 +7558,70 @@
                 // =================================================
 
                 async guardarProducto() {
-
-                    if (
-
-                        !this.formProducto.nombre ||
-                        !this.formProducto.nombre.trim()
-
-                    ) {
-
-                        Swal.fire(
-
-                            'Atención',
-
-                            'El nombre del producto es obligatorio.',
-
-                            'warning'
-
-                        );
-
-
+                    if (!this.formProducto.nombre || !this.formProducto.nombre.trim()) {
+                        Swal.fire('Atención', 'El nombre del producto es obligatorio.', 'warning');
                         return;
-
                     }
-
-
-                    if (
-                        !this.formProducto.sku
-                    ) {
-
-                        this.generarSKU();
-
-                    }
-
-
-                    const canal =
-
-                        this.formProducto.esNuevo
-
-                        ?
-
-                        'WhatsApp'
-
-                        :
-
-                        this.formProducto.canalVenta;
-
-
-                    const payload = {
-
-                        ...this.formProducto,
-
-                        nombre:
-                            this.formProducto.nombre.trim(),
-
-                        sku:
-                            this.formProducto.sku.trim(),
-
-                        canalVenta:
-                            canal || 'WhatsApp',
-
-                        comision:
-                            canal ===
-                            'Falabella'
-
-                            ?
-
-                            Number(
-                                this.formProducto.comision
-                            ) || 0
-
-                            :
-
-                            0,
-
-                        confLogistico:
-                            canal ===
-                            'Falabella'
-
-                            ?
-
-                            Number(
-                                this.formProducto.confLogistico
-                            ) || 0
-
-                            :
-
-                            0,
-
-                        costoUnitario:
-                            Number(
-                                this.formProducto.costoUnitario
-                            ) || 0,
-
-                        precioVenta:
-                            Number(
-                                this.formProducto.precioVenta
-                            ) || 0,
-
-                        descuento:
-                            Number(
-                                this.formProducto.descuento
-                            ) || 0,
-
-                        estado:
-                            this.formProducto.estado ===
-                            'vendido'
-
-                            ?
-
-                            'vendido'
-
-                            :
-
-                            'disponible',
-
-                        fechaIngreso:
-
-                            this.formProducto.fechaIngreso
-                            ||
-                            new Date()
-                                .toISOString()
-                                .split('T')[0]
-
-                    };
-
-
-                    delete payload.id;
-
-
                     try {
-
-
-                        if (
-                            this.editandoId
-                        ) {
-
-
-                            await window.fb.update(
-
-                                window.fb.ref(
-
-                                    window.db,
-
-                                    `productos/${this.editandoId}`
-
-                                ),
-
-                                payload
-
-                            );
-
-
-                            this.notificarToast(
-
-                                'success',
-
-                                'Unidad actualizada correctamente'
-
-                            );
-
+                        if (!this.editandoId) {
+                            this.formProducto.sku = await this.generarSKUUnico();
+                        } else if (!this.formProducto.sku) {
+                            this.formProducto.sku = await this.generarSKUUnico(this.editandoId);
                         }
 
-                        else {
+                        const payload = {
+                            ...this.formProducto,
+                            nombre: this.formProducto.nombre.trim(),
+                            sku: this.formProducto.sku.trim(),
+                            categoria: this.formProducto.categoria || 'Otros',
+                            talla: this.formProducto.talla || 'Única',
+                            costoUnitario: Number(this.formProducto.costoUnitario) || 0,
+                            precioVenta: Number(this.formProducto.precioVenta) || 0,
+                            comision: Number(this.formProducto.comision) || 0,
+                            confLogistico: Number(this.formProducto.confLogistico) || 0,
+                            medioPago: this.formProducto.estado === 'vendido' ? 'Yape' : '',
+                            distrito: this.formProducto.distrito || '',
+                            perfilFacebook: this.formProducto.perfilFacebook || ''
+                        };
+                        delete payload.id;
 
-
-                            const productosRef =
-
-                                window.fb.ref(
-
-                                    window.db,
-
-                                    'productos'
-
-                                );
-
-
-                            const nuevoRef =
-
-                                window.fb.push(
-                                    productosRef
-                                );
-
-
-                            await window.fb.set(
-
-                                nuevoRef,
-
-                                payload
-
-                            );
-
-
-                            this.notificarToast(
-
-                                'success',
-
-                                'Unidad registrada correctamente'
-
-                            );
-
+                        if (this.editandoId) {
+                            await window.fb.update(window.fb.ref(window.db, `productos/${this.editandoId}`), payload);
+                            if (payload.estado === 'vendido' && payload.comprobanteId) {
+                                await window.fb.update(window.fb.ref(window.db, `comprobantes/${payload.comprobanteId}`), {
+                                    clienteNombre: payload.clienteNombre || '',
+                                    clienteTelefono: payload.clienteTelefono || '',
+                                    distrito: payload.distrito || '',
+                                    perfilFacebook: payload.perfilFacebook || '',
+                                    canalVenta: payload.canalVenta || '',
+                                    medioPago: 'Yape',
+                                    observacion: payload.observacion || ''
+                                });
+                            }
+                            this.notificarToast('success', 'Unidad y datos del cliente actualizados correctamente');
+                        } else {
+                            const nuevoRef = window.fb.push(window.fb.ref(window.db, 'productos'));
+                            payload.id = nuevoRef.key;
+                            delete payload.id;
+                            await window.fb.set(nuevoRef, payload);
+                            this.notificarToast('success', `Unidad registrada · SKU ${payload.sku}`);
                         }
-
-
-                        this.modalProducto =
-                            false;
-
+                        this.modalProducto = false;
+                    } catch (error) {
+                        console.error(error);
+                        Swal.fire('Error', error.message || 'No se pudo guardar la unidad.', 'error');
                     }
-
-                    catch (error) {
-
-                        console.error(
-                            error
-                        );
-
-
-                        Swal.fire(
-
-                            'Error',
-
-                            error.message ||
-                            'No se pudo guardar la unidad.',
-
-                            'error'
-
-                        );
-
-                    }
-
                 },
-
 
                 // =================================================
                 // REGISTRAR VENTA
                 // =================================================
 
                 registrarVenta(item) {
-
-                    if (
-                        item.estado ===
-                        'vendido'
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    this.productoVenta =
-                        item;
-
-
-                    this.ventaForm = {
-
-                        clienteNombre:
-                            '',
-
-                        clienteTelefono:
-                            '',
-
-                        canalVenta:
-
-                            item.canalVenta
-                            ||
-                            'WhatsApp',
-
-                        medioPago:
-                            item.medioPago
-                            ||
-                            'Yape',
-
-                        precioVenta:
-
-                            Number(
-                                item.precioVenta
-                            ) ||
-                            0,
-
-                        fechaVenta:
-
-                            new Date()
-                            .toISOString()
-                            .split('T')[0],
-
-                        comision:
-
-                            item.canalVenta ===
-                            'Falabella'
-
-                            ?
-
-                            Number(
-                                item.comision
-                            ) ||
-                            0
-
-                            :
-
-                            0,
-
-                        confLogistico:
-
-                            item.canalVenta ===
-                            'Falabella'
-
-                            ?
-
-                            Number(
-                                item.confLogistico
-                            ) ||
-                            0
-
-                            :
-
-                            0,
-
-                        observacion:
-                            '',
-
-                        descuento:
-                            0
-
-                    };
-
-
-                    this.modalVenta =
-                        true;
-
+                    if (item.estado === 'vendido') return;
+                    this.productoVenta = item;
+                    this.ventaForm = { clienteNombre: '', clienteTelefono: '', distrito: '', canalVenta: 'WhatsApp', perfilFacebook: '', medioPago: 'Yape', precioVenta: Number(item.precioVenta) || 0, fechaVenta: new Date().toISOString().split('T')[0], comision: 0, confLogistico: 0, observacion: '' };
+                    this.modalVenta = true;
                 },
 
 
@@ -9853,470 +7695,21 @@
                 // =================================================
 
                 async confirmarVenta() {
-
-                    if (
-                        !this.productoVenta
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    if (
-                        !this.ventaForm.clienteNombre.trim()
-                    ) {
-
-                        Swal.fire(
-
-                            'Atención',
-
-                            'Debes registrar el nombre del cliente.',
-
-                            'warning'
-
-                        );
-
-
-                        return;
-
-                    }
-
-
-                    const precio =
-
-                        Number(
-                            this.ventaForm.precioVenta
-                        ) || 0;
-
-
-                    const descuento =
-
-                        Number(
-                            this.ventaForm.descuento
-                        ) || 0;
-
-
-                    if (
-                        descuento >
-                        precio
-                    ) {
-
-                        Swal.fire(
-
-                            'Atención',
-
-                            'El descuento no puede ser mayor que el precio de venta.',
-
-                            'warning'
-
-                        );
-
-
-                        return;
-
-                    }
-
-
+                    if (!this.productoVenta) return;
+                    if (!this.ventaForm.clienteNombre.trim()) { Swal.fire('Atención', 'Debes registrar el nombre del cliente.', 'warning'); return; }
+                    if (this.ventaForm.canalVenta === 'Facebook' && !this.ventaForm.perfilFacebook) { Swal.fire('Atención', 'Selecciona el perfil de Facebook que realizó la venta.', 'warning'); return; }
                     try {
-
-
-                        Swal.fire({
-
-                            title:
-                                'Generando comprobante...',
-
-                            text:
-                                'Guardando la venta.',
-
-                            allowOutsideClick:
-                                false,
-
-                            didOpen: () => {
-
-                                Swal.showLoading();
-
-                            }
-
-                        });
-
-
-                        const item =
-                            this.productoVenta;
-
-
-                        const numero =
-
-                            await
-                            this.obtenerSiguienteNumeroComprobante();
-
-
-                        const canalVenta =
-
-                            this.ventaForm.canalVenta;
-
-
-                        const comision =
-
-                            canalVenta ===
-                            'Falabella'
-
-                            ?
-
-                            Number(
-                                this.ventaForm.comision
-                            ) || 0
-
-                            :
-
-                            0;
-
-
-                        const confLogistico =
-
-                            canalVenta ===
-                            'Falabella'
-
-                            ?
-
-                            Number(
-                                this.ventaForm.confLogistico
-                            ) || 0
-
-                            :
-
-                            0;
-
-
-                        const total =
-
-                            Math.max(
-
-                                0,
-
-                                precio -
-                                descuento
-
-                            );
-
-
-                        const comprobante = {
-
-                            numero:
-
-                                numero,
-
-                            tipo:
-
-                                'comprobante_interno',
-
-                            productoId:
-
-                                item.id,
-
-                            productoNombre:
-
-                                item.nombre ||
-                                '',
-
-                            sku:
-
-                                item.sku ||
-                                '',
-
-                            categoria:
-
-                                item.categoria ||
-                                '',
-
-                            talla:
-
-                                item.talla ||
-                                '',
-
-                            color:
-
-                                item.color ||
-                                '',
-
-                            detalle:
-
-                                item.detalle ||
-                                '',
-
-                            clienteNombre:
-
-                                this.ventaForm.clienteNombre.trim(),
-
-                            clienteTelefono:
-
-                                this.ventaForm.clienteTelefono.trim(),
-
-                            canalVenta:
-
-                                canalVenta,
-
-                            medioPago:
-
-                                this.ventaForm.medioPago,
-
-                            precioVenta:
-
-                                precio,
-
-                            descuento:
-
-                                descuento,
-
-                            total:
-
-                                total,
-
-                            costoUnitario:
-
-                                Number(
-                                    item.costoUnitario
-                                ) || 0,
-
-                            comision:
-
-                                comision,
-
-                            confLogistico:
-
-                                confLogistico,
-
-                            fechaVenta:
-
-                                this.ventaForm.fechaVenta,
-
-                            observacion:
-
-                                this.ventaForm.observacion.trim(),
-
-                            negocio:
-
-                                {
-                                    ...this.configNegocio
-                                },
-
-                            creadoEn:
-
-                                new Date()
-                                .toISOString()
-
-                        };
-
-
-                        // =========================================
-                        // COMPROBANTE
-                        // =========================================
-
-                        const comprobantesRef =
-
-                            window.fb.ref(
-
-                                window.db,
-
-                                'comprobantes'
-
-                            );
-
-
-                        const comprobanteRef =
-
-                            window.fb.push(
-                                comprobantesRef
-                            );
-
-
-                        const comprobanteId =
-                            comprobanteRef.key;
-
-
-                        comprobante.id =
-                            comprobanteId;
-
-
-                        await window.fb.set(
-
-                            comprobanteRef,
-
-                            comprobante
-
-                        );
-
-
-                        // =========================================
-                        // PRODUCTO
-                        // =========================================
-
-                        await window.fb.update(
-
-                            window.fb.ref(
-
-                                window.db,
-
-                                `productos/${item.id}`
-
-                            ),
-
-                            {
-
-                                estado:
-                                    'vendido',
-
-                                fechaVenta:
-                                    this.ventaForm.fechaVenta,
-
-                                clienteNombre:
-                                    this.ventaForm.clienteNombre.trim(),
-
-                                clienteTelefono:
-                                    this.ventaForm.clienteTelefono.trim(),
-
-                                canalVenta:
-                                    canalVenta,
-
-                                medioPago:
-                                    this.ventaForm.medioPago,
-
-                                precioVenta:
-                                    precio,
-
-                                descuento:
-                                    descuento,
-
-                                comision:
-                                    comision,
-
-                                confLogistico:
-                                    confLogistico,
-
-                                observacion:
-                                    this.ventaForm.observacion.trim(),
-
-                                comprobanteNumero:
-                                    numero,
-
-                                comprobanteId:
-                                    comprobanteId
-
-                            }
-
-                        );
-
-
-                        Swal.close();
-
-
-                        this.modalVenta =
-                            false;
-
-
-                        this.productoVenta =
-                            null;
-
-
-                        this.comprobanteActual =
-                            comprobante;
-
-
-                        this.modalComprobante =
-                            true;
-
-
-                        this.notificarToast(
-
-                            'success',
-
-                            `Venta registrada · ${numero}`
-
-                        );
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            'ERROR GENERANDO COMPROBANTE:',
-                            error
-                        );
-
-
-                        Swal.close();
-
-
-                        Swal.fire({
-
-                            icon:
-                                'error',
-
-                            title:
-                                'No se pudo generar el comprobante',
-
-                            html:
-
-                                `
-
-                                <div
-                                    style="
-                                        text-align:left;
-                                        font-size:13px;
-                                    "
-                                >
-
-                                    <div>
-                                        <strong>Error real:</strong>
-                                    </div>
-
-                                    <div
-                                        style="
-                                            margin-top:8px;
-                                            padding:12px;
-                                            background:#f8fafc;
-                                            border-radius:10px;
-                                            word-break:break-word;
-                                        "
-                                    >
-
-                                        ${
-                                            this.escapeHtml(
-                                                error?.message ||
-                                                'Error desconocido'
-                                            )
-                                        }
-
-                                    </div>
-
-
-                                    <div
-                                        style="
-                                            margin-top:12px;
-                                            color:#64748b;
-                                        "
-                                    >
-
-                                        Si aparece
-                                        <strong>PERMISSION_DENIED</strong>,
-                                        revisa las Rules de Firebase.
-
-                                    </div>
-
-                                </div>
-
-                                `,
-
-                            confirmButtonText:
-                                'Cerrar',
-
-                            confirmButtonColor:
-                                '#7c3aed'
-
-                        });
-
-                    }
-
+                        Swal.fire({ title: 'Generando comprobante...', text: 'Guardando la venta.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                        const item = this.productoVenta, numero = await this.obtenerSiguienteNumeroComprobante(), canalVenta = this.ventaForm.canalVenta;
+                        const comision = canalVenta === 'Falabella' ? Number(this.ventaForm.comision) || 0 : 0;
+                        const confLogistico = canalVenta === 'Falabella' ? Number(this.ventaForm.confLogistico) || 0 : 0;
+                        const precio = Number(item.precioVenta) || 0;
+                        const perfilFacebook = canalVenta === 'Facebook' ? (this.ventaForm.perfilFacebook || '') : '';
+                        const comprobante = { numero, tipo: 'comprobante_venta', productoId: item.id, productoNombre: item.nombre || '', sku: item.sku || '', categoria: item.categoria || '', talla: item.talla || '', detalle: item.detalle || '', clienteNombre: this.ventaForm.clienteNombre.trim(), clienteTelefono: this.ventaForm.clienteTelefono.trim(), distrito: this.ventaForm.distrito.trim(), canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, total: precio, costoUnitario: Number(item.costoUnitario) || 0, comision, confLogistico, fechaVenta: this.ventaForm.fechaVenta, observacion: this.ventaForm.observacion.trim(), negocio: { ...this.configNegocio }, creadoEn: new Date().toISOString() };
+                        const comprobanteRef = window.fb.push(window.fb.ref(window.db, 'comprobantes')); const comprobanteId = comprobanteRef.key; comprobante.id = comprobanteId; await window.fb.set(comprobanteRef, comprobante);
+                        await window.fb.update(window.fb.ref(window.db, `productos/${item.id}`), { estado: 'vendido', fechaVenta: this.ventaForm.fechaVenta, clienteNombre: this.ventaForm.clienteNombre.trim(), clienteTelefono: this.ventaForm.clienteTelefono.trim(), distrito: this.ventaForm.distrito.trim(), canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: this.ventaForm.observacion.trim(), comprobanteNumero: numero, comprobanteId });
+                        Swal.close(); this.modalVenta = false; this.productoVenta = null; this.comprobanteActual = comprobante; this.modalComprobante = true; this.notificarToast('success', `Venta registrada · ${numero}`);
+                    } catch (error) { console.error('ERROR GENERANDO COMPROBANTE:', error); Swal.close(); Swal.fire({ icon: 'error', title: 'No se pudo generar el comprobante', text: error?.message || 'Error desconocido', confirmButtonColor: '#7c3aed' }); }
                 },
 
 
@@ -10422,6 +7815,14 @@
                                     item.clienteTelefono ||
                                     '',
 
+                                distrito:
+                                    item.distrito ||
+                                    '',
+
+                                perfilFacebook:
+                                    item.perfilFacebook ||
+                                    '',
+
                                 canalVenta:
                                     item.canalVenta ||
                                     '',
@@ -10436,28 +7837,8 @@
                                     ) ||
                                     0,
 
-                                descuento:
-                                    Number(
-                                        item.descuento
-                                    ) ||
-                                    0,
-
                                 total:
-
-                                    Math.max(
-                                        0,
-                                        (
-                                            Number(
-                                                item.precioVenta
-                                            ) || 0
-                                        )
-                                        -
-                                        (
-                                            Number(
-                                                item.descuento
-                                            ) || 0
-                                        )
-                                    ),
+                                    Number(item.precioVenta) || 0,
 
                                 comision:
                                     Number(
@@ -10535,290 +7916,111 @@
                 // VER VENTA
                 // =================================================
 
-                async verVenta(item) {
-
-                    const ganancia =
-
-                        this.calcularGananciaReal(
-                            item
-                        );
-
-
-                    Swal.fire({
-
-                        title:
-                            'Detalle de la venta',
-
-                        html:
-
-                            `
-
-                            <div
-                                class="text-left space-y-3"
-                            >
-
-                                <div>
-
-                                    <b>
-                                        Producto:
-                                    </b>
-
-                                    ${this.escapeHtml(
-                                        item.nombre ||
-                                        ''
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        SKU:
-                                    </b>
-
-                                    ${this.escapeHtml(
-                                        item.sku ||
-                                        'N/A'
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Cliente:
-                                    </b>
-
-                                    ${this.escapeHtml(
-                                        item.clienteNombre ||
-                                        'Sin registrar'
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Teléfono:
-                                    </b>
-
-                                    ${this.escapeHtml(
-                                        item.clienteTelefono ||
-                                        'No registrado'
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Canal:
-                                    </b>
-
-                                    ${this.escapeHtml(
-                                        item.canalVenta ||
-                                        ''
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Medio de pago:
-                                    </b>
-
-                                    ${this.escapeHtml(
-                                        item.medioPago ||
-                                        'No registrado'
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Fecha:
-                                    </b>
-
-                                    ${this.formatFecha(
-                                        item.fechaVenta
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Precio:
-                                    </b>
-
-                                    S/
-
-                                    ${this.formatMonto(
-                                        item.precioVenta
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Comisión:
-                                    </b>
-
-                                    S/
-
-                                    ${this.formatMonto(
-                                        item.comision
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Conf. Logístico:
-                                    </b>
-
-                                    S/
-
-                                    ${this.formatMonto(
-                                        item.confLogistico
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Descuento:
-                                    </b>
-
-                                    S/
-
-                                    ${this.formatMonto(
-                                        item.descuento
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Comprobante:
-                                    </b>
-
-                                    ${this.escapeHtml(
-                                        item.comprobanteNumero ||
-                                        'No generado'
-                                    )}
-
-                                </div>
-
-
-                                <div>
-
-                                    <b>
-                                        Ganancia:
-                                    </b>
-
-                                    <span
-                                        class="
-                                            text-emerald-600
-                                            font-bold
-                                        "
-                                    >
-
-                                        S/
-
-                                        ${this.formatMonto(
-                                            ganancia
-                                        )}
-
-                                    </span>
-
-                                </div>
-
-
-                                ${
-                                    item.observacion
-
-                                    ?
-
-                                    `
-
-                                    <div>
-
-                                        <b>
-                                            Observación:
-                                        </b>
-
-                                        ${this.escapeHtml(
-                                            item.observacion
-                                        )}
-
-                                    </div>
-
-                                    `
-
-                                    :
-
-                                    ''
-
-                                }
-
-
-                            </div>
-
-                            `,
-
-                        showCancelButton:
-                            !!(
-                                item.comprobanteId ||
-                                item.comprobanteNumero ||
-                                item.estado ===
-                                'vendido'
-                            ),
-
-                        cancelButtonText:
-                            'Cerrar',
-
-                        confirmButtonText:
-                            'Ver comprobante',
-
-                        confirmButtonColor:
-                            '#7c3aed'
-
-                    }).then(
-
-                        result => {
-
-                            if (
-                                result.isConfirmed
-                            ) {
-
-                                this.abrirComprobanteDesdeVenta(
-                                    item
-                                );
-
-                            }
-
+                async editarVenta(item) {
+                    if (!item || item.estado !== 'vendido') return;
+                    this.ventaEditando = JSON.parse(JSON.stringify(item));
+                    this.ventaEditando.clienteNombre = this.ventaEditando.clienteNombre || '';
+                    this.ventaEditando.clienteTelefono = this.ventaEditando.clienteTelefono || '';
+                    this.ventaEditando.distrito = this.ventaEditando.distrito || '';
+                    this.ventaEditando.canalVenta = this.ventaEditando.canalVenta || 'WhatsApp';
+                    this.ventaEditando.perfilFacebook = this.ventaEditando.perfilFacebook || '';
+                    this.ventaEditando.fechaVenta = this.ventaEditando.fechaVenta || new Date().toISOString().split('T')[0];
+                    this.ventaEditando.observacion = this.ventaEditando.observacion || '';
+                    this.ventaEditando.comision = Number(this.ventaEditando.comision || 0);
+                    this.ventaEditando.confLogistico = Number(this.ventaEditando.confLogistico || 0);
+                    this.ventaEditando.precioVenta = Number(this.ventaEditando.precioVenta || 0);
+                    this.modalEditarVenta = true;
+                },
+
+
+                async guardarVentaEditada() {
+                    const venta = this.ventaEditando;
+                    if (!venta?.id) return;
+                    if (!String(venta.clienteNombre || '').trim()) { Swal.fire('Atención', 'Debes registrar el nombre del cliente.', 'warning'); return; }
+                    if (!venta.fechaVenta) { Swal.fire('Atención', 'Debes registrar la fecha de venta.', 'warning'); return; }
+                    if (venta.canalVenta === 'Facebook' && !venta.perfilFacebook) { Swal.fire('Atención', 'Selecciona el perfil de Facebook.', 'warning'); return; }
+                    try {
+                        Swal.fire({ title: 'Guardando cambios...', text: 'Actualizando el registro de venta.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                        const precio = Number(venta.precioVenta) || 0;
+                        const comision = venta.canalVenta === 'Falabella' ? Number(venta.comision) || 0 : 0;
+                        const confLogistico = venta.canalVenta === 'Falabella' ? Number(venta.confLogistico) || 0 : 0;
+                        const perfilFacebook = venta.canalVenta === 'Facebook' ? String(venta.perfilFacebook || '') : '';
+                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, clienteNombre: String(venta.clienteNombre || '').trim(), clienteTelefono: String(venta.clienteTelefono || '').trim(), distrito: String(venta.distrito || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim() };
+                        await window.fb.update(window.fb.ref(window.db, `productos/${venta.id}`), datos);
+                        if (venta.comprobanteId) {
+                            await window.fb.update(window.fb.ref(window.db, `comprobantes/${venta.comprobanteId}`), { clienteNombre: datos.clienteNombre, clienteTelefono: datos.clienteTelefono, distrito: datos.distrito, canalVenta: datos.canalVenta, perfilFacebook: datos.perfilFacebook, medioPago: 'Yape', precioVenta: precio, total: precio, comision, confLogistico, fechaVenta: datos.fechaVenta, observacion: datos.observacion });
                         }
+                        Swal.close();
+                        this.modalEditarVenta = false;
+                        this.ventaEditando = null;
+                        this.notificarToast('success', 'Venta actualizada correctamente');
+                    } catch (error) {
+                        console.error('ERROR EDITANDO VENTA:', error);
+                        Swal.close();
+                        Swal.fire({ icon: 'error', title: 'No se pudo actualizar', text: error?.message || 'Error desconocido', confirmButtonColor: '#f59e0b' });
+                    }
+                },
 
-                    );
 
+                // =================================================
+                // VER VENTA
+                // =================================================
+
+                async verVenta(item) {
+                    const ganancia = this.calcularGananciaReal(item);
+                    const canal = this.escapeHtml(item.canalVenta || 'Sin registrar');
+                    const perfil = item.canalVenta === 'Facebook' ? (item.perfilFacebook || 'Sin registrar') : '';
+                    const observacion = item.observacion ? this.escapeHtml(item.observacion) : 'Sin observaciones';
+                    Swal.fire({
+                        width: 650,
+                        padding: '0',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        showDenyButton: true,
+                        cancelButtonText: 'Cerrar',
+                        denyButtonText: '<i class="fa-solid fa-pen-to-square"></i> Editar venta',
+                        confirmButtonText: '<i class="fa-solid fa-file-invoice"></i> Ver comprobante',
+                        confirmButtonColor: '#7c3aed',
+                        denyButtonColor: '#f59e0b',
+                        html: `
+                            <div class="text-left overflow-hidden rounded-2xl">
+                                <div class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white p-6">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <div class="min-w-0">
+                                            <div class="text-[10px] uppercase tracking-[0.2em] font-black opacity-80">Registro de venta</div>
+                                            <div class="text-2xl font-black mt-1 truncate">${this.escapeHtml(item.nombre || 'Producto')}</div>
+                                            <div class="text-xs opacity-80 mt-1">SKU: ${this.escapeHtml(item.sku || 'N/A')}</div>
+                                        </div>
+                                        <div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-cart-shopping text-xl"></i></div>
+                                    </div>
+                                </div>
+                                <div class="p-5 bg-white dark:bg-slate-800 space-y-4">
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div class="rounded-xl bg-slate-50 dark:bg-slate-900 p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400 font-black">Cliente</div><div class="text-sm font-black mt-1 truncate">${this.escapeHtml(item.clienteNombre || 'Sin registrar')}</div></div>
+                                        <div class="rounded-xl bg-slate-50 dark:bg-slate-900 p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400 font-black">Teléfono</div><div class="text-sm font-black mt-1 truncate">${this.escapeHtml(item.clienteTelefono || 'No registrado')}</div></div>
+                                        <div class="rounded-xl bg-slate-50 dark:bg-slate-900 p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400 font-black">Distrito</div><div class="text-sm font-black mt-1 truncate">${this.escapeHtml(item.distrito || 'No registrado')}</div></div>
+                                        <div class="rounded-xl bg-slate-50 dark:bg-slate-900 p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400 font-black">Fecha de venta</div><div class="text-sm font-black mt-1">${this.formatFecha(item.fechaVenta) || 'No registrada'}</div></div>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-black"><i class="fa-solid fa-bullhorn"></i>${canal}</span>
+                                        ${item.canalVenta === 'Facebook' ? `<span class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-sky-500/10 text-sky-600 text-xs font-black"><i class="fa-brands fa-facebook-f"></i>${this.escapeHtml(perfil)}</span>` : ''}
+                                        <span class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400 text-xs font-black"><i class="fa-solid fa-mobile-screen-button"></i>Yape</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3"><div class="text-[9px] text-slate-400 uppercase font-black">Precio</div><div class="text-base font-black mt-1">S/ ${this.formatMonto(item.precioVenta)}</div></div>
+                                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3"><div class="text-[9px] text-slate-400 uppercase font-black">Comisión</div><div class="text-base font-black mt-1">S/ ${this.formatMonto(item.comision)}</div></div>
+                                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3"><div class="text-[9px] text-slate-400 uppercase font-black">Logística</div><div class="text-base font-black mt-1">S/ ${this.formatMonto(item.confLogistico)}</div></div>
+                                        <div class="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3"><div class="text-[9px] text-emerald-600 uppercase font-black">Ganancia</div><div class="text-base font-black text-emerald-600 mt-1">S/ ${this.formatMonto(ganancia)}</div></div>
+                                    </div>
+                                    <div class="rounded-xl bg-slate-50 dark:bg-slate-900 p-4"><div class="text-[9px] uppercase tracking-wider text-slate-400 font-black mb-1">Comprobante</div><div class="text-sm font-black text-violet-600">${this.escapeHtml(item.comprobanteNumero || 'No generado')}</div></div>
+                                    <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-4"><div class="text-[9px] uppercase tracking-wider text-slate-400 font-black mb-1"><i class="fa-solid fa-note-sticky mr-1"></i>Detalle de la venta</div><div class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${observacion}</div></div>
+                                </div>
+                            </div>
+                        `
+                    }).then(result => {
+                        if (result.isConfirmed) this.abrirComprobanteDesdeVenta(item);
+                        else if (result.isDenied) this.editarVenta(item);
+                    });
                 },
 
 
