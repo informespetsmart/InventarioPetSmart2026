@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Inventario PetSmart</title>
+<title>Inventario PetSmart · V5 Multi SKU</title>
 <!-- =========================================================
          TAILWIND
     ========================================================== -->
@@ -257,7 +257,13 @@ body.dark{background:#070d19!important}
 .inventory-main [class*="grid-cols"]+[class*="grid-cols"]{margin-top:16px!important}
 .inventory-main [class*="grid-cols"]{row-gap:16px!important;column-gap:16px!important}
 }
-</style></head>
+</style>
+<style>
+/* REGISTRO DE VENTA MULTI-SKU */
+.venta-sku-row{transition:box-shadow .2s ease,border-color .2s ease,background .2s ease}
+.venta-sku-row:focus-within{box-shadow:0 8px 25px rgba(79,70,229,.08)}
+</style>
+</head>
 <body :class="
         darkMode
         ? 'dark bg-slate-900 text-slate-100'
@@ -541,41 +547,76 @@ body.dark{background:#070d19!important}
 </div>
 </div>
 <!-- =====================================================
-             MODAL VENTA
+             MODAL VENTA MULTI-SKU
         ====================================================== -->
 <div class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50" style="display:none;" x-show="modalVenta" x-transition.opacity="">
-<div class="bg-white dark:bg-slate-800 w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 max-h-[94vh] overflow-y-auto">
+<div class="bg-white dark:bg-slate-800 w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 max-h-[94vh] overflow-y-auto">
 <div class="p-6 md:p-7 border-b border-slate-200 dark:border-slate-700">
 <div class="flex items-start justify-between gap-4">
 <div>
-<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-3">
-<i class="fa-solid fa-circle-check"></i> Nueva venta
-                            </div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-3"><i class="fa-solid fa-cart-plus"></i> Nueva venta</div>
 <h3 class="text-2xl font-black text-slate-900 dark:text-white">Registrar Venta</h3>
-<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Completa los datos del cliente y confirma la operación.</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Ingresa uno o varios SKU. Los datos del cliente se registran una sola vez.</p>
 </div>
-<button @click="modalVenta = false" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-400 hover:text-rose-500 flex items-center justify-center"><i class="fa-solid fa-xmark text-xl"></i></button>
-</div>
-<div class="mt-5 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700" x-show="productoVenta">
-<div class="flex items-center gap-4">
-<div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-700 flex-shrink-0 flex items-center justify-center">
-<template x-if="productoVenta?.imagenUrl"><img :alt="productoVenta.nombre" :src="productoVenta.imagenUrl" class="w-full h-full object-cover"/></template>
-<template x-if="!productoVenta?.imagenUrl"><i class="fa-solid fa-paw text-slate-400 text-xl"></i></template>
-</div>
-<div class="min-w-0 flex-1">
-<div class="font-black text-slate-900 dark:text-white truncate" x-text="productoVenta?.nombre"></div>
-<div class="text-xs text-slate-500 dark:text-slate-400 mt-1">SKU: <span x-text="productoVenta?.sku || 'N/A'"></span> · Costo: S/ <span x-text="formatMonto(productoVenta?.costoUnitario)"></span></div>
-</div>
-<div class="text-right"><div class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Precio</div><div class="text-xl font-black text-emerald-600 dark:text-emerald-400">S/ <span x-text="formatMonto(productoVenta?.precioVenta)"></span></div></div>
+<button @click="cerrarModalVenta()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-400 hover:text-rose-500 flex items-center justify-center"><i class="fa-solid fa-xmark text-xl"></i></button>
 </div>
 </div>
-</div>
+
 <form @submit.prevent="confirmarVenta()" class="p-6 md:p-7 space-y-5">
+<!-- PRODUCTOS / SKU -->
+<div class="rounded-2xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/60 dark:bg-indigo-950/20 overflow-hidden">
+<div class="px-4 py-4 border-b border-indigo-200 dark:border-indigo-900/60 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+<div>
+<div class="text-xs font-black uppercase tracking-widest text-indigo-700 dark:text-indigo-300"><i class="fa-solid fa-barcode mr-1"></i> Productos de la venta</div>
+<div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Escribe el SKU. El producto, costo y precio se completan automáticamente.</div>
+</div>
+<button @click="agregarLineaVenta()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black flex items-center justify-center gap-2" type="button"><i class="fa-solid fa-plus"></i> Agregar producto</button>
+</div>
+<div class="p-4 space-y-3">
+<template :key="'sku-venta-' + index" x-for="(linea,index) in ventaItems">
+<div class="venta-sku-row rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3" :class="linea.error ? 'border-rose-300 dark:border-rose-800' : (linea.producto ? 'border-emerald-300 dark:border-emerald-800' : '')">
+<div class="grid grid-cols-1 md:grid-cols-[minmax(180px,1.2fr)_minmax(220px,2fr)_110px_110px_44px] gap-3 items-center">
+<div>
+<label class="block text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">SKU</label>
+<div class="relative">
+<input :list="'skus-disponibles-' + index" @input="validarLineaSKU(index)" @blur="validarLineaSKU(index)" class="w-full bg-slate-100 dark:bg-slate-800 border rounded-xl px-3 py-2.5 font-mono text-sm font-black uppercase" :class="linea.error ? 'border-rose-400' : 'border-slate-300 dark:border-slate-700'" maxlength="40" placeholder="Ej: PSARTTRA..." type="text" x-model="linea.sku"/>
+<datalist :id="'skus-disponibles-' + index"><template x-for="item in productosDisponiblesParaVenta"><option :value="item.sku" x-text="item.sku + ' · ' + item.nombre"></option></template></datalist>
+</div>
+<div class="text-[10px] mt-1" :class="linea.error ? 'text-rose-500 font-bold' : 'text-slate-400'" x-text="linea.error || (linea.producto ? 'SKU válido · Disponible' : 'Ingresa un SKU disponible')"></div>
+</div>
+<div class="min-w-0">
+<label class="block text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">Producto</label>
+<div class="font-black text-sm text-slate-800 dark:text-slate-100 truncate" x-text="linea.producto?.nombre || '—'"></div>
+<div class="text-[10px] text-slate-400 mt-1 truncate" x-text="linea.producto ? ('Talla: ' + (linea.producto.talla || 'Única')) : 'El producto aparecerá al reconocer el SKU'"></div>
+</div>
+<div>
+<label class="block text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">Costo</label>
+<div class="text-sm font-black text-amber-600 dark:text-amber-400">S/ <span x-text="formatMonto(linea.producto?.costoUnitario || 0)"></span></div>
+</div>
+<div>
+<label class="block text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">Precio</label>
+<div class="text-sm font-black text-emerald-600 dark:text-emerald-400">S/ <span x-text="formatMonto(linea.producto?.precioVenta || 0)"></span></div>
+</div>
+<div class="flex justify-center">
+<button @click="quitarLineaVenta(index)" :disabled="ventaItems.length === 1" class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed" title="Eliminar SKU" type="button"><i class="fa-solid fa-trash"></i></button>
+</div>
+</div>
+</div>
+</template>
+</div>
+</div>
+
+<!-- DATOS CLIENTE -->
+<div class="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/30 space-y-4">
+<div><div class="text-xs font-black text-blue-700 dark:text-blue-300 flex items-center gap-2"><i class="fa-solid fa-user"></i> Datos del cliente</div><div class="text-[10px] text-slate-400 mt-1">Estos datos se ingresan una sola vez y se aplicarán a todos los SKU seleccionados.</div></div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Cliente *</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" placeholder="Nombre completo" required="" type="text" x-model="ventaForm.clienteNombre"/></div>
+<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Cliente *</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" placeholder="Nombre completo" required type="text" x-model="ventaForm.clienteNombre"/></div>
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Teléfono</label><input @input="ventaForm.clienteTelefono = limpiarCelular(ventaForm.clienteTelefono)" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" inputmode="numeric" maxlength="9" pattern="[0-9]{9}" placeholder="999999999" type="tel" x-model="ventaForm.clienteTelefono"/></div>
 </div>
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Distrito</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" placeholder="Ej: Miraflores" type="text" x-model="ventaForm.distrito"/></div>
+</div>
+
+<!-- COMPROBANTE -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Tipo de comprobante</label><select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold" x-model="ventaForm.tipoComprobante"><option value="Boleta">Boleta</option><option value="Factura">Factura</option></select></div>
 <div x-show="ventaForm.tipoComprobante === 'Boleta'"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Tipo de documento</label><select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold" x-model="ventaForm.tipoDocumento"><option value="DNI">DNI</option><option value="Carnet de Extranjería">Carnet de Extranjería</option><option value="Pasaporte">Pasaporte</option></select></div>
@@ -583,24 +624,31 @@ body.dark{background:#070d19!important}
 <div x-show="ventaForm.tipoComprobante === 'Factura'"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">RUC</label><input @input="ventaForm.ruc = String(ventaForm.ruc).replace(/\D/g,'')" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" inputmode="numeric" maxlength="11" type="text" x-model="ventaForm.ruc"/></div>
 <div x-show="ventaForm.tipoComprobante === 'Factura'"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Razón Social</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" type="text" x-model="ventaForm.razonSocial"/></div>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Canal de Venta *</label><select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold" required="" x-model="ventaForm.canalVenta"><option value="WhatsApp">WhatsApp</option><option value="Facebook">Facebook</option><option value="Rappi">Rappi</option><option value="Falabella">Seller Falabella</option></select></div>
-<div x-show="ventaForm.canalVenta === 'Facebook'" x-transition=""><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Perfil que realizó la venta *</label><select :required="ventaForm.canalVenta === 'Facebook'" class="w-full bg-blue-50 dark:bg-slate-900 border border-blue-300 dark:border-blue-700 rounded-xl px-4 py-3 text-sm font-bold" x-model="ventaForm.perfilFacebook"><option value="">Seleccionar perfil</option><option value="Rouss Huamani">Rouss Huamani</option><option value="Katy Avril">Katy Avril</option><option value="Simon Sebastian">Simon Sebastian</option><option value="Jennifer Medina">Jennifer Medina</option><option value="Rouss Mery">Rouss Mery</option></select></div>
-</div>
+
+<!-- VENTA -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Canal de Venta *</label><select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold" required x-model="ventaForm.canalVenta"><option value="WhatsApp">WhatsApp</option><option value="Facebook">Facebook</option><option value="Rappi">Rappi</option><option value="Falabella">Seller Falabella</option></select></div>
+<div x-show="ventaForm.canalVenta === 'Facebook'" x-transition><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Perfil que realizó la venta *</label><select :required="ventaForm.canalVenta === 'Facebook'" class="w-full bg-blue-50 dark:bg-slate-900 border border-blue-300 dark:border-blue-700 rounded-xl px-4 py-3 text-sm font-bold" x-model="ventaForm.perfilFacebook"><option value="">Seleccionar perfil</option><option value="Rouss Huamani">Rouss Huamani</option><option value="Katy Avril">Katy Avril</option><option value="Simon Sebastian">Simon Sebastian</option><option value="Jennifer Medina">Jennifer Medina</option><option value="Rouss Mery">Rouss Mery</option></select></div>
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Medio de pago</label><div class="w-full bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800 rounded-xl px-4 py-3 text-sm font-black text-violet-700 dark:text-violet-300 flex items-center gap-2"><i class="fa-solid fa-mobile-screen-button"></i> Yape</div></div>
-<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Precio final</label><input class="w-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-300 dark:border-emerald-800 rounded-xl px-4 py-3 text-sm font-black text-emerald-700 dark:text-emerald-300 cursor-not-allowed" readonly="" step="0.01" type="number" x-model.number="ventaForm.precioVenta"/><div class="text-[10px] text-slate-400 mt-1">Tomado automáticamente del precio del producto.</div></div>
-<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Fecha de venta *</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-3 text-sm" required="" type="date" x-model="ventaForm.fechaVenta"/></div>
 </div>
+
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-truck text-amber-500 mr-1"></i>Envío <span class="font-normal text-slate-400">(informativo)</span></label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" placeholder="Ej: S/ 10 · Motorizado" type="text" x-model="ventaForm.envio"/><div class="text-[10px] text-slate-400 mt-1">No suma, resta ni participa en ningún cálculo.</div></div>
+<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Fecha de venta *</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-3 text-sm" required type="date" x-model="ventaForm.fechaVenta"/></div>
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-calendar-check text-emerald-500 mr-1"></i>Fecha de entrega</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-3 text-sm" type="date" x-model="ventaForm.fechaEntrega"/></div>
 </div>
-<template x-if="ventaForm.canalVenta === 'Falabella'"><div class="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30 space-y-3"><div class="text-xs font-black text-purple-700 dark:text-purple-300">Costos Seller Falabella</div><div class="grid grid-cols-2 gap-3"><div><label class="block text-[11px] font-bold text-purple-600 dark:text-purple-400 mb-1">Comisión (S/)</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-purple-300 rounded-lg px-3 py-2 text-xs font-bold" min="0" step="0.01" type="number" x-model.number="ventaForm.comision"/></div><div><label class="block text-[11px] font-bold text-purple-600 dark:text-purple-400 mb-1">Conf. Logístico (S/)</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-purple-300 rounded-lg px-3 py-2 text-xs font-bold" min="0" step="0.01" type="number" x-model.number="ventaForm.confLogistico"/></div></div></div></template>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-truck text-amber-500 mr-1"></i>Envío <span class="font-normal text-slate-400">(informativo)</span></label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" placeholder="Ej: S/ 10 · Motorizado" type="text" x-model="ventaForm.envio"/><div class="text-[10px] text-slate-400 mt-1">No suma, resta ni participa en ningún cálculo.</div></div>
+<template x-if="ventaForm.canalVenta === 'Falabella'"><div class="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30 space-y-3"><div class="text-xs font-black text-purple-700 dark:text-purple-300">Costos Seller Falabella · para toda la venta</div><div class="grid grid-cols-2 gap-3"><div><label class="block text-[11px] font-bold text-purple-600 dark:text-purple-400 mb-1">Comisión (S/)</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-purple-300 rounded-lg px-3 py-2 text-xs font-bold" min="0" step="0.01" type="number" x-model.number="ventaForm.comision"/></div><div><label class="block text-[11px] font-bold text-purple-600 dark:text-purple-400 mb-1">Conf. Logístico (S/)</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-purple-300 rounded-lg px-3 py-2 text-xs font-bold" min="0" step="0.01" type="number" x-model.number="ventaForm.confLogistico"/></div></div><div class="text-[10px] text-purple-700/70 dark:text-purple-300/70">Se distribuirán proporcionalmente entre los productos según su precio.</div></div></template>
+</div>
+
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Detalle de la venta</label><textarea class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm resize-none" placeholder="Ej: Entrega coordinada, referencia del domicilio, horario acordado, confirmación de pago o cualquier información adicional." rows="3" x-model="ventaForm.observacion"></textarea></div>
-<div class="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden"><div class="bg-slate-900 text-white px-4 py-3 flex items-center gap-2"><i class="fa-solid fa-receipt text-emerald-400"></i><span class="text-xs font-black uppercase tracking-widest">Resumen de la operación</span></div><div class="p-4 bg-slate-50 dark:bg-slate-900/50 grid grid-cols-2 md:grid-cols-5 gap-4"><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Cliente</div><div class="text-sm font-black mt-1 truncate" x-text="ventaForm.clienteNombre || 'Pendiente'"></div></div><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Distrito</div><div class="text-sm font-black mt-1 truncate" x-text="ventaForm.distrito || 'No indicado'"></div></div><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Canal</div><div class="text-sm font-black mt-1" x-text="ventaForm.canalVenta"></div></div><div x-show="ventaForm.canalVenta === 'Facebook'"><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Perfil</div><div class="text-sm font-black mt-1 truncate" x-text="ventaForm.perfilFacebook || 'Pendiente'"></div></div><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Total · Yape</div><div class="text-lg font-black text-emerald-600 mt-0.5">S/ <span x-text="formatMonto(ventaForm.precioVenta)"></span></div></div></div></div>
-<div class="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-4 flex justify-between items-center"><div><div class="text-xs font-black">Ganancia real estimada</div><div class="text-[10px] text-slate-400 mt-1">Precio final − costo − comisión − logística.</div></div><div class="text-xl font-black text-blue-600 dark:text-blue-400">S/ <span x-text="formatMonto(calcularGananciaVenta())"></span></div></div>
-<div class="flex justify-end gap-3 pt-2"><button @click="modalVenta = false" class="px-5 py-3 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold" type="button">Cancelar</button><button class="px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-black shadow-lg flex items-center gap-2" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar/Registrar venta</button></div>
+
+<!-- RESUMEN -->
+<div class="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden"><div class="bg-slate-900 text-white px-4 py-3 flex items-center gap-2"><i class="fa-solid fa-receipt text-emerald-400"></i><span class="text-xs font-black uppercase tracking-widest">Resumen de la operación</span></div><div class="p-4 bg-slate-50 dark:bg-slate-900/50 grid grid-cols-2 md:grid-cols-4 gap-4"><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Productos</div><div class="text-sm font-black mt-1" x-text="ventaItemsValidos.length"></div></div><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Cliente</div><div class="text-sm font-black mt-1 truncate" x-text="ventaForm.clienteNombre || 'Pendiente'"></div></div><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Canal</div><div class="text-sm font-black mt-1" x-text="ventaForm.canalVenta"></div></div><div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Total · Yape</div><div class="text-lg font-black text-emerald-600 mt-0.5">S/ <span x-text="formatMonto(totalVentaSeleccionada)"></span></div></div></div></div>
+<div class="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-4 flex justify-between items-center"><div><div class="text-xs font-black">Ganancia real estimada</div><div class="text-[10px] text-slate-400 mt-1">Precio total − costo total − comisión − logística.</div></div><div class="text-xl font-black text-blue-600 dark:text-blue-400">S/ <span x-text="formatMonto(calcularGananciaVenta())"></span></div></div>
+
+<div class="flex justify-end gap-3 pt-2"><button @click="cerrarModalVenta()" class="px-5 py-3 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold" type="button">Cancelar</button><button class="px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-black shadow-lg flex items-center gap-2" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar/Registrar venta</button></div>
 </form>
 </div>
 </div>
@@ -985,6 +1033,9 @@ body.dark{background:#070d19!important}
                     null,
                 productoVenta:
                     null,
+                ventaItems: [
+                    { sku: '', producto: null, error: '' }
+                ],
                 ventaEditando:
                     null,
                 // =================================================
@@ -1210,7 +1261,6 @@ body.dark{background:#070d19!important}
                                     })
                                 );
                             this.normalizarSKUsExistentes();
-                            this.asignarSKUsFaltantes();
                         },
                         error => {
                             console.error(
@@ -1290,51 +1340,19 @@ body.dark{background:#070d19!important}
                     return p;
                 },
                 async normalizarSKUsExistentes() {
-                    if (!this.productos.length || !window.db || !window.fb) return;
-                    const updates = {};
-                    const usados = new Set();
-                    for (const item of this.productos) {
-                        const actual = String(item.sku || '');
-                        if (!actual) continue;
-                        const normalizado = this.normalizarSKU(actual);
-                        if (usados.has(normalizado)) continue;
-                        usados.add(normalizado);
-                        if (normalizado !== actual) updates[`productos/${item.id}/sku`] = normalizado;
-                    }
-                    if (Object.keys(updates).length) {
-                        try { await window.fb.update(window.fb.ref(window.db), updates); }
-                        catch (error) { console.error('No se pudieron normalizar los SKUs existentes:', error); }
-                    }
+                    // Los SKU existentes no se modifican automáticamente.
+                    return;
                 },
                 async asignarSKUsFaltantes() {
-                    if (!this.productos.length || !window.db || !window.fb) return;
-                    const usados = new Set(this.productos.map(item => String(item.sku || '').toUpperCase()).filter(Boolean));
-                    const pendientes = [];
-                    for (const item of this.productos) {
-                        if (item.sku) continue;
-                        let sku = '';
-                        for (let i = 0; i < 30; i++) {
-                            const familia = this.codigoFamiliaSKU(item.categoria);
-                            const variante = this.normalizarCodigoSKU(item.talla) || 'U';
-                            sku = `PS${familia}${this.generarIdentificadorInternoSKU()}${variante}`;
-                            if (!usados.has(sku)) break;
-                        }
-                        usados.add(sku);
-                        pendientes.push({ id: item.id, sku });
-                    }
-                    if (!pendientes.length) return;
-                    const updates = {};
-                    pendientes.forEach(item => {
-                        updates[`productos/${item.id}/sku`] = item.sku;
-                    });
-                    try {
-                        await window.fb.update(window.fb.ref(window.db), updates);
-                    } catch (error) {
-                        console.error('No se pudieron asignar SKUs faltantes:', error);
-                    }
+                    // V5: no se realizan escrituras automáticas al cargar el inventario.
+                    // Los SKU deben ser creados únicamente al registrar una nueva unidad.
+                    return;
                 },
                 normalizarSKU(sku) {
-                    return String(sku || '').replace(/ART/gi, '').replace(/-/g, '').replace(/\s+/g, '').toUpperCase();
+                    return String(sku || '').trim().replace(/\s+/g, '').toUpperCase();
+                },
+                normalizarSKUBusqueda(sku) {
+                    return String(sku || '').trim().replace(/\s+/g, '').replace(/-/g, '').toUpperCase();
                 },
                 get productosConSKU() {
                     return this.productos.filter(item => item.sku);
@@ -1780,51 +1798,6 @@ body.dark{background:#070d19!important}
                     );
                 },
                 // =================================================
-                // GANANCIA EN VENTA
-                // =================================================
-                calcularGananciaVenta() {
-                    if (
-                        !this.productoVenta
-                    ) {
-                        return 0;
-                    }
-                    const precio =
-                        Number(
-                            this.ventaForm.precioVenta
-                        ) || 0;
-                    const costo =
-                        Number(
-                            this.productoVenta.costoUnitario
-                        ) || 0;
-                    const comision =
-                        this.ventaForm.canalVenta ===
-                        'Falabella'
-                        ?
-                        Number(
-                            this.ventaForm.comision
-                        ) || 0
-                        :
-                        0;
-                    const logistica =
-                        this.ventaForm.canalVenta ===
-                        'Falabella'
-                        ?
-                        Number(
-                            this.ventaForm.confLogistico
-                        ) || 0
-                        :
-                        0;
-                    return (
-                        precio
-                        -
-                        costo
-                        -
-                        comision
-                        -
-                        logistica
-                    );
-                },
-                // =================================================
                 // DIAS INVENTARIO
                 // =================================================
                 diasInventario(item) {
@@ -2238,88 +2211,302 @@ body.dark{background:#070d19!important}
                     }
                 },
                 // =================================================
-                // REGISTRAR VENTA
+                // REGISTRAR VENTA MULTI-SKU
                 // =================================================
-                registrarVenta(item) {
-                    if (item.estado === 'vendido') return;
-                    this.productoVenta = item;
-                    this.ventaForm = { clienteNombre: '', clienteTelefono: '', distrito: '', canalVenta: 'WhatsApp', perfilFacebook: '', medioPago: 'Yape', precioVenta: Number(item.precioVenta) || 0, fechaVenta: this.fechaPeru(), fechaEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '', comision: 0, confLogistico: 0, observacion: '' };
+                registrarVenta(item = null) {
+                    this.productoVenta = item || null;
+                    this.ventaItems = [{ sku: '', producto: null, error: '' }];
+                    this.ventaForm = { clienteNombre: '', clienteTelefono: '', distrito: '', canalVenta: 'WhatsApp', perfilFacebook: '', medioPago: 'Yape', fechaVenta: this.fechaPeru(), fechaEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '', comision: 0, confLogistico: 0, observacion: '' };
+                    if (item && item.estado !== 'vendido') {
+                        this.ventaItems[0] = { sku: item.sku || '', producto: item, error: '' };
+                    }
                     this.modalVenta = true;
+                },
+                cerrarModalVenta() {
+                    this.modalVenta = false;
+                    this.productoVenta = null;
+                    this.ventaItems = [{ sku: '', producto: null, error: '' }];
+                },
+                get productosDisponiblesParaVenta() {
+                    return this.productos.filter(item => item.estado !== 'vendido' && item.sku);
+                },
+                get ventaItemsValidos() {
+                    return this.ventaItems.filter(linea => linea.producto && !linea.error);
+                },
+                get totalVentaSeleccionada() {
+                    return this.ventaItemsValidos.reduce((total, linea) => total + (Number(linea.producto?.precioVenta) || 0), 0);
+                },
+                get costoTotalVentaSeleccionada() {
+                    return this.ventaItemsValidos.reduce((total, linea) => total + (Number(linea.producto?.costoUnitario) || 0), 0);
+                },
+                agregarLineaVenta() {
+                    this.ventaItems.push({ sku: '', producto: null, error: '' });
+                    this.$nextTick(() => {
+                        const inputs = this.$root.querySelectorAll('.venta-sku-row input');
+                        if (inputs.length) inputs[inputs.length - 1].focus();
+                    });
+                },
+                quitarLineaVenta(index) {
+                    if (this.ventaItems.length === 1) {
+                        this.ventaItems[0] = { sku: '', producto: null, error: '' };
+                        return;
+                    }
+                    this.ventaItems.splice(index, 1);
+                },
+                buscarProductoPorSKU(sku) {
+                    const buscadoExacto = this.normalizarSKU(sku);
+                    const buscadoFlexible = this.normalizarSKUBusqueda(sku);
+                    if (!buscadoExacto) return null;
+                    return this.productos.find(item => {
+                        const skuProducto = this.normalizarSKU(item.sku);
+                        return skuProducto === buscadoExacto || this.normalizarSKUBusqueda(skuProducto) === buscadoFlexible;
+                    }) || null;
+                },
+                validarLineaSKU(index) {
+                    const linea = this.ventaItems[index];
+                    if (!linea) return null;
+                    linea.sku = this.normalizarSKU(linea.sku);
+                    linea.producto = null;
+                    linea.error = '';
+                    if (!linea.sku) return null;
+
+                    const repetido = this.ventaItems.some((otra, i) => i !== index && this.normalizarSKU(otra.sku) === linea.sku);
+                    if (repetido) {
+                        linea.error = 'Este SKU ya fue agregado a la venta.';
+                        return null;
+                    }
+
+                    const producto = this.buscarProductoPorSKU(linea.sku);
+                    if (!producto) {
+                        linea.error = 'SKU inexistente. Verifica el código.';
+                        return null;
+                    }
+                    if (producto.estado === 'vendido') {
+                        linea.error = 'Este producto ya fue vendido.';
+                        return null;
+                    }
+                    linea.producto = producto;
+                    return producto;
+                },
+                validarTodasLasLineasVenta() {
+                    this.ventaItems.forEach((_, index) => this.validarLineaSKU(index));
+                    const vacias = this.ventaItems.some(linea => !String(linea.sku || '').trim());
+                    if (vacias) {
+                        Swal.fire('Atención', 'Completa todos los campos SKU o elimina las filas vacías.', 'warning');
+                        return false;
+                    }
+                    const invalidas = this.ventaItems.filter(linea => !linea.producto || linea.error);
+                    if (invalidas.length) {
+                        const primera = invalidas[0];
+                        Swal.fire('SKU no válido', primera.error || 'Hay un SKU que no se puede vender.', 'warning');
+                        return false;
+                    }
+                    const skus = this.ventaItems.map(linea => this.normalizarSKU(linea.sku));
+                    if (new Set(skus).size !== skus.length) {
+                        Swal.fire('SKU duplicado', 'No puedes agregar el mismo SKU dos veces en una misma venta.', 'warning');
+                        return false;
+                    }
+                    return true;
                 },
                 // =================================================
                 // CORRELATIVO
                 // =================================================
                 async obtenerSiguienteNumeroComprobante() {
-                    const contadorRef =
-                        window.fb.ref(
-                            window.db,
-                            'configuracion/contadorComprobantes'
-                        );
-                    const resultado =
-                        await window.fb.runTransaction(
-                            contadorRef,
-                            current => {
-                                return (
-                                    Number(
-                                        current ||
-                                        0
-                                    )
-                                    +
-                                    1
-                                );
-                            }
-                        );
-                    const numero =
-                        Number(
-                            resultado.snapshot.val() ||
-                            1
-                        );
-                    return (
-                        `PS-${new Date().getFullYear()}-` +
-                        String(
-                            numero
-                        ).padStart(
-                            6,
-                            '0'
-                        )
-                    );
+                    // V5: intentamos conservar el correlativo, pero si Firebase no permite
+                    // escribir en configuracion/contadorComprobantes, la venta NO se bloquea.
+                    try {
+                        const contadorRef = window.fb.ref(window.db, 'configuracion/contadorComprobantes');
+                        const resultado = await window.fb.runTransaction(contadorRef, current => Number(current || 0) + 1);
+                        const numero = Number(resultado.snapshot.val() || 1);
+                        return `PS-${new Date().getFullYear()}-${String(numero).padStart(6, '0')}`;
+                    } catch (error) {
+                        console.warn('No se pudo actualizar el correlativo de comprobantes. Se usará un número local:', error);
+                        const ahora = new Date();
+                        const sello = String(ahora.getTime()).slice(-8);
+                        return `PS-${ahora.getFullYear()}-${sello}`;
+                    }
                 },
                 // =================================================
-                // CONFIRMAR VENTA
+                // GANANCIA VENTA MULTI-SKU
+                // =================================================
+                calcularGananciaVenta() {
+                    const subtotal = this.totalVentaSeleccionada;
+                    const costo = this.costoTotalVentaSeleccionada;
+                    const comision = this.ventaForm.canalVenta === 'Falabella' ? Number(this.ventaForm.comision) || 0 : 0;
+                    const logistica = this.ventaForm.canalVenta === 'Falabella' ? Number(this.ventaForm.confLogistico) || 0 : 0;
+                    return subtotal - costo - comision - logistica;
+                },
+                // =================================================
+                // CONFIRMAR VENTA MULTI-SKU
                 // =================================================
                 async confirmarVenta() {
-                    if (!this.productoVenta) return;
                     this.ventaForm.clienteTelefono = this.limpiarCelular(this.ventaForm.clienteTelefono);
+                    if (!this.validarTodasLasLineasVenta()) return;
                     if (!this.ventaForm.clienteNombre.trim()) { Swal.fire('Atención', 'Debes registrar el nombre del cliente.', 'warning'); return; }
                     if (this.ventaForm.clienteTelefono && this.ventaForm.clienteTelefono.length !== 9) { Swal.fire('Atención', 'El celular debe tener exactamente 9 dígitos.', 'warning'); return; }
                     if (this.ventaForm.canalVenta === 'Facebook' && !this.ventaForm.perfilFacebook) { Swal.fire('Atención', 'Selecciona el perfil de Facebook que realizó la venta.', 'warning'); return; }
                     if (this.ventaForm.tipoComprobante === 'Boleta' && !this.ventaForm.numeroDocumento) { Swal.fire('Atención', 'Ingresa el número del documento para la boleta.', 'warning'); return; }
                     if (this.ventaForm.tipoComprobante === 'Factura' && (!this.ventaForm.ruc || !String(this.ventaForm.razonSocial || '').trim())) { Swal.fire('Atención', 'Ingresa el RUC y la Razón Social para la factura.', 'warning'); return; }
+
                     try {
-                        Swal.fire({ title: 'Guardando venta...', text: 'Registrando la venta y el cliente.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-                        const item = this.productoVenta;
+                        Swal.fire({ title: 'Guardando venta...', text: `Registrando ${this.ventaItemsValidos.length} producto(s) y el cliente.`, allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+                        // Volvemos a leer Firebase para evitar vender un SKU que cambió de estado mientras el modal estaba abierto.
+                        const snapshot = await window.fb.get(window.fb.ref(window.db, 'productos'));
+                        const dataActual = snapshot.val() || {};
+                        const productosActuales = Object.entries(dataActual).map(([id, producto]) => ({ id, ...this.normalizarProducto(producto) }));
+                        const porSKU = new Map(productosActuales.filter(p => p.sku).map(p => [this.normalizarSKU(p.sku), p]));
+
+                        const seleccionados = [];
+                        const usados = new Set();
+                        for (const linea of this.ventaItems) {
+                            const sku = this.normalizarSKU(linea.sku);
+                            if (usados.has(sku)) throw new Error(`El SKU ${sku} está repetido en la venta.`);
+                            usados.add(sku);
+                            const producto = porSKU.get(sku);
+                            if (!producto) throw new Error(`El SKU ${sku} no existe en Firebase.`);
+                            if (producto.estado === 'vendido') throw new Error(`El SKU ${sku} ya fue vendido.`);
+                            seleccionados.push(producto);
+                        }
+
                         const canalVenta = this.ventaForm.canalVenta;
-                        const comision = canalVenta === 'Falabella' ? Number(this.ventaForm.comision) || 0 : 0;
-                        const confLogistico = canalVenta === 'Falabella' ? Number(this.ventaForm.confLogistico) || 0 : 0;
-                        const precio = Number(item.precioVenta) || 0;
+                        const comisionTotal = canalVenta === 'Falabella' ? Number(this.ventaForm.comision) || 0 : 0;
+                        const logisticaTotal = canalVenta === 'Falabella' ? Number(this.ventaForm.confLogistico) || 0 : 0;
+                        const totalPrecios = seleccionados.reduce((sum, p) => sum + (Number(p.precioVenta) || 0), 0) || 1;
                         const perfilFacebook = canalVenta === 'Facebook' ? (this.ventaForm.perfilFacebook || '') : '';
-                        const datosVenta = {
-                            estado: 'vendido', fechaVenta: this.ventaForm.fechaVenta || this.fechaPeru(),
-                            fechaEntrega: String(this.ventaForm.fechaEntrega || ''), envio: String(this.ventaForm.envio || '').trim(),
-                            clienteNombre: this.ventaForm.clienteNombre.trim(), clienteTelefono: this.ventaForm.clienteTelefono,
-                            distrito: this.ventaForm.distrito.trim(), canalVenta, perfilFacebook, medioPago: 'Yape',
-                            precioVenta: precio, comision, confLogistico, observacion: this.ventaForm.observacion.trim(),
-                            tipoComprobante: this.ventaForm.tipoComprobante || 'Boleta',
-                            tipoDocumento: this.ventaForm.tipoComprobante === 'Boleta' ? this.ventaForm.tipoDocumento : '',
-                            numeroDocumento: this.ventaForm.tipoComprobante === 'Boleta' ? String(this.ventaForm.numeroDocumento || '').replace(/\D/g, '') : '',
-                            ruc: this.ventaForm.tipoComprobante === 'Factura' ? String(this.ventaForm.ruc || '').replace(/\D/g, '') : '',
-                            razonSocial: this.ventaForm.tipoComprobante === 'Factura' ? String(this.ventaForm.razonSocial || '').trim() : ''
-                        };
-                        await window.fb.update(window.fb.ref(window.db, `productos/${item.id}`), datosVenta);
-                        await this.guardarRegistroVentaAdicional(item, datosVenta);
-                        Swal.close(); this.modalVenta = false; this.productoVenta = null;
-                        this.notificarToast('success', 'Venta registrada correctamente');
-                    } catch (error) { console.error('ERROR GUARDANDO VENTA:', error); Swal.close(); Swal.fire({ icon: 'error', title: 'No se pudo guardar la venta', text: error?.message || 'Error desconocido' }); }
+                        const fechaVenta = this.ventaForm.fechaVenta || this.fechaPeru();
+                        const clienteNombre = this.ventaForm.clienteNombre.trim();
+                        const clienteTelefono = this.ventaForm.clienteTelefono;
+                        const distrito = String(this.ventaForm.distrito || '').trim();
+                        const tipoComprobante = this.ventaForm.tipoComprobante || 'Boleta';
+                        const tipoDocumento = tipoComprobante === 'Boleta' ? this.ventaForm.tipoDocumento : '';
+                        const numeroDocumento = tipoComprobante === 'Boleta' ? String(this.ventaForm.numeroDocumento || '').replace(/\D/g, '') : '';
+                        const ruc = tipoComprobante === 'Factura' ? String(this.ventaForm.ruc || '').replace(/\D/g, '') : '';
+                        const razonSocial = tipoComprobante === 'Factura' ? String(this.ventaForm.razonSocial || '').trim() : '';
+                        const ventaGrupoId = window.fb.push(window.fb.ref(window.db, 'ventas')).key;
+                        const comprobanteNumero = await this.obtenerSiguienteNumeroComprobante();
+                        const updatesProductos = {};
+                        const registrosVentas = [];
+
+                        seleccionados.forEach((item) => {
+                            const precio = Number(item.precioVenta) || 0;
+                            const proporcion = precio / totalPrecios;
+                            const comision = Number((comisionTotal * proporcion).toFixed(2));
+                            const confLogistico = Number((logisticaTotal * proporcion).toFixed(2));
+                            const datosVenta = {
+                                estado: 'vendido',
+                                fechaVenta,
+                                fechaEntrega: String(this.ventaForm.fechaEntrega || ''),
+                                envio: String(this.ventaForm.envio || '').trim(),
+                                clienteNombre,
+                                clienteTelefono,
+                                distrito,
+                                canalVenta,
+                                perfilFacebook,
+                                medioPago: 'Yape',
+                                precioVenta: precio,
+                                comision,
+                                confLogistico,
+                                observacion: String(this.ventaForm.observacion || '').trim(),
+                                tipoComprobante,
+                                tipoDocumento,
+                                numeroDocumento,
+                                ruc,
+                                razonSocial,
+                                comprobanteNumero,
+                                ventaGrupoId
+                            };
+
+                            // MUY IMPORTANTE: conservamos nombre, SKU, costo, categoria, talla,
+                            // imagen y todos los datos originales del producto.
+                            updatesProductos[`productos/${item.id}`] = {
+                                ...item,
+                                ...datosVenta
+                            };
+                            delete updatesProductos[`productos/${item.id}`].id;
+
+                            registrosVentas.push({
+                                id: item.id,
+                                data: {
+                                    productoId: item.id,
+                                    producto: item.nombre || '',
+                                    sku: item.sku || '',
+                                    fechaVenta,
+                                    clienteNombre,
+                                    clienteTelefono,
+                                    canalVenta,
+                                    distrito,
+                                    montoTotal: precio,
+                                    totalVenta: this.totalVentaSeleccionada,
+                                    cantidadProductos: seleccionados.length,
+                                    fechaEntrega: String(this.ventaForm.fechaEntrega || ''),
+                                    envio: String(this.ventaForm.envio || '').trim(),
+                                    tipoComprobante,
+                                    tipoDocumento,
+                                    numeroDocumento,
+                                    ruc,
+                                    razonSocial,
+                                    comprobanteNumero,
+                                    ventaGrupoId
+                                }
+                            });
+                        });
+
+                        // 1) Primero marcamos los productos como vendidos. Si esto falla,
+                        // detenemos la operación porque el inventario es la parte crítica.
+                        try {
+                            await window.fb.update(window.fb.ref(window.db), updatesProductos);
+                        } catch (error) {
+                            const e = new Error(`Firebase rechazó la escritura en PRODUCTOS. ${error?.message || error}`);
+                            e.cause = error;
+                            throw e;
+                        }
+
+                        // 2) Registros históricos de ventas. Se intentan por separado para
+                        // identificar si las reglas de Firebase bloquean esta ruta.
+                        const fallosSecundarios = [];
+                        for (const registro of registrosVentas) {
+                            try {
+                                await window.fb.set(window.fb.ref(window.db, `ventas/${registro.id}`), registro.data);
+                            } catch (error) {
+                                console.error('No se pudo guardar ventas/' + registro.id, error);
+                                fallosSecundarios.push(`ventas/${registro.id}`);
+                            }
+                        }
+
+                        // 3) Cliente: también se intenta de forma independiente.
+                        const identidad = String(ruc || numeroDocumento || clienteTelefono || clienteNombre || ventaGrupoId).replace(/[^a-zA-Z0-9_-]/g, '_');
+                        try {
+                            await window.fb.set(window.fb.ref(window.db, `clientes/${identidad}`), {
+                                nombre: clienteNombre,
+                                razonSocial,
+                                celular: clienteTelefono,
+                                documento: numeroDocumento,
+                                tipoDocumento,
+                                ruc,
+                                actualizadoEn: new Date().toISOString(),
+                                ventaGrupoId
+                            });
+                        } catch (error) {
+                            console.error('No se pudo guardar clientes/' + identidad, error);
+                            fallosSecundarios.push(`clientes/${identidad}`);
+                        }
+
+                        Swal.close();
+                        this.modalVenta = false;
+                        this.productoVenta = null;
+                        this.ventaItems = [{ sku: '', producto: null, error: '' }];
+                        if (fallosSecundarios.length) {
+                            this.notificarToast('warning', `${seleccionados.length} producto(s) vendidos. Inventario actualizado, pero Firebase bloqueó: ${fallosSecundarios.join(', ')}`);
+                            Swal.fire({ icon: 'warning', title: 'Venta registrada en inventario', html: `<div class="text-left text-sm">Los productos fueron marcados como <b>vendidos</b>, pero Firebase no permitió guardar algunos registros adicionales.<br><br><b>Rutas bloqueadas:</b><br>${fallosSecundarios.join('<br>')}<br><br>Esto confirma que las reglas de Firebase necesitan permisos para esas rutas.</div>` });
+                        } else {
+                            this.notificarToast('success', `${seleccionados.length} producto(s) vendidos correctamente`);
+                        }
+                    } catch (error) {
+                        console.error('ERROR GUARDANDO VENTA MULTI-SKU:', error);
+                        Swal.close();
+                        Swal.fire({ icon: 'error', title: 'No se pudo guardar la venta', text: error?.message || 'Error desconocido' });
+                    }
                 },
                 // =================================================
                 // VER VENTA
