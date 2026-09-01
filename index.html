@@ -1057,6 +1057,14 @@ body.dark{background:#070d19!important}
                     'todos',
                 filtroCanalGanancia:
                     'todos',
+                filtroClientesTexto: '',
+                filtroClientesDni: '',
+                filtroClientesRuc: '',
+                filtroClientesTelefono: '',
+                filtroVentasTexto: '',
+                filtroVentasDni: '',
+                filtroVentasFecha: '',
+                clientesData: [],
                 // =================================================
                 // ADMIN
                 // =================================================
@@ -1217,6 +1225,7 @@ body.dark{background:#070d19!important}
                             return;
                         }
                         this.escucharProductos();
+                        this.escucharClientes();
                         this.escucharConfiguracion();
                     }
                     catch (error) {
@@ -1272,6 +1281,19 @@ body.dark{background:#070d19!important}
                             );
                         }
                     );
+                },
+                escucharClientes() {
+                    const clientesRef = window.fb.ref(window.db, 'clientes');
+                    window.fb.onValue(clientesRef, snapshot => {
+                        const data = snapshot.val() || {};
+                        this.clientesData = Object.entries(data).map(([key, cliente]) => ({
+                            key,
+                            ...cliente
+                        }));
+                    }, error => {
+                        console.error(error);
+                        this.clientesData = [];
+                    });
                 },
                 // =================================================
                 // NORMALIZAR
@@ -1515,43 +1537,134 @@ body.dark{background:#070d19!important}
                 // =================================================
                 // VENTAS Y CLIENTES
                 // =================================================
+                normalizarTextoCliente(valor) {
+                    return String(valor || '')
+                        .trim()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '')
+                        .replace(/\s+/g, ' ')
+                        .toUpperCase();
+                },
+                normalizarDocumento(valor) {
+                    return String(valor || '').replace(/\D/g, '');
+                },
+                obtenerDniItem(item) {
+                    return item.tipoComprobante === 'Boleta'
+                        ? this.normalizarDocumento(item.numeroDocumento || item.documento || '')
+                        : '';
+                },
+                obtenerRucItem(item) {
+                    return item.tipoComprobante === 'Factura'
+                        ? this.normalizarDocumento(item.ruc || '')
+                        : this.normalizarDocumento(item.ruc || '');
+                },
                 get ventasRegistradas() {
-                    return this.productos
+                    let lista = this.productos
                         .filter(item => item.estado === 'vendido')
                         .sort((a, b) => String(b.fechaVenta || '').localeCompare(String(a.fechaVenta || '')));
+                    const texto = this.normalizarTextoCliente(this.filtroVentasTexto);
+                    const dni = this.normalizarDocumento(this.filtroVentasDni);
+                    const fecha = String(this.filtroVentasFecha || '').trim();
+                    if (texto) {
+                        lista = lista.filter(item => {
+                            const valores = [
+                                item.nombre, item.sku, item.clienteNombre, item.clienteTelefono,
+                                item.canalVenta, item.distrito, item.ruc, item.numeroDocumento,
+                                item.razonSocial, item.comprobanteNumero
+                            ].map(v => this.normalizarTextoCliente(v));
+                            return valores.some(v => v.includes(texto));
+                        });
+                    }
+                    if (dni) {
+                        lista = lista.filter(item => this.obtenerDniItem(item).includes(dni));
+                    }
+                    if (fecha) {
+                        lista = lista.filter(item => String(item.fechaVenta || '') === fecha);
+                    }
+                    return lista;
                 },
                 get clientesRegistrados() {
                     const mapa = new Map();
-                    this.ventasRegistradas.forEach(item => {
-                        const nombre = String(item.clienteNombre || '').trim();
-                        const celular = this.limpiarCelular(item.clienteTelefono || '');
-                        const documento = item.tipoComprobante === 'Boleta'
-                            ? String(item.numeroDocumento || '').trim()
-                            : '';
-                        const ruc = item.tipoComprobante === 'Factura'
-                            ? String(item.ruc || '').trim()
-                            : '';
-                        const razonSocial = String(item.razonSocial || '').trim();
-                        const key = (ruc || documento || celular || nombre || item.id).toLowerCase();
-                        if (!mapa.has(key)) {
-                            mapa.set(key, {
-                                key,
-                                nombre,
-                                razonSocial,
-                                celular,
-                                documento: documento ? `${item.tipoDocumento || 'Documento'}: ${documento}` : '',
-                                ruc
-                            });
-                        } else {
-                            const actual = mapa.get(key);
-                            if (!actual.nombre && nombre) actual.nombre = nombre;
-                            if (!actual.razonSocial && razonSocial) actual.razonSocial = razonSocial;
-                            if (!actual.celular && celular) actual.celular = celular;
-                            if (!actual.documento && documento) actual.documento = `${item.tipoDocumento || 'Documento'}: ${documento}`;
-                            if (!actual.ruc && ruc) actual.ruc = ruc;
-                        }
+                    this.clientesData.forEach(cliente => {
+                        const nombre = String(cliente.nombre || '').trim();
+                        const razonSocial = String(cliente.razonSocial || '').trim();
+                        const celular = this.limpiarCelular(cliente.celular || cliente.clienteTelefono || '');
+                        const documento = this.normalizarDocumento(cliente.documento || cliente.numeroDocumento || '');
+                        const ruc = this.normalizarDocumento(cliente.ruc || '');
+                        const identidad = documento ? `dni:${documento}` : (ruc ? `ruc:${ruc}` : (nombre ? `nom:${this.normalizarTextoCliente(nombre)}` : `key:${cliente.key}`));
+                        const actual = mapa.get(identidad);
+                        const nuevo = {
+                            key: cliente.key, nombre, razonSocial, celular, documento,
+                            tipoDocumento: cliente.tipoDocumento || '', ruc,
+                            actualizadoEn: cliente.actualizadoEn || ''
+                        };
+                        if (!actual || String(nuevo.actualizadoEn).localeCompare(String(actual.actualizadoEn)) >= 0) mapa.set(identidad, nuevo);
                     });
-                    return Array.from(mapa.values());
+                    // Compatibilidad: si por alguna razón la ruta clientes está vacía,
+                    // mostramos también los clientes que existen en ventas.
+                    if (!mapa.size) {
+                        this.ventasRegistradas.forEach(item => {
+                            const nombre = String(item.clienteNombre || '').trim();
+                            const documento = this.obtenerDniItem(item);
+                            const ruc = this.normalizarDocumento(item.ruc || '');
+                            const celular = this.limpiarCelular(item.clienteTelefono || '');
+                            const key = item.clienteId || this.normalizarTextoCliente(nombre) || item.id;
+                            if (!mapa.has(key)) mapa.set(key, { key, nombre, razonSocial: item.razonSocial || '', celular, documento, tipoDocumento: item.tipoDocumento || '', ruc });
+                        });
+                    }
+                    let lista = Array.from(mapa.values());
+                    const texto = this.normalizarTextoCliente(this.filtroClientesTexto);
+                    const dni = this.normalizarDocumento(this.filtroClientesDni);
+                    const ruc = this.normalizarDocumento(this.filtroClientesRuc);
+                    const telefono = this.normalizarDocumento(this.filtroClientesTelefono);
+                    if (texto) {
+                        lista = lista.filter(c => [c.nombre, c.razonSocial, c.documento, c.ruc, c.celular].map(v => this.normalizarTextoCliente(v)).some(v => v.includes(texto)));
+                    }
+                    if (dni) lista = lista.filter(c => this.normalizarDocumento(c.documento).includes(dni));
+                    if (ruc) lista = lista.filter(c => this.normalizarDocumento(c.ruc).includes(ruc));
+                    if (telefono) lista = lista.filter(c => this.normalizarDocumento(c.celular).includes(telefono));
+                    return lista.sort((a,b) => this.normalizarTextoCliente(a.nombre).localeCompare(this.normalizarTextoCliente(b.nombre)));
+                },
+                buscarClienteExistente(clientes, datos) {
+                    const nombre = this.normalizarTextoCliente(datos.nombre);
+                    const dni = this.normalizarDocumento(datos.documento);
+                    const ruc = this.normalizarDocumento(datos.ruc);
+                    const lista = Object.entries(clientes || {}).map(([key, value]) => ({ key, ...(value || {}) }));
+                    // Prioridad: DNI, RUC y finalmente nombre completo exacto.
+                    if (dni) {
+                        const encontrado = lista.find(c => this.normalizarDocumento(c.documento || c.numeroDocumento) === dni);
+                        if (encontrado) return encontrado;
+                    }
+                    if (ruc) {
+                        const encontrado = lista.find(c => this.normalizarDocumento(c.ruc) === ruc);
+                        if (encontrado) return encontrado;
+                    }
+                    if (nombre) {
+                        const encontrado = lista.find(c => this.normalizarTextoCliente(c.nombre) === nombre);
+                        if (encontrado) return encontrado;
+                    }
+                    return null;
+                },
+                async guardarClienteUnico(datos, ventaGrupoId = '') {
+                    const clientesSnap = await window.fb.get(window.fb.ref(window.db, 'clientes'));
+                    const clientes = clientesSnap.val() || {};
+                    const existente = this.buscarClienteExistente(clientes, datos);
+                    const clienteId = existente?.key || window.fb.push(window.fb.ref(window.db, 'clientes')).key;
+                    const anterior = existente || {};
+                    const cliente = {
+                        ...anterior,
+                        nombre: String(datos.nombre || anterior.nombre || '').trim(),
+                        razonSocial: String(datos.razonSocial || anterior.razonSocial || '').trim(),
+                        celular: this.limpiarCelular(datos.celular || anterior.celular || ''),
+                        documento: this.normalizarDocumento(datos.documento || anterior.documento || ''),
+                        tipoDocumento: datos.tipoDocumento || anterior.tipoDocumento || '',
+                        ruc: this.normalizarDocumento(datos.ruc || anterior.ruc || ''),
+                        nombreNormalizado: this.normalizarTextoCliente(datos.nombre || anterior.nombre || ''),
+                        actualizadoEn: new Date().toISOString(),
+                        ventaGrupoId: ventaGrupoId || anterior.ventaGrupoId || ''
+                    };
+                    await window.fb.set(window.fb.ref(window.db, `clientes/${clienteId}`), cliente);
+                    return clienteId;
                 },
                 formatearFecha(fecha) {
                     if (!fecha) return '—';
@@ -1562,6 +1675,14 @@ body.dark{background:#070d19!important}
                     if (!window.db || !window.fb || !item?.id) return;
                     try {
                         const ventaRef = window.fb.ref(window.db, `ventas/${item.id}`);
+                        const clienteId = await this.guardarClienteUnico({
+                            nombre: datosVenta.clienteNombre,
+                            celular: datosVenta.clienteTelefono,
+                            documento: datosVenta.numeroDocumento,
+                            tipoDocumento: datosVenta.tipoDocumento,
+                            ruc: datosVenta.ruc,
+                            razonSocial: datosVenta.razonSocial
+                        }, datosVenta.ventaGrupoId || '');
                         await window.fb.set(ventaRef, {
                             productoId: item.id,
                             producto: item.nombre || '',
@@ -1569,6 +1690,7 @@ body.dark{background:#070d19!important}
                             fechaVenta: datosVenta.fechaVenta || this.fechaPeru(),
                             clienteNombre: datosVenta.clienteNombre || '',
                             clienteTelefono: datosVenta.clienteTelefono || '',
+                            clienteId,
                             canalVenta: datosVenta.canalVenta || '',
                             distrito: datosVenta.distrito || '',
                             montoTotal: Number(datosVenta.precioVenta) || 0,
@@ -1578,21 +1700,14 @@ body.dark{background:#070d19!important}
                             tipoDocumento: datosVenta.tipoDocumento || '',
                             numeroDocumento: datosVenta.numeroDocumento || '',
                             ruc: datosVenta.ruc || '',
-                            razonSocial: datosVenta.razonSocial || ''
-                        });
-                        const identidad = String(datosVenta.ruc || datosVenta.numeroDocumento || datosVenta.clienteTelefono || datosVenta.clienteNombre || item.id)
-                            .replace(/[^a-zA-Z0-9_-]/g, '_');
-                        await window.fb.set(window.fb.ref(window.db, `clientes/${identidad}`), {
-                            nombre: datosVenta.clienteNombre || '',
                             razonSocial: datosVenta.razonSocial || '',
-                            celular: datosVenta.clienteTelefono || '',
-                            documento: datosVenta.numeroDocumento || '',
-                            tipoDocumento: datosVenta.tipoDocumento || '',
-                            ruc: datosVenta.ruc || '',
-                            actualizadoEn: new Date().toISOString()
+                            comprobanteNumero: datosVenta.comprobanteNumero || '',
+                            ventaGrupoId: datosVenta.ventaGrupoId || ''
                         });
+                        return clienteId;
                     } catch (e) {
                         console.warn('No se pudo crear el registro adicional de ventas/clientes:', e);
+                        throw e;
                     }
                 },
                 // =================================================
@@ -2385,6 +2500,10 @@ body.dark{background:#070d19!important}
                         const razonSocial = tipoComprobante === 'Factura' ? String(this.ventaForm.razonSocial || '').trim() : '';
                         const ventaGrupoId = window.fb.push(window.fb.ref(window.db, 'ventas')).key;
                         const comprobanteNumero = await this.obtenerSiguienteNumeroComprobante();
+                        const clienteId = await this.guardarClienteUnico({
+                            nombre: clienteNombre, celular: clienteTelefono, documento: numeroDocumento,
+                            tipoDocumento, ruc, razonSocial
+                        }, ventaGrupoId);
                         const updatesProductos = {};
                         const registrosVentas = [];
 
@@ -2400,6 +2519,7 @@ body.dark{background:#070d19!important}
                                 envio: String(this.ventaForm.envio || '').trim(),
                                 clienteNombre,
                                 clienteTelefono,
+                                clienteId,
                                 distrito,
                                 canalVenta,
                                 perfilFacebook,
@@ -2434,6 +2554,7 @@ body.dark{background:#070d19!important}
                                     fechaVenta,
                                     clienteNombre,
                                     clienteTelefono,
+                                    clienteId,
                                     canalVenta,
                                     distrito,
                                     montoTotal: precio,
@@ -2474,23 +2595,7 @@ body.dark{background:#070d19!important}
                             }
                         }
 
-                        // 3) Cliente: también se intenta de forma independiente.
-                        const identidad = String(ruc || numeroDocumento || clienteTelefono || clienteNombre || ventaGrupoId).replace(/[^a-zA-Z0-9_-]/g, '_');
-                        try {
-                            await window.fb.set(window.fb.ref(window.db, `clientes/${identidad}`), {
-                                nombre: clienteNombre,
-                                razonSocial,
-                                celular: clienteTelefono,
-                                documento: numeroDocumento,
-                                tipoDocumento,
-                                ruc,
-                                actualizadoEn: new Date().toISOString(),
-                                ventaGrupoId
-                            });
-                        } catch (error) {
-                            console.error('No se pudo guardar clientes/' + identidad, error);
-                            fallosSecundarios.push(`clientes/${identidad}`);
-                        }
+                        // 3) El cliente ya fue creado/actualizado de forma única antes de marcar los productos.
 
                         Swal.close();
                         this.modalVenta = false;
@@ -3368,7 +3473,7 @@ body.dark{background:#070d19!important}
 <tr :class="
                                     item.estado === 'vendido'
                                     ?
-                                    'bg-blue-50/60 dark:bg-blue-950/20'
+                                    'bg-rose-50/70 dark:bg-rose-950/20'
                                     :
                                     'bg-emerald-50/60 dark:bg-emerald-950/20'
                                 " class="transition-colors">
@@ -3440,7 +3545,7 @@ body.dark{background:#070d19!important}
                                             item.estado ===
                                             'vendido'
                                         ">
-<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[10px] font-bold">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-600 text-white text-[10px] font-bold">
 <i class="fa-solid fa-check">
 </i>
                                             Vendido
@@ -3670,13 +3775,19 @@ body.dark{background:#070d19!important}
 <span x-text="ventasRegistradas.length"></span> ventas registradas
                     </div>
 </div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 grid grid-cols-1 md:grid-cols-4 gap-3">
+<div class="relative md:col-span-2"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroVentasTexto" type="text" placeholder="Buscar cliente, producto, SKU, celular, canal..." class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm"></div>
+<input x-model="filtroVentasDni" inputmode="numeric" type="text" placeholder="Filtrar por DNI" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm">
+<input x-model="filtroVentasFecha" type="date" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm">
+</div>
 <div class="overflow-x-auto">
-<table class="w-full text-left min-w-[900px]">
+<table class="w-full text-left min-w-[1000px]">
 <thead class="bg-slate-50 dark:bg-slate-900/70 border-b border-slate-200 dark:border-slate-700">
 <tr class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-black">
 <th class="py-4 px-4">Fecha Venta</th>
 <th class="py-4 px-4">Producto</th>
 <th class="py-4 px-4">Cliente</th>
+<th class="py-4 px-4">DNI</th>
 <th class="py-4 px-4">Celular</th>
 <th class="py-4 px-4">Canal Venta</th>
 <th class="py-4 px-4">Distrito</th>
@@ -3692,6 +3803,7 @@ body.dark{background:#070d19!important}
 <div class="text-[10px] text-slate-400 font-bold mt-1" x-text="item.sku || ''"></div>
 </td>
 <td class="py-4 px-4 text-sm font-bold" x-text="item.clienteNombre || 'Sin registrar'"></td>
+<td class="py-4 px-4 text-sm font-bold" x-text="obtenerDniItem(item) || '—'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="item.clienteTelefono || '—'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="item.canalVenta || '—'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="item.distrito || '—'"></td>
@@ -3699,7 +3811,7 @@ body.dark{background:#070d19!important}
 </tr>
 </template>
 <tr x-show="ventasRegistradas.length === 0">
-<td class="py-12 text-center text-slate-400" colspan="7">No hay ventas registradas todavía.</td>
+<td class="py-12 text-center text-slate-400" colspan="8">No hay ventas registradas todavía.</td>
 </tr>
 </tbody>
 </table>
@@ -3719,6 +3831,12 @@ body.dark{background:#070d19!important}
 <span x-text="clientesRegistrados.length"></span> clientes
                     </div>
 </div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 grid grid-cols-1 md:grid-cols-5 gap-3">
+<div class="relative md:col-span-2"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroClientesTexto" type="text" placeholder="Buscar por nombre, razón social, DNI, RUC o celular..." class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm"></div>
+<input x-model="filtroClientesDni" inputmode="numeric" type="text" placeholder="DNI" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm">
+<input x-model="filtroClientesRuc" inputmode="numeric" type="text" placeholder="RUC" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm">
+<input x-model="filtroClientesTelefono" inputmode="numeric" type="text" placeholder="Celular" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm">
+</div>
 <div class="overflow-x-auto">
 <table class="w-full text-left min-w-[900px]">
 <thead class="bg-slate-50 dark:bg-slate-900/70 border-b border-slate-200 dark:border-slate-700">
@@ -3736,7 +3854,7 @@ body.dark{background:#070d19!important}
 <td class="py-4 px-4 text-sm font-black" x-text="cliente.nombre || '—'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="cliente.razonSocial || '—'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="cliente.celular || '—'"></td>
-<td class="py-4 px-4 text-sm font-bold" x-text="cliente.documento || '—'"></td>
+<td class="py-4 px-4 text-sm font-bold" x-text="cliente.documento ? ((cliente.tipoDocumento || 'DNI') + ': ' + cliente.documento) : '—'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="cliente.ruc || '—'"></td>
 </tr>
 </template>
