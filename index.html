@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Inventario PetSmart · V5 Multi SKU</title>
+<title>Inventario PetSmart · V10 UPC + Reporte + Gestión Financiera</title>
 <!-- =========================================================
          TAILWIND
     ========================================================== -->
@@ -30,6 +30,9 @@
 <!-- =========================================================
          HTML2CANVAS
     ========================================================== -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
 </script>
 <!-- =========================================================
@@ -65,6 +68,56 @@
             object-fit: contain;
             display: block;
         }
+
+/* =========================================================
+   REPORTE PROFESIONAL DE PEDIDO
+   ========================================================= */
+.pedido-modal-scroll{max-height:92vh;overflow-y:auto}
+.pedido-editor{display:grid;grid-template-columns:minmax(300px,420px) minmax(0,1fr);gap:22px;align-items:start}
+.pedido-form-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:20px}
+.dark .pedido-form-card{background:#0f172a;border-color:#334155}
+.pedido-paper{width:100%;max-width:794px;margin:0 auto;background:#fff;color:#20242c;border-radius:4px;box-shadow:0 18px 50px rgba(15,23,42,.12);overflow:hidden;font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+.pedido-paper-inner{padding:40px 44px 34px}
+.pedido-brand{text-align:center;padding-bottom:22px;border-bottom:2px solid #d8dde5}
+.pedido-brand img{max-width:230px;max-height:125px;width:auto;height:auto;object-fit:contain;margin:0 auto 12px;display:block}
+.pedido-brand-fallback{font-size:34px;font-weight:900;letter-spacing:-1px;color:#1f2937}
+.pedido-title{font-size:32px;line-height:1.12;font-weight:800;margin:10px 0 6px}
+.pedido-order{font-size:21px;color:#30343b}
+.pedido-greeting{font-size:19px;line-height:1.5;margin:28px 0 20px}
+.pedido-section-title{font-size:22px;font-weight:800;padding-bottom:10px;border-bottom:1px solid #cfd4dc;margin-bottom:14px}
+.pedido-table{width:100%;border-collapse:collapse}
+.pedido-table th{background:#f3f6fa;font-size:16px;text-align:left;padding:13px 12px;border:1px solid #dce1e8;font-weight:800}
+.pedido-table th:nth-child(2),.pedido-table th:nth-child(3){text-align:right}
+.pedido-table td{padding:15px 12px;border-bottom:1px solid #d7dce3;vertical-align:middle;font-size:16px}
+.pedido-table td:nth-child(2),.pedido-table td:nth-child(3){text-align:right;white-space:nowrap}
+.pedido-product{display:flex;align-items:center;gap:14px;min-width:0}
+.pedido-product-img{width:110px;height:110px;border-radius:10px;object-fit:contain;border:0;background:transparent;flex:0 0 110px;display:block}
+.pedido-product-name{font-weight:800;line-height:1.25}
+.pedido-product-detail{font-size:12px;color:#6b7280;margin-top:4px}
+.pedido-totals{margin:20px 0 30px auto;max-width:500px}
+.pedido-total-row{display:flex;justify-content:space-between;gap:20px;padding:6px 0;font-size:16px}
+.pedido-total-row.grand{border-top:1px solid #aeb5c0;margin-top:5px;padding-top:10px;font-size:18px;font-weight:900}
+.pedido-delivery-title{font-size:22px;font-weight:800;padding-bottom:10px;border-bottom:1px solid #cfd4dc;margin-bottom:14px}
+.pedido-delivery{font-size:16px;line-height:1.8}
+.pedido-delivery strong{font-weight:800}
+.pedido-next{margin-top:22px;background:#eaf6ff;border-left:5px solid #3b82c4;border-radius:6px;padding:14px 18px;color:#1f5688;font-size:15px;line-height:1.55}
+.pedido-footer{margin-top:34px;padding-top:22px;border-top:1px solid #cfd4dc;text-align:center;color:#4b5563;font-size:15px;line-height:1.8}
+.pedido-muted{color:#6b7280}
+@media(max-width:1050px){.pedido-editor{grid-template-columns:1fr}.pedido-form-card{order:1}.pedido-preview-wrap{order:2}}
+@media(max-width:700px){.pedido-paper-inner{padding:22px 18px}.pedido-title{font-size:24px}.pedido-order{font-size:18px}.pedido-greeting{font-size:16px}.pedido-section-title,.pedido-delivery-title{font-size:19px}.pedido-table th,.pedido-table td{font-size:13px;padding:9px 7px}.pedido-product-img{width:82px;height:82px;flex-basis:82px}.pedido-paper{border-radius:0}.pedido-form-card{padding:15px}}
+@media print{
+  body{background:#fff!important}
+  body *{visibility:hidden!important}
+  #reportePedidoPreview,#reportePedidoPreview *{visibility:visible!important}
+  #reportePedidoPreview{position:absolute!important;left:0!important;top:0!important;width:100%!important;max-width:none!important;display:block!important}
+  .pedido-paper{max-width:none!important;width:100%!important;box-shadow:none!important;border-radius:0!important}
+  .pedido-paper-inner{padding:12mm 12mm 9mm!important}
+  .pedido-modal-scroll,.pedido-editor,.pedido-form-card,.pedido-preview-wrap,.pedido-report-actions{overflow:visible!important}
+  .pedido-table{page-break-inside:auto}
+  .pedido-table tr{page-break-inside:avoid;page-break-after:auto}
+  .pedido-brand,.pedido-greeting,.pedido-section-title,.pedido-delivery-title{break-inside:avoid}
+}
+
         .sku-label-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -263,6 +316,17 @@ body.dark{background:#070d19!important}
 .venta-sku-row{transition:box-shadow .2s ease,border-color .2s ease,background .2s ease}
 .venta-sku-row:focus-within{box-shadow:0 8px 25px rgba(79,70,229,.08)}
 </style>
+
+<style>
+/* V10 · UPC + CÓDIGO DE BARRAS FALSO + FINANZAS */
+.fake-barcode{height:42px;display:flex;align-items:stretch;justify-content:center;gap:1px;overflow:hidden;background:#fff;padding:4px 8px;border-radius:6px;border:1px solid #e2e8f0}
+.fake-barcode span{display:block;background:#111827;min-width:1px}
+.fin-pool{position:relative;overflow:hidden}
+.fin-pool:after{content:"";position:absolute;width:150px;height:150px;border-radius:999px;right:-55px;top:-70px;background:rgba(255,255,255,.16);pointer-events:none}
+.fin-number{font-variant-numeric:tabular-nums}
+.fin-movement-row{transition:background .18s ease}
+.fin-movement-row:hover{background:rgba(245,158,11,.05)}
+</style>
 </head>
 <body :class="
         darkMode
@@ -297,9 +361,9 @@ body.dark{background:#070d19!important}
 <i class="fa-solid fa-sun text-lg"></i>
 </template>
 </button>
-<button @click="abrirPlantillaSKU()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-lg flex items-center gap-2" title="Crear plantilla imprimible de etiquetas SKU">
-<i class="fa-solid fa-tags"></i>
-                    Etiquetas SKU
+<button @click="abrirPlantillaSKU()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-lg flex items-center gap-2" title="Crear plantilla imprimible de etiquetas UPC">
+<i class="fa-solid fa-barcode"></i>
+                    Etiquetas UPC
                 </button>
 <button @click="abrirModalProducto()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-lg flex items-center gap-2">
 <i class="fa-solid fa-plus-circle"></i>
@@ -349,7 +413,7 @@ body.dark{background:#070d19!important}
                         guardarProducto()
                     " class="space-y-4">
 <!-- =================================================
-                         NOMBRE / SKU
+                         NOMBRE / UPC
                     ================================================== -->
 <div class="grid grid-cols-3 gap-3">
 <div class="col-span-2">
@@ -367,10 +431,10 @@ body.dark{background:#070d19!important}
                                 SKU
                             </label>
 <div class="relative">
-<input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 pr-10 font-mono text-xs font-black tracking-wide cursor-not-allowed" placeholder="Se generará al guardar" readonly="" type="text" x-model="formProducto.sku"/>
+<input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 pr-10 font-mono text-xs font-black tracking-wide cursor-not-allowed" placeholder="Se generará automáticamente al guardar (11 dígitos)" readonly="" type="text" x-model="formProducto.sku"/>
 <i class="fa-solid fa-wand-magic-sparkles absolute right-3 top-3 text-indigo-500"></i>
 </div>
-<div class="text-[10px] text-slate-400 mt-1">Generado automáticamente y único. No se edita manualmente.</div>
+<div class="text-[10px] text-slate-400 mt-1">UPC de 11 dígitos, generado automáticamente y único. No se edita manualmente.</div>
 </div>
 </div>
 <!-- =================================================
@@ -556,19 +620,19 @@ body.dark{background:#070d19!important}
 <div>
 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-3"><i class="fa-solid fa-cart-plus"></i> Nueva venta</div>
 <h3 class="text-2xl font-black text-slate-900 dark:text-white">Registrar Venta</h3>
-<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Ingresa uno o varios SKU. Los datos del cliente se registran una sola vez.</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Ingresa uno o varios UPC.  Los datos del cliente se registran una sola vez.</p>
 </div>
 <button @click="cerrarModalVenta()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-400 hover:text-rose-500 flex items-center justify-center"><i class="fa-solid fa-xmark text-xl"></i></button>
 </div>
 </div>
 
 <form @submit.prevent="confirmarVenta()" class="p-6 md:p-7 space-y-5">
-<!-- PRODUCTOS / SKU -->
+<!-- PRODUCTOS / UPC -->
 <div class="rounded-2xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/60 dark:bg-indigo-950/20 overflow-hidden">
 <div class="px-4 py-4 border-b border-indigo-200 dark:border-indigo-900/60 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
 <div>
 <div class="text-xs font-black uppercase tracking-widest text-indigo-700 dark:text-indigo-300"><i class="fa-solid fa-barcode mr-1"></i> Productos de la venta</div>
-<div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Escribe el SKU. El producto, costo y precio se completan automáticamente.</div>
+<div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Escribe el UPC. El producto, costo y precio se completan automáticamente.</div>
 </div>
 <button @click="agregarLineaVenta()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black flex items-center justify-center gap-2" type="button"><i class="fa-solid fa-plus"></i> Agregar producto</button>
 </div>
@@ -577,17 +641,17 @@ body.dark{background:#070d19!important}
 <div class="venta-sku-row rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3" :class="linea.error ? 'border-rose-300 dark:border-rose-800' : (linea.producto ? 'border-emerald-300 dark:border-emerald-800' : '')">
 <div class="grid grid-cols-1 md:grid-cols-[minmax(180px,1.2fr)_minmax(220px,2fr)_110px_110px_44px] gap-3 items-center">
 <div>
-<label class="block text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">SKU</label>
+<label class="block text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">UPC</label>
 <div class="relative">
-<input :list="'skus-disponibles-' + index" @input="validarLineaSKU(index)" @blur="validarLineaSKU(index)" class="w-full bg-slate-100 dark:bg-slate-800 border rounded-xl px-3 py-2.5 font-mono text-sm font-black uppercase" :class="linea.error ? 'border-rose-400' : 'border-slate-300 dark:border-slate-700'" maxlength="40" placeholder="Ej: PSARTTRA..." type="text" x-model="linea.sku"/>
-<datalist :id="'skus-disponibles-' + index"><template x-for="item in productosDisponiblesParaVenta"><option :value="item.sku" x-text="item.sku + ' · ' + item.nombre"></option></template></datalist>
+<input :list="'skus-disponibles-' + index" @input="linea.sku = String(linea.sku || '').replace(/\D/g, '').slice(0,11); validarLineaSKU(index)" @blur="validarLineaSKU(index)" class="w-full bg-slate-100 dark:bg-slate-800 border rounded-xl px-3 py-2.5 font-mono text-sm font-black tracking-wider" :class="linea.error ? 'border-rose-400' : 'border-slate-300 dark:border-slate-700'" maxlength="11" inputmode="numeric" pattern="[0-9]{11}" placeholder="Ej: 12345678901" type="text" x-model="linea.sku"/>
+<datalist :id="'skus-disponibles-' + index"><template x-for="item in productosDisponiblesParaVenta"><option :value="item.sku" x-text="normalizarSKUBusqueda(item.sku) + ' · ' + item.nombre"></option></template></datalist>
 </div>
-<div class="text-[10px] mt-1" :class="linea.error ? 'text-rose-500 font-bold' : 'text-slate-400'" x-text="linea.error || (linea.producto ? 'SKU válido · Disponible' : 'Ingresa un SKU disponible')"></div>
+<div class="text-[10px] mt-1" :class="linea.error ? 'text-rose-500 font-bold' : 'text-slate-400'" x-text="linea.error || (linea.producto ? 'UPC válido · Disponible' : 'Ingresa un UPC disponible')"></div>
 </div>
 <div class="min-w-0">
 <label class="block text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">Producto</label>
 <div class="font-black text-sm text-slate-800 dark:text-slate-100 truncate" x-text="linea.producto?.nombre || '—'"></div>
-<div class="text-[10px] text-slate-400 mt-1 truncate" x-text="linea.producto ? ('Talla: ' + (linea.producto.talla || 'Única')) : 'El producto aparecerá al reconocer el SKU'"></div>
+<div class="text-[10px] text-slate-400 mt-1 truncate" x-text="linea.producto ? ('Talla: ' + (linea.producto.talla || 'Única')) : 'El producto aparecerá al reconocer el UPC'"></div>
 </div>
 <div>
 <label class="block text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">Costo</label>
@@ -598,7 +662,7 @@ body.dark{background:#070d19!important}
 <div class="text-sm font-black text-emerald-600 dark:text-emerald-400">S/ <span x-text="formatMonto(linea.producto?.precioVenta || 0)"></span></div>
 </div>
 <div class="flex justify-center">
-<button @click="quitarLineaVenta(index)" :disabled="ventaItems.length === 1" class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed" title="Eliminar SKU" type="button"><i class="fa-solid fa-trash"></i></button>
+<button @click="quitarLineaVenta(index)" :disabled="ventaItems.length === 1" class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed" title="Eliminar UPC" type="button"><i class="fa-solid fa-trash"></i></button>
 </div>
 </div>
 </div>
@@ -608,12 +672,12 @@ body.dark{background:#070d19!important}
 
 <!-- DATOS CLIENTE -->
 <div class="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/30 space-y-4">
-<div><div class="text-xs font-black text-blue-700 dark:text-blue-300 flex items-center gap-2"><i class="fa-solid fa-user"></i> Datos del cliente</div><div class="text-[10px] text-slate-400 mt-1">Estos datos se ingresan una sola vez y se aplicarán a todos los SKU seleccionados.</div></div>
+<div><div class="text-xs font-black text-blue-700 dark:text-blue-300 flex items-center gap-2"><i class="fa-solid fa-user"></i> Datos del cliente</div><div class="text-[10px] text-slate-400 mt-1">Estos datos se ingresan una sola vez y se aplicarán a todos los UPC seleccionados.</div></div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Cliente *</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" placeholder="Nombre completo" required type="text" x-model="ventaForm.clienteNombre"/></div>
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Teléfono</label><input @input="ventaForm.clienteTelefono = limpiarCelular(ventaForm.clienteTelefono)" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" inputmode="numeric" maxlength="9" pattern="[0-9]{9}" placeholder="999999999" type="tel" x-model="ventaForm.clienteTelefono"/></div>
 </div>
-<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Distrito</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" placeholder="Ej: Miraflores" type="text" x-model="ventaForm.distrito"/></div>
+<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Distrito</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" placeholder="Ej: Miraflores" type="text" x-model="ventaForm.distrito"/></div><div class="md:col-span-2"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Dirección de entrega</label><textarea class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium resize-none" rows="2" placeholder="Av. ..., número, referencia" x-model="ventaForm.direccionEntrega"></textarea><div class="flex flex-wrap items-center gap-2 mt-2"><button type="button" @click="geocodificarDireccionVenta()" class="px-3 py-2 rounded-lg bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white text-xs font-black"><i class="fa-solid fa-location-crosshairs mr-1"></i>Localizar automáticamente</button><span class="text-[10px] text-slate-400" x-show="ventaForm.latitud && ventaForm.longitud">📍 <span x-text="ventaForm.latitud"></span>, <span x-text="ventaForm.longitud"></span></span></div></div>
 </div>
 
 <!-- COMPROBANTE -->
@@ -674,7 +738,7 @@ body.dark{background:#070d19!important}
 <template x-if="ventaEditando?.imagenUrl"><img :src="ventaEditando.imagenUrl" class="w-full h-full object-cover"/></template>
 <template x-if="!ventaEditando?.imagenUrl"><i class="fa-solid fa-paw text-slate-400"></i></template>
 </div>
-<div class="min-w-0 flex-1"><div class="font-black truncate" x-text="ventaEditando?.nombre || ''"></div><div class="text-[11px] text-slate-400 mt-1">SKU: <span x-text="ventaEditando?.sku || 'N/A'"></span></div></div>
+<div class="min-w-0 flex-1"><div class="font-black truncate" x-text="ventaEditando?.nombre || ''"></div><div class="text-[11px] text-slate-400 mt-1">UPC: <span x-text="normalizarSKUBusqueda(ventaEditando?.sku) || 'N/A'"></span></div></div>
 <div class="text-right"><div class="text-[9px] uppercase tracking-wider text-slate-400 font-black">Comprobante</div><div class="text-xs font-black text-violet-600" x-text="ventaEditando?.comprobanteNumero || 'Sin número'"></div></div>
 </div>
 </div>
@@ -715,15 +779,15 @@ body.dark{background:#070d19!important}
 </div>
 </div>
 <!-- =====================================================
-             MODAL ETIQUETAS SKU
+             MODAL ETIQUETAS UPC
         ====================================================== -->
 <div class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6 z-[85]" style="display:none;" x-show="modalEtiquetasSKU" x-transition.opacity="">
 <div class="w-full max-w-6xl max-h-[95vh] overflow-y-auto bg-white dark:bg-slate-800 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700">
 <div class="print-sku-actions sticky top-0 z-10 bg-white/95 dark:bg-slate-800/95 backdrop-blur border-b border-slate-200 dark:border-slate-700 p-5 flex flex-col md:flex-row md:items-center justify-between gap-3">
 <div>
 <div class="text-[10px] uppercase tracking-[0.2em] font-black text-indigo-600">Etiquetado de inventario</div>
-<h3 class="text-xl font-black text-slate-900 dark:text-white">Plantilla de etiquetas SKU</h3>
-<p class="text-xs text-slate-500 dark:text-slate-400 mt-1"><span x-text="productosConSKU.length"></span> productos · cada etiqueta incluye nombre y SKU.</p>
+<h3 class="text-xl font-black text-slate-900 dark:text-white">Plantilla de etiquetas UPC</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1"><span x-text="productosConSKU.length"></span> productos · cada etiqueta incluye nombre y UPC.</p>
 </div>
 <div class="flex gap-2">
 <button @click="imprimirEtiquetasSKU()" class="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black flex items-center gap-2"><i class="fa-solid fa-print"></i> Imprimir</button>
@@ -737,7 +801,9 @@ body.dark{background:#070d19!important}
 <div class="min-w-0 w-full">
 <div class="text-[8px] uppercase tracking-widest font-black text-slate-400">PetSmart · Inventario</div>
 <div class="text-sm font-black text-slate-900 mt-1 leading-tight break-words" x-text="item.nombre"></div>
-<div class="font-mono text-[12px] font-black tracking-wide text-indigo-700 mt-2 break-all" x-text="item.sku"></div>
+<div class="font-mono text-[12px] font-black tracking-wide text-indigo-700 mt-2 break-all" x-text="normalizarSKUBusqueda(item.sku)"></div>
+<div class="fake-barcode mt-2" aria-label="Código de barras decorativo"><template x-for="(barra,i) in generarBarrasFalsas(item.sku)" :key="'barra-'+item.id+'-'+i"><span :style="`width:${barra.w}px`"></span></template></div>
+<div class="text-[8px] text-slate-400 mt-1">Código de barras ilustrativo · no corresponde a un producto registrado</div>
 </div>
 </div>
 </template>
@@ -1015,6 +1081,22 @@ body.dark{background:#070d19!important}
                     true,
                 activeTab:
                     'inventario',
+                geoMapa: null,
+                geoMarkers: [],
+                geoCargando: false,
+                geoError: '',
+                geoManualLat: '',
+                geoManualLng: '',
+                geoSeleccionado: null,
+                geoMarcadorPendiente: false,
+                geoBusqueda: '',
+                geoResultados: [],
+                geoBuscando: false,
+                geoMarcadorTemporal: null,
+                geoResultadoElegido: null,
+                catalogoSeleccionados: [],
+                catalogoFiltro: '',
+                catalogoTitulo: 'Catálogo PetSmart',
                 subiendoProducto:
                     false,
                 logoSubiendo:
@@ -1029,6 +1111,15 @@ body.dark{background:#070d19!important}
                     false,
                 modalEtiquetasSKU:
                     false,
+                modalReportePedido:
+                    false,
+                finanzasCargando:
+                    false,
+                movimientosFinancieros:
+                    [],
+                finanzasErrorPermisos:
+                    false,
+                _limpiezaClientesProgramada: false,
                 editandoId:
                     null,
                 productoVenta:
@@ -1065,6 +1156,30 @@ body.dark{background:#070d19!important}
                 filtroVentasDni: '',
                 filtroVentasFecha: '',
                 clientesData: [],
+                ventasData: [],
+                finanzaForm: {
+                    pozo: 'capital',
+                    tipo: 'salida',
+                    monto: 0,
+                    concepto: '',
+                    fecha: fechaPeruActual(),
+                    observacion: ''
+                },
+                reportePedido: {
+                    pedidoNumero: '',
+                    clienteNombre: '',
+                    clienteTelefono: '',
+                    dni: '',
+                    direccion: '',
+                    metodoPago: 'Yape',
+                    fechaPedido: '',
+                    fechaEntrega: '',
+                    horarioEntrega: '',
+                    precioProductos: 0,
+                    costoEnvio: 0,
+                    observacion: '',
+                    items: []
+                },
                 // =================================================
                 // ADMIN
                 // =================================================
@@ -1176,7 +1291,7 @@ body.dark{background:#070d19!important}
                 ventaForm: {
                     clienteNombre: '', clienteTelefono: '', distrito: '', canalVenta: 'WhatsApp', perfilFacebook: '',
                     medioPago: 'Yape', precioVenta: 0, fechaVenta: fechaPeruActual(), fechaEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '',
-                    comision: 0, confLogistico: 0, observacion: ''
+                    comision: 0, confLogistico: 0, observacion: '', direccionEntrega: '', latitud: '', longitud: ''
                 },
                 productos: [],
                 // =================================================
@@ -1226,6 +1341,8 @@ body.dark{background:#070d19!important}
                         }
                         this.escucharProductos();
                         this.escucharClientes();
+                        this.escucharVentasHistoricas();
+                        this.escucharFinanzas();
                         this.escucharConfiguracion();
                     }
                     catch (error) {
@@ -1270,6 +1387,7 @@ body.dark{background:#070d19!important}
                                     })
                                 );
                             this.normalizarSKUsExistentes();
+                            this.programarLimpiezaClientesHuerfanos();
                         },
                         error => {
                             console.error(
@@ -1290,9 +1408,35 @@ body.dark{background:#070d19!important}
                             key,
                             ...cliente
                         }));
+                        this.programarLimpiezaClientesHuerfanos();
                     }, error => {
                         console.error(error);
                         this.clientesData = [];
+                    });
+                },
+                escucharVentasHistoricas() {
+                    const ventasRef = window.fb.ref(window.db, 'ventas');
+                    window.fb.onValue(ventasRef, snapshot => {
+                        const data = snapshot.val() || {};
+                        this.ventasData = Object.entries(data).map(([key, venta]) => ({
+                            key, ...(venta || {})
+                        }));
+                        this.programarLimpiezaClientesHuerfanos();
+                    }, error => {
+                        console.error('No se pudieron cargar las ventas históricas:', error);
+                        this.ventasData = [];
+                    });
+                },
+                escucharFinanzas() {
+                    const finRef = window.fb.ref(window.db, 'finanzas/movimientos');
+                    window.fb.onValue(finRef, snapshot => {
+                        const data = snapshot.val() || {};
+                        this.movimientosFinancieros = Object.entries(data).map(([key, mov]) => ({ key, ...(mov || {}) }));
+                        this.finanzasErrorPermisos = false;
+                    }, error => {
+                        console.warn('Finanzas: no se pudo leer finanzas/movimientos', error);
+                        this.movimientosFinancieros = [];
+                        this.finanzasErrorPermisos = true;
                     });
                 },
                 // =================================================
@@ -1304,6 +1448,7 @@ body.dark{background:#070d19!important}
                     const p = {
                         ...producto
                     };
+                    if (/^\d{11}$/.test(String(p.sku || '').trim())) p.upc = String(p.sku).trim();
                     if (!p.fechaIngreso) {
                         p.fechaIngreso =
                             p.fecha
@@ -1362,8 +1507,39 @@ body.dark{background:#070d19!important}
                     return p;
                 },
                 async normalizarSKUsExistentes() {
-                    // Los SKU existentes no se modifican automáticamente.
-                    return;
+                    // V10: migración controlada a UPC numérico de 11 dígitos.
+                    // Los productos que ya cumplen 11 dígitos no se tocan. Los códigos antiguos
+                    // alfanuméricos se conservan como codigoAnterior y reciben un UPC nuevo.
+                    if (!window.db || !window.fb || !this.productos.length) return;
+                    if (this._migrandoUPC) return;
+                    this._migrandoUPC = true;
+                    try {
+                        const usados = new Set(this.productos.map(p => String(p.sku || '').replace(/\D/g, '')).filter(v => /^\d{11}$/.test(v)));
+                        const updates = {};
+                        for (const item of this.productos) {
+                            const actual = String(item.sku || '').trim();
+                            if (/^\d{11}$/.test(actual)) continue;
+                            let nuevo = '';
+                            let intentos = 0;
+                            do {
+                                nuevo = this.generarUPC11();
+                                intentos++;
+                            } while (usados.has(nuevo) && intentos < 100);
+                            if (!nuevo || usados.has(nuevo)) continue;
+                            usados.add(nuevo);
+                            updates[`productos/${item.id}/codigoAnterior`] = actual || null;
+                            updates[`productos/${item.id}/sku`] = nuevo;
+                            updates[`productos/${item.id}/upc`] = nuevo;
+                        }
+                        if (Object.keys(updates).length) {
+                            await window.fb.update(window.fb.ref(window.db), updates);
+                            this.notificarToast('success', `${Object.keys(updates).filter(k => k.endsWith('/sku')).length} producto(s) actualizados a UPC numérico de 11 dígitos.`);
+                        }
+                    } catch (e) {
+                        console.warn('No se pudo migrar automáticamente a UPC:', e);
+                    } finally {
+                        this._migrandoUPC = false;
+                    }
                 },
                 async asignarSKUsFaltantes() {
                     // V5: no se realizan escrituras automáticas al cargar el inventario.
@@ -1371,17 +1547,18 @@ body.dark{background:#070d19!important}
                     return;
                 },
                 normalizarSKU(sku) {
-                    return String(sku || '').trim().replace(/\s+/g, '').toUpperCase();
+                    return String(sku || '').trim().replace(/\s+/g, '').replace(/-/g, '').toUpperCase();
                 },
                 normalizarSKUBusqueda(sku) {
-                    return String(sku || '').trim().replace(/\s+/g, '').replace(/-/g, '').toUpperCase();
+                    const limpio = String(sku || '').trim().replace(/\s+/g, '').replace(/-/g, '').toUpperCase();
+                    return /^\d{11}$/.test(limpio) ? limpio : limpio;
                 },
                 get productosConSKU() {
                     return this.productos.filter(item => item.sku);
                 },
                 abrirPlantillaSKU() {
                     if (!this.productosConSKU.length) {
-                        Swal.fire('Sin productos', 'Todavía no hay productos con SKU para imprimir.', 'info');
+                        Swal.fire('Sin productos', 'Todavía no hay productos con UPC para imprimir.', 'info');
                         return;
                     }
                     this.modalEtiquetasSKU = true;
@@ -1535,6 +1712,83 @@ body.dark{background:#070d19!important}
                     }
                 },
                 // =================================================
+                // LIMPIEZA AUTOMÁTICA DE CLIENTES HUÉRFANOS
+                // =================================================
+                programarLimpiezaClientesHuerfanos() {
+                    if (this._limpiezaClientesProgramada) return;
+                    this._limpiezaClientesProgramada = true;
+                    clearTimeout(this._timerLimpiezaClientes);
+                    this._timerLimpiezaClientes = setTimeout(() => {
+                        this._limpiezaClientesProgramada = false;
+                        this.limpiarClientesHuerfanos().catch(e => console.warn('Limpieza de clientes:', e));
+                    }, 700);
+                },
+                async limpiarClientesHuerfanos() {
+                    if (!window.db || !window.fb) return;
+                    const [clientesSnap, ventasSnap, productosSnap] = await Promise.all([
+                        window.fb.get(window.fb.ref(window.db, 'clientes')),
+                        window.fb.get(window.fb.ref(window.db, 'ventas')),
+                        window.fb.get(window.fb.ref(window.db, 'productos'))
+                    ]);
+                    const clientes = clientesSnap.val() || {};
+                    const ventas = ventasSnap.val() || {};
+                    const productos = Object.entries(productosSnap.val() || {}).map(([id,p]) => ({id, ...(p||{})}));
+                    // FUENTE DE VERDAD: una venta existe si el producto sigue marcado como vendido.
+                    // Esto evita que registros antiguos de /ventas vuelvan a mostrar clientes eliminados.
+                    const vendidos = productos.filter(p => p.estado === 'vendido');
+                    const activos = new Set();
+                    const identidades = new Set();
+                    const registrar = v => {
+                        const cid = String(v?.clienteId || '').trim();
+                        if (cid) activos.add(cid);
+                        const n = this.normalizarTextoCliente(v?.clienteNombre || v?.nombre || '');
+                        const d = this.normalizarDocumento(v?.numeroDocumento || v?.documento || '');
+                        const r = this.normalizarDocumento(v?.ruc || '');
+                        if (n) identidades.add('n:' + n);
+                        if (d) identidades.add('d:' + d);
+                        if (r) identidades.add('r:' + r);
+                    };
+                    vendidos.forEach(registrar);
+                    const updates = {};
+                    // Si no queda ningún producto vendido, eliminamos definitivamente clientes y ventas antiguas.
+                    if (!vendidos.length) {
+                        if (Object.keys(clientes).length) updates['clientes'] = null;
+                        if (Object.keys(ventas).length) updates['ventas'] = null;
+                    } else {
+                        Object.entries(clientes).forEach(([key, c]) => {
+                            const cid = String(c?.clienteId || key);
+                            const n = this.normalizarTextoCliente(c?.nombre || '');
+                            const d = this.normalizarDocumento(c?.documento || c?.numeroDocumento || '');
+                            const r = this.normalizarDocumento(c?.ruc || '');
+                            const sigueActivo = activos.has(cid) || (n && identidades.has('n:' + n)) || (d && identidades.has('d:' + d)) || (r && identidades.has('r:' + r));
+                            if (!sigueActivo) updates[`clientes/${key}`] = null;
+                        });
+                        // Elimina /ventas que ya no tienen un producto vendido correspondiente.
+                        Object.keys(ventas).forEach(key => {
+                            const prod = productos.find(p => p.id === key);
+                            if (!prod || prod.estado !== 'vendido') updates[`ventas/${key}`] = null;
+                        });
+                    }
+                    if (Object.keys(updates).length) await window.fb.update(window.fb.ref(window.db), updates);
+                    this.clientesData = [];
+                },
+                async reiniciarClientesDesdeCero() {
+                    const confirmacion = await Swal.fire({ title:'¿Eliminar TODOS los clientes?', html:'Esta acción eliminará todos los registros de <b>clientes</b>. Las ventas e inventario no se modificarán.', icon:'warning', showCancelButton:true, confirmButtonColor:'#e11d48', confirmButtonText:'Sí, empezar de cero', cancelButtonText:'Cancelar' });
+                    if (!confirmacion.isConfirmed) return;
+                    try {
+                        const productosSnap = await window.fb.get(window.fb.ref(window.db, 'productos'));
+                        const vendidos = Object.values(productosSnap.val() || {}).some(p => p && p.estado === 'vendido');
+                        await window.fb.remove(window.fb.ref(window.db, 'clientes'));
+                        if (!vendidos) await window.fb.remove(window.fb.ref(window.db, 'ventas'));
+                        this.clientesData = [];
+                        this.ventasData = vendidos ? this.ventasData : [];
+                        this.notificarToast('success', vendidos ? 'Clientes eliminados. Las ventas activas se conservaron.' : 'Clientes y registros de ventas antiguos eliminados. Partimos desde cero.');
+                    } catch(e) {
+                        console.error(e);
+                        Swal.fire('No se pudo limpiar clientes', e?.message || 'Firebase rechazó la eliminación de clientes. Revisa las reglas de /clientes.', 'error');
+                    }
+                },
+                // =================================================
                 // VENTAS Y CLIENTES
                 // =================================================
                 normalizarTextoCliente(valor) {
@@ -1584,46 +1838,53 @@ body.dark{background:#070d19!important}
                     return lista;
                 },
                 get clientesRegistrados() {
-                    const mapa = new Map();
-                    this.clientesData.forEach(cliente => {
+                    // Solo mostramos clientes que tengan una venta activa/histórica real.
+                    // Los registros huérfanos de clientes/ nunca vuelven a aparecer en pantalla.
+                    const candidatos = [];
+                    // La lista visible se alimenta SOLO de productos actualmente vendidos.
+                    // Así ningún registro viejo de /ventas puede volver a mostrar clientes eliminados.
+                    this.productos.filter(p => p.estado === 'vendido').forEach(v => candidatos.push({
+                        key: v.clienteId || ('producto:' + v.id),
+                        nombre: v.clienteNombre || '', razonSocial: v.razonSocial || '',
+                        celular: v.clienteTelefono || '', documento: v.numeroDocumento || '',
+                        tipoDocumento: v.tipoDocumento || '', ruc: v.ruc || '', clienteId: v.clienteId || ''
+                    }));
+                    const lista = [];
+                    for (const cliente of candidatos) {
                         const nombre = String(cliente.nombre || '').trim();
                         const razonSocial = String(cliente.razonSocial || '').trim();
-                        const celular = this.limpiarCelular(cliente.celular || cliente.clienteTelefono || '');
-                        const documento = this.normalizarDocumento(cliente.documento || cliente.numeroDocumento || '');
+                        const celular = this.limpiarCelular(cliente.celular || '');
+                        const documento = this.normalizarDocumento(cliente.documento || '');
                         const ruc = this.normalizarDocumento(cliente.ruc || '');
-                        const identidad = documento ? `dni:${documento}` : (ruc ? `ruc:${ruc}` : (nombre ? `nom:${this.normalizarTextoCliente(nombre)}` : `key:${cliente.key}`));
-                        const actual = mapa.get(identidad);
-                        const nuevo = {
-                            key: cliente.key, nombre, razonSocial, celular, documento,
-                            tipoDocumento: cliente.tipoDocumento || '', ruc,
-                            actualizadoEn: cliente.actualizadoEn || ''
-                        };
-                        if (!actual || String(nuevo.actualizadoEn).localeCompare(String(actual.actualizadoEn)) >= 0) mapa.set(identidad, nuevo);
-                    });
-                    // Compatibilidad: si por alguna razón la ruta clientes está vacía,
-                    // mostramos también los clientes que existen en ventas.
-                    if (!mapa.size) {
-                        this.ventasRegistradas.forEach(item => {
-                            const nombre = String(item.clienteNombre || '').trim();
-                            const documento = this.obtenerDniItem(item);
-                            const ruc = this.normalizarDocumento(item.ruc || '');
-                            const celular = this.limpiarCelular(item.clienteTelefono || '');
-                            const key = item.clienteId || this.normalizarTextoCliente(nombre) || item.id;
-                            if (!mapa.has(key)) mapa.set(key, { key, nombre, razonSocial: item.razonSocial || '', celular, documento, tipoDocumento: item.tipoDocumento || '', ruc });
-                        });
+                        const nombreNorm = this.normalizarTextoCliente(nombre);
+                        let existente = null;
+                        if (cliente.clienteId) existente = lista.find(c => c.key === cliente.clienteId);
+                        if (!existente && documento) existente = lista.find(c => c.documento === documento);
+                        if (!existente && ruc) existente = lista.find(c => c.ruc === ruc);
+                        if (!existente && nombreNorm) existente = lista.find(c => c.nombreNorm === nombreNorm);
+                        const nuevo = { key: String(cliente.clienteId || cliente.key || ''), nombre, razonSocial, celular, documento, tipoDocumento: cliente.tipoDocumento || '', ruc, nombreNorm, clienteId: String(cliente.clienteId || '') };
+                        if (!existente) lista.push(nuevo);
+                        else {
+                            existente.nombre = existente.nombre || nuevo.nombre;
+                            existente.razonSocial = existente.razonSocial || nuevo.razonSocial;
+                            existente.celular = existente.celular || nuevo.celular;
+                            existente.documento = existente.documento || nuevo.documento;
+                            existente.ruc = existente.ruc || nuevo.ruc;
+                            existente.tipoDocumento = existente.tipoDocumento || nuevo.tipoDocumento;
+                            if ((!existente.key || existente.key.startsWith('venta:') || existente.key.startsWith('producto:')) && nuevo.clienteId) existente.key = nuevo.clienteId;
+                        }
                     }
-                    let lista = Array.from(mapa.values());
                     const texto = this.normalizarTextoCliente(this.filtroClientesTexto);
                     const dni = this.normalizarDocumento(this.filtroClientesDni);
                     const ruc = this.normalizarDocumento(this.filtroClientesRuc);
-                    const telefono = this.normalizarDocumento(this.filtroClientesTelefono);
-                    if (texto) {
-                        lista = lista.filter(c => [c.nombre, c.razonSocial, c.documento, c.ruc, c.celular].map(v => this.normalizarTextoCliente(v)).some(v => v.includes(texto)));
-                    }
-                    if (dni) lista = lista.filter(c => this.normalizarDocumento(c.documento).includes(dni));
-                    if (ruc) lista = lista.filter(c => this.normalizarDocumento(c.ruc).includes(ruc));
-                    if (telefono) lista = lista.filter(c => this.normalizarDocumento(c.celular).includes(telefono));
-                    return lista.sort((a,b) => this.normalizarTextoCliente(a.nombre).localeCompare(this.normalizarTextoCliente(b.nombre)));
+                    const tel = this.normalizarDocumento(this.filtroClientesTelefono);
+                    return lista.filter(c => {
+                        const textoOk = !texto || [c.nombre,c.razonSocial,c.documento,c.ruc,c.celular].some(v => this.normalizarTextoCliente(v).includes(texto));
+                        const dniOk = !dni || c.documento.includes(dni);
+                        const rucOk = !ruc || c.ruc.includes(ruc);
+                        const telOk = !tel || this.normalizarDocumento(c.celular).includes(tel);
+                        return textoOk && dniOk && rucOk && telOk;
+                    });
                 },
                 buscarClienteExistente(clientes, datos) {
                     const nombre = this.normalizarTextoCliente(datos.nombre);
@@ -1693,6 +1954,9 @@ body.dark{background:#070d19!important}
                             clienteId,
                             canalVenta: datosVenta.canalVenta || '',
                             distrito: datosVenta.distrito || '',
+                            direccionEntrega: datosVenta.direccionEntrega || '',
+                            latitud: datosVenta.latitud || '',
+                            longitud: datosVenta.longitud || '',
                             montoTotal: Number(datosVenta.precioVenta) || 0,
                             fechaEntrega: datosVenta.fechaEntrega || '',
                             envio: datosVenta.envio || '',
@@ -1708,6 +1972,266 @@ body.dark{background:#070d19!important}
                     } catch (e) {
                         console.warn('No se pudo crear el registro adicional de ventas/clientes:', e);
                         throw e;
+                    }
+                },
+
+                // =================================================
+                // REPORTE PROFESIONAL DE PEDIDO
+                // =================================================
+                extraerMontoEnvio(valor) {
+                    const texto = String(valor || '').replace(',', '.');
+                    const match = texto.match(/(?:S\/|S\.|SOLES?)?\s*(\d+(?:\.\d{1,2})?)/i);
+                    return match ? (Number(match[1]) || 0) : 0;
+                },
+                formatearFechaLarga(fecha) {
+                    if (!fecha) return '—';
+                    const partes = String(fecha).split('-');
+                    if (partes.length !== 3) return fecha;
+                    const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+                    const mes = Number(partes[1]) - 1;
+                    return `${Number(partes[2])} de ${meses[mes] || partes[1]}, ${partes[0]}`;
+                },
+                get reportePedidoTotal() {
+                    return (Number(this.reportePedido?.precioProductos) || 0) + (Number(this.reportePedido?.costoEnvio) || 0);
+                },
+                abrirReportePedido(item) {
+                    if (!item) return;
+                    const grupoId = item.ventaGrupoId || '';
+                    let grupo = grupoId
+                        ? this.productos.filter(p => p.estado === 'vendido' && p.ventaGrupoId === grupoId)
+                        : [item];
+                    if (!grupo.length) grupo = [item];
+
+                    const agrupados = new Map();
+                    grupo.forEach(p => {
+                        const clave = [p.nombre || 'Producto', p.detalle || '', p.talla || ''].join('||').toUpperCase();
+                        const actual = agrupados.get(clave);
+                        if (actual) {
+                            actual.cantidad += 1;
+                            actual.total += Number(p.precioVenta) || 0;
+                            if (!actual.imagenUrl && p.imagenUrl) actual.imagenUrl = p.imagenUrl;
+                            if (!actual.upc && p.sku) actual.upc = this.normalizarSKUBusqueda(p.sku);
+                        } else {
+                            agrupados.set(clave, {
+                                nombre: p.nombre || 'Producto',
+                                detalle: p.detalle || '',
+                                talla: p.talla || '',
+                                cantidad: 1,
+                                total: Number(p.precioVenta) || 0,
+                                imagenUrl: p.imagenUrl || '',
+                                upc: this.normalizarSKUBusqueda(p.sku) || ''
+                            });
+                        }
+                    });
+
+                    const fechaVenta = item.fechaVenta || this.fechaPeru();
+                    this.reportePedido = {
+                        pedidoNumero: item.comprobanteNumero || '',
+                        clienteNombre: item.clienteNombre || '',
+                        clienteTelefono: item.clienteTelefono || '',
+                        dni: this.obtenerDniItem(item) || '',
+                        direccion: item.direccionEntrega ? String(item.direccionEntrega) : (item.distrito ? String(item.distrito) : ''),
+                        metodoPago: item.medioPago || 'Yape',
+                        fechaPedido: fechaVenta,
+                        fechaEntrega: item.fechaEntrega || '',
+                        horarioEntrega: '',
+                        precioProductos: Number(grupo.reduce((sum, p) => sum + (Number(p.precioVenta) || 0), 0).toFixed(2)),
+                        costoEnvio: this.extraerMontoEnvio(item.envio),
+                        observacion: item.observacion || '',
+                        items: Array.from(agrupados.values())
+                    };
+                    this.modalReportePedido = true;
+                },
+                cerrarReportePedido() {
+                    this.modalReportePedido = false;
+                },
+                imprimirReportePedido() {
+                    const source = document.getElementById('reportePedidoPreview');
+                    if (!source) return;
+                    const win = window.open('', '_blank', 'width=900,height=1100');
+                    if (!win) {
+                        Swal.fire('Atención', 'El navegador bloqueó la ventana de impresión. Permite ventanas emergentes para este sitio.', 'warning');
+                        return;
+                    }
+                    const estilos = `
+                        *{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:#20242c;font-family:Arial,Helvetica,sans-serif}
+                        .pedido-paper{width:100%;max-width:820px;margin:0 auto;background:#fff;color:#171b22;box-shadow:0 18px 55px rgba(15,23,42,.10);border:1px solid #e6e9ef}
+                        .pedido-paper-inner{padding:40px 44px 34px}.pedido-brand{text-align:center;padding-bottom:22px;border-bottom:2px solid #d8dde5}
+                        .pedido-brand img{max-width:220px;max-height:120px;width:auto;height:auto;object-fit:contain;margin:0 auto 12px;display:block}.pedido-brand-fallback{font-size:34px;font-weight:900;color:#1f2937}
+                        .pedido-title{font-size:32px;line-height:1.12;font-weight:800;margin:10px 0 6px}.pedido-order{font-size:21px;color:#30343b}
+                        .pedido-greeting{font-size:19px;line-height:1.5;margin:28px 0 20px}.pedido-section-title,.pedido-delivery-title{font-size:22px;font-weight:800;padding-bottom:10px;border-bottom:1px solid #cfd4dc;margin-bottom:14px}
+                        .pedido-table{width:100%;border-collapse:collapse}.pedido-table th{background:#f3f6fa;font-size:16px;text-align:left;padding:13px 12px;border:1px solid #dce1e8;font-weight:800}.pedido-table th:nth-child(2),.pedido-table th:nth-child(3){text-align:right}
+                        .pedido-table td{padding:15px 12px;border-bottom:1px solid #d7dce3;vertical-align:middle;font-size:16px}.pedido-table td:nth-child(2),.pedido-table td:nth-child(3){text-align:right;white-space:nowrap}
+                        .pedido-product{display:flex;align-items:center;gap:14px}.pedido-product-img{width:110px;height:110px;border-radius:10px;object-fit:contain;border:0;background:transparent;display:block}.pedido-product-name{font-weight:800;line-height:1.25}.pedido-product-detail{font-size:12px;color:#6b7280;margin-top:4px}
+                        .pedido-totals{margin:20px 0 30px auto;max-width:500px}.pedido-total-row{display:flex;justify-content:space-between;gap:20px;padding:6px 0;font-size:16px}.pedido-total-row.grand{border-top:1px solid #aeb5c0;margin-top:5px;padding-top:10px;font-size:18px;font-weight:900}
+                        .pedido-delivery{font-size:16px;line-height:1.8}.pedido-delivery strong{font-weight:800}.pedido-next{margin-top:22px;background:#eaf6ff;border-left:5px solid #3b82c4;border-radius:6px;padding:14px 18px;color:#1f5688;font-size:15px;line-height:1.55}.pedido-footer{margin-top:34px;padding-top:22px;border-top:1px solid #cfd4dc;text-align:center;color:#4b5563;font-size:15px;line-height:1.8}.pedido-muted{color:#6b7280}
+                        @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}.pedido-paper{max-width:none}.pedido-paper-inner{padding:12mm 12mm 9mm}.pedido-table tr{page-break-inside:avoid}}
+                    `;
+                    win.document.open();
+                    win.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Pedido ${this.escapeHtml(this.reportePedido.pedidoNumero || '')}</title><style>${estilos}</style></head><body>${source.innerHTML}</body></html>`);
+                    win.document.close();
+                    setTimeout(() => {
+                        try { win.focus(); win.print(); } catch(e) { console.warn(e); }
+                    }, 900);
+                },
+                async descargarReportePedidoJpeg() {
+                    const source = document.getElementById('reportePedidoPreview');
+                    if (!source || !window.html2canvas) {
+                        Swal.fire('Atención', 'No se pudo preparar la imagen del pedido.', 'warning');
+                        return;
+                    }
+                    try {
+                        Swal.fire({ title: 'Preparando imagen...', text: 'Generando JPEG del pedido', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                        await new Promise(resolve => this.$nextTick(() => setTimeout(resolve, 120)));
+                        const canvas = await window.html2canvas(source, {
+                            scale: 3.5,
+                            useCORS: true,
+                            allowTaint: false,
+                            backgroundColor: '#ffffff',
+                            imageTimeout: 15000,
+                            logging: false
+                        });
+                        const enlace = document.createElement('a');
+                        const pedido = String(this.reportePedido.pedidoNumero || 'pedido').replace(/[^a-zA-Z0-9_-]/g, '_');
+                        enlace.download = `PetSmart_Pedido_${pedido}.jpeg`;
+                        enlace.href = canvas.toDataURL('image/jpeg', 0.94);
+                        document.body.appendChild(enlace);
+                        enlace.click();
+                        enlace.remove();
+                        Swal.close();
+                        this.notificarToast('success', 'Imagen JPEG generada correctamente');
+                    } catch (error) {
+                        console.error('ERROR GENERANDO JPEG:', error);
+                        Swal.close();
+                        Swal.fire('No se pudo generar el JPEG', 'Si alguna foto del producto proviene de otro dominio, verifica que la imagen permita carga CORS.', 'warning');
+                    }
+                },
+                copiarResumenPedido() {
+                    const r = this.reportePedido;
+                    const lineas = [
+                        `PETSMART - PEDIDO #${r.pedidoNumero || '—'}`,
+                        `Cliente: ${r.clienteNombre || '—'}`,
+                        r.dni ? `DNI: ${r.dni}` : '',
+                        r.clienteTelefono ? `Teléfono: ${r.clienteTelefono}` : '',
+                        r.direccion ? `Dirección: ${r.direccion}` : '',
+                        '',
+                        ...((r.items || []).map(i => `${i.nombre}${i.talla ? ` - Talla ${i.talla}` : ''} · UPC ${i.upc || ''} x${i.cantidad}: S/ ${this.formatMonto(i.total)}`)),
+                        '',
+                        `Precio de productos: S/ ${this.formatMonto(r.precioProductos)}`,
+                        `Costo de envío: S/ ${this.formatMonto(r.costoEnvio)}`,
+                        `Total: S/ ${this.formatMonto(this.reportePedidoTotal)}`,
+                        r.metodoPago ? `Método de pago: ${r.metodoPago}` : '',
+                        r.fechaEntrega ? `Entrega: ${this.formatearFechaLarga(r.fechaEntrega)}${r.horarioEntrega ? ` · ${r.horarioEntrega}` : ''}` : ''
+                    ].filter(Boolean).join('\n');
+                    if (navigator.clipboard?.writeText) {
+                        navigator.clipboard.writeText(lineas).then(() => this.notificarToast('success', 'Resumen del pedido copiado')).catch(() => {});
+                    }
+                },
+                // =================================================
+                // CATÁLOGO AUTOMÁTICO
+                // =================================================
+                get productosCatalogoDisponibles() {
+                    const q=this.normalizarTextoCliente(this.catalogoFiltro);
+                    return this.productos.filter(p=>{ if(q && ![p.nombre,p.detalle,p.categoria,p.talla].some(v=>this.normalizarTextoCliente(v).includes(q))) return false; return true; });
+                },
+                toggleCatalogoProducto(id){ const i=this.catalogoSeleccionados.indexOf(id); if(i>=0)this.catalogoSeleccionados.splice(i,1); else this.catalogoSeleccionados.push(id); },
+                seleccionarTodosCatalogo(){ this.catalogoSeleccionados=this.productosCatalogoDisponibles.map(p=>p.id); },
+                limpiarSeleccionCatalogo(){ this.catalogoSeleccionados=[]; },
+                get productosSeleccionadosCatalogo(){ const set=new Set(this.catalogoSeleccionados); return this.productos.filter(p=>set.has(p.id)); },
+                async exportarCatalogoJPEG(){ const source=document.getElementById('catalogoExportable'); if(!source||!this.productosSeleccionadosCatalogo.length){Swal.fire('Selecciona productos','Elige al menos un producto para el catálogo.','warning');return;} if(!window.html2canvas)return; try{Swal.fire({title:'Generando catálogo...',text:'Preparando imagen JPEG',allowOutsideClick:false,didOpen:()=>Swal.showLoading()}); await new Promise(r=>this.$nextTick(()=>setTimeout(r,150))); const canvas=await html2canvas(source,{scale:3,useCORS:true,allowTaint:false,backgroundColor:'#fff',logging:false,imageTimeout:15000}); const a=document.createElement('a');a.download='PetSmart_Catalogo.jpeg';a.href=canvas.toDataURL('image/jpeg',0.96);a.click();Swal.close();this.notificarToast('success','Catálogo JPEG generado');}catch(e){Swal.close();Swal.fire('No se pudo generar',e.message||'Verifica que las imágenes permitan CORS.','warning');}},
+                async exportarCatalogoPDF(){ const source=document.getElementById('catalogoExportable'); if(!source||!this.productosSeleccionadosCatalogo.length){Swal.fire('Selecciona productos','Elige al menos un producto para el catálogo.','warning');return;} if(!window.html2canvas||!window.jspdf){Swal.fire('No disponible','No se pudo cargar el generador PDF.','warning');return;} try{Swal.fire({title:'Generando PDF...',text:'Preparando catálogo',allowOutsideClick:false,didOpen:()=>Swal.showLoading()});await new Promise(r=>this.$nextTick(()=>setTimeout(r,150)));const canvas=await html2canvas(source,{scale:2.5,useCORS:true,allowTaint:false,backgroundColor:'#fff',logging:false,imageTimeout:15000});const img=canvas.toDataURL('image/jpeg',0.96);const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});const pw=210,ph=297;const ratio=canvas.height/canvas.width;let ih=pw*ratio;let y=0;let remaining=ih;while(remaining>0){pdf.addImage(img,'JPEG',0,y,pw,ih);remaining-=ph;if(remaining>0){pdf.addPage();y-=ph;}}pdf.save('PetSmart_Catalogo.pdf');Swal.close();this.notificarToast('success','Catálogo PDF generado');}catch(e){Swal.close();Swal.fire('No se pudo generar PDF',e.message||'Error inesperado.','warning');}},
+                // =================================================
+                // GESTIÓN FINANCIERA · DOS POZOS AUTÓNOMOS
+                // =================================================
+                get ventasFinancieras() {
+                    return this.productos.filter(item => item.estado === 'vendido');
+                },
+                get capitalAutomatico() {
+                    // Cada venta devuelve al pozo Capital el costo real de la unidad vendida.
+                    return this.ventasFinancieras.reduce((sum, item) => sum + (Number(item.costoUnitario) || 0), 0);
+                },
+                get gananciasAutomaticas() {
+                    // La ganancia neta usa exactamente la lógica existente de ventas,
+                    // incluyendo comisión y logística de Seller Falabella cuando corresponda.
+                    return this.ventasFinancieras.reduce((sum, item) => sum + this.calcularGananciaReal(item), 0);
+                },
+                get movimientosCapital() {
+                    return this.movimientosFinancieros.filter(m => m.pozo === 'capital');
+                },
+                get movimientosMancomunado() {
+                    return this.movimientosFinancieros.filter(m => m.pozo === 'mancomunado');
+                },
+                sumarMovimientos(pozo, tipo) {
+                    return this.movimientosFinancieros
+                        .filter(m => m.pozo === pozo && m.tipo === tipo)
+                        .reduce((sum, m) => sum + (Number(m.monto) || 0), 0);
+                },
+                get ingresosCapitalManuales() { return this.sumarMovimientos('capital','ingreso'); },
+                get salidasCapital() { return this.sumarMovimientos('capital','salida'); },
+                get ingresosMancomunadoManuales() { return this.sumarMovimientos('mancomunado','ingreso'); },
+                get salidasMancomunado() { return this.sumarMovimientos('mancomunado','salida'); },
+                get saldoPozoCapital() {
+                    return this.capitalAutomatico + this.ingresosCapitalManuales - this.salidasCapital;
+                },
+                get saldoPozoMancomunado() {
+                    return this.gananciasAutomaticas + this.ingresosMancomunadoManuales - this.salidasMancomunado;
+                },
+                get totalCapitalHistorico() {
+                    return this.capitalAutomatico + this.ingresosCapitalManuales;
+                },
+                get totalGananciaHistorica() {
+                    return this.gananciasAutomaticas + this.ingresosMancomunadoManuales;
+                },
+                get movimientosFinancierosOrdenados() {
+                    return [...this.movimientosFinancieros].sort((a,b) => {
+                        const fa = String(a.fecha || '').localeCompare(String(b.fecha || ''));
+                        if (fa !== 0) return -fa;
+                        return String(b.creadoEn || '').localeCompare(String(a.creadoEn || ''));
+                    });
+                },
+                limpiarFinanzaForm() {
+                    this.finanzaForm = { pozo: 'capital', tipo: 'salida', monto: 0, concepto: '', fecha: this.fechaPeru(), observacion: '' };
+                },
+                async registrarMovimientoFinanciero() {
+                    const f = this.finanzaForm || {};
+                    const monto = Number(f.monto) || 0;
+                    if (monto <= 0) { Swal.fire('Atención', 'Ingresa un monto mayor que cero.', 'warning'); return; }
+                    if (!String(f.concepto || '').trim()) { Swal.fire('Atención', 'Indica el concepto del movimiento.', 'warning'); return; }
+                    if (!['capital','mancomunado'].includes(f.pozo)) { Swal.fire('Atención', 'Selecciona un pozo válido.', 'warning'); return; }
+                    if (!['ingreso','salida'].includes(f.tipo)) { Swal.fire('Atención', 'Selecciona ingreso o salida.', 'warning'); return; }
+                    try {
+                        Swal.fire({ title:'Guardando movimiento...', allowOutsideClick:false, didOpen:()=>Swal.showLoading() });
+                        const movRef = window.fb.push(window.fb.ref(window.db, 'finanzas/movimientos'));
+                        await window.fb.set(movRef, {
+                            pozo: f.pozo,
+                            tipo: f.tipo,
+                            monto: Number(monto.toFixed(2)),
+                            concepto: String(f.concepto || '').trim(),
+                            fecha: f.fecha || this.fechaPeru(),
+                            observacion: String(f.observacion || '').trim(),
+                            origen: 'manual',
+                            creadoEn: new Date().toISOString()
+                        });
+                        Swal.close();
+                        this.limpiarFinanzaForm();
+                        this.notificarToast('success', 'Movimiento financiero registrado');
+                    } catch (error) {
+                        console.error('ERROR FINANZAS:', error);
+                        Swal.close();
+                        this.finanzasErrorPermisos = true;
+                        Swal.fire({ icon:'error', title:'No se pudo guardar el movimiento', html:'Firebase bloqueó <b>finanzas/movimientos</b>.<br><br>Agrega permisos de lectura y escritura para esa ruta en las reglas de Realtime Database.' });
+                    }
+                },
+                async eliminarMovimientoFinanciero(mov) {
+                    if (!mov?.key) return;
+                    const r = await Swal.fire({ icon:'warning', title:'Eliminar movimiento', text:`¿Eliminar ${mov.tipo === 'salida' ? 'la salida' : 'el ingreso'} de S/ ${this.formatMonto(mov.monto)}?`, showCancelButton:true, confirmButtonText:'Sí, eliminar', cancelButtonText:'Cancelar', confirmButtonColor:'#e11d48' });
+                    if (!r.isConfirmed) return;
+                    try {
+                        await window.fb.remove(window.fb.ref(window.db, `finanzas/movimientos/${mov.key}`));
+                        this.notificarToast('success','Movimiento eliminado');
+                    } catch (error) {
+                        console.error(error);
+                        Swal.fire('Error','No se pudo eliminar el movimiento. Revisa las reglas de Firebase.','error');
                     }
                 },
                 // =================================================
@@ -1778,8 +2302,9 @@ body.dark{background:#070d19!important}
                     );
                 },
                 // =================================================
-                // SKU AUTOMÁTICO
-                // Formato: PS-ART-TRA-X7K4-L
+                // UPC AUTOMÁTICO · 11 DÍGITOS
+                // Se mantiene el campo interno "sku" para compatibilidad
+                // con Firebase y con registros antiguos.
                 // =================================================
                 normalizarCodigoSKU(valor) {
                     return String(valor || '')
@@ -1788,51 +2313,50 @@ body.dark{background:#070d19!important}
                         .toUpperCase()
                         .replace(/[^A-Z0-9]/g, '');
                 },
-                codigoFamiliaSKU(categoria) {
-                    const mapa = {
-                        'TRANSPORTADORES': 'TRA',
-                        'RASCADORES': 'RAS',
-                        'ACCESORIOS': 'ACC',
-                        'OTROS': 'OTR'
-                    };
-                    const limpio = this.normalizarCodigoSKU(categoria);
-                    return mapa[limpio] || (limpio.substring(0, 3) || 'GEN');
-                },
-                generarIdentificadorInternoSKU() {
-                    const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-                    let codigo = '';
+                generarUPC11() {
+                    let numero = '';
                     if (window.crypto?.getRandomValues) {
-                        const valores = new Uint32Array(4);
+                        const valores = new Uint32Array(3);
                         window.crypto.getRandomValues(valores);
-                        for (let i = 0; i < 4; i++) codigo += caracteres[valores[i] % caracteres.length];
+                        numero = String(valores[0]) + String(valores[1]) + String(valores[2]);
                     } else {
-                        for (let i = 0; i < 4; i++) codigo += caracteres[Math.floor(Math.random() * caracteres.length)];
+                        numero = String(Date.now()) + String(Math.floor(Math.random() * 1000000));
                     }
-                    return codigo;
+                    return numero.replace(/\D/g, '').slice(-11).padStart(11, '0');
                 },
-                construirSKU(idInterno = '') {
-                    const familia = this.codigoFamiliaSKU(this.formProducto.categoria);
-                    const variante = this.normalizarCodigoSKU(this.formProducto.talla) || 'U';
-                    const interno = this.normalizarCodigoSKU(idInterno) || this.generarIdentificadorInternoSKU();
-                    return `PS-ART-${familia}-${interno}-${variante}`;
+                construirSKU() {
+                    return this.generarUPC11();
                 },
                 async skuExiste(sku, excluirId = null) {
-                    const buscado = String(sku || '').toUpperCase();
-                    return this.productos.some(item => item.id !== excluirId && String(item.sku || '').toUpperCase() === buscado);
+                    const buscado = this.normalizarSKU(sku);
+                    return this.productos.some(item => item.id !== excluirId && this.normalizarSKU(item.sku) === buscado);
                 },
                 async generarSKUUnico(excluirId = null) {
                     let intentos = 0;
-                    while (intentos < 30) {
+                    while (intentos < 50) {
                         const sku = this.construirSKU();
                         if (!(await this.skuExiste(sku, excluirId))) return sku;
                         intentos++;
                     }
-                    throw new Error('No fue posible generar un SKU único.');
+                    throw new Error('No fue posible generar un UPC único de 11 dígitos.');
                 },
                 generarSKU() {
                     if (this.editandoId && this.formProducto.sku) return this.formProducto.sku;
                     this.formProducto.sku = this.construirSKU();
                     return this.formProducto.sku;
+                },
+                generarBarrasFalsas(codigo) {
+                    const digits = String(codigo || '00000000000').replace(/\D/g, '').padStart(11, '0').slice(-11);
+                    const barras = [];
+                    barras.push({w:2},{w:1},{w:2});
+                    digits.split('').forEach((d, i) => {
+                        const n = Number(d) || 0;
+                        const patrones = [1,2,1,3,1,2,3,1,2,3];
+                        const base = patrones[(n + i) % patrones.length];
+                        barras.push({w:base},{w:1},{w:(n % 3) + 1},{w:1});
+                    });
+                    barras.push({w:2},{w:1},{w:2});
+                    return barras;
                 },
                 // =================================================
                 // GANANCIA UNITARIA
@@ -2290,7 +2814,8 @@ body.dark{background:#070d19!important}
                     try {
                         if (!this.editandoId) {
                             this.formProducto.sku = await this.generarSKUUnico();
-                        } else if (!this.formProducto.sku) {
+                        } else if (!/^\d{11}$/.test(String(this.formProducto.sku || '').trim())) {
+                            this.formProducto.codigoAnterior = this.formProducto.sku || '';
                             this.formProducto.sku = await this.generarSKUUnico(this.editandoId);
                         }
                         const payload = {
@@ -2317,7 +2842,7 @@ body.dark{background:#070d19!important}
                             payload.id = nuevoRef.key;
                             delete payload.id;
                             await window.fb.set(nuevoRef, payload);
-                            this.notificarToast('success', `Unidad registrada · SKU ${payload.sku}`);
+                            this.notificarToast('success', `Unidad registrada · UPC ${payload.sku}`);
                         }
                         this.modalProducto = false;
                     } catch (error) {
@@ -2331,7 +2856,7 @@ body.dark{background:#070d19!important}
                 registrarVenta(item = null) {
                     this.productoVenta = item || null;
                     this.ventaItems = [{ sku: '', producto: null, error: '' }];
-                    this.ventaForm = { clienteNombre: '', clienteTelefono: '', distrito: '', canalVenta: 'WhatsApp', perfilFacebook: '', medioPago: 'Yape', fechaVenta: this.fechaPeru(), fechaEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '', comision: 0, confLogistico: 0, observacion: '' };
+                    this.ventaForm = { clienteNombre: '', clienteTelefono: '', distrito: '', direccionEntrega: '', latitud: '', longitud: '', canalVenta: 'WhatsApp', perfilFacebook: '', medioPago: 'Yape', fechaVenta: this.fechaPeru(), fechaEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '', comision: 0, confLogistico: 0, observacion: '' };
                     if (item && item.estado !== 'vendido') {
                         this.ventaItems[0] = { sku: item.sku || '', producto: item, error: '' };
                     }
@@ -2393,7 +2918,7 @@ body.dark{background:#070d19!important}
 
                     const producto = this.buscarProductoPorSKU(linea.sku);
                     if (!producto) {
-                        linea.error = 'SKU inexistente. Verifica el código.';
+                        linea.error = 'UPC inexistente. Verifica el código.';
                         return null;
                     }
                     if (producto.estado === 'vendido') {
@@ -2464,6 +2989,9 @@ body.dark{background:#070d19!important}
                     if (this.ventaForm.tipoComprobante === 'Factura' && (!this.ventaForm.ruc || !String(this.ventaForm.razonSocial || '').trim())) { Swal.fire('Atención', 'Ingresa el RUC y la Razón Social para la factura.', 'warning'); return; }
 
                     try {
+                        if (!this.ventaForm.latitud || !this.ventaForm.longitud) {
+                            await this.geocodificarDireccionVenta();
+                        }
                         Swal.fire({ title: 'Guardando venta...', text: `Registrando ${this.ventaItemsValidos.length} producto(s) y el cliente.`, allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
                         // Volvemos a leer Firebase para evitar vender un SKU que cambió de estado mientras el modal estaba abierto.
@@ -2476,11 +3004,11 @@ body.dark{background:#070d19!important}
                         const usados = new Set();
                         for (const linea of this.ventaItems) {
                             const sku = this.normalizarSKU(linea.sku);
-                            if (usados.has(sku)) throw new Error(`El SKU ${sku} está repetido en la venta.`);
+                            if (usados.has(sku)) throw new Error(`El UPC ${sku} está repetido en la venta.`);
                             usados.add(sku);
                             const producto = porSKU.get(sku);
-                            if (!producto) throw new Error(`El SKU ${sku} no existe en Firebase.`);
-                            if (producto.estado === 'vendido') throw new Error(`El SKU ${sku} ya fue vendido.`);
+                            if (!producto) throw new Error(`El UPC ${sku} no existe en Firebase.`);
+                            if (producto.estado === 'vendido') throw new Error(`El UPC ${sku} ya fue vendido.`);
                             seleccionados.push(producto);
                         }
 
@@ -2614,6 +3142,195 @@ body.dark{background:#070d19!important}
                     }
                 },
                 // =================================================
+                // =================================================
+                // GEOLOCALIZACIÓN DE ENTREGAS - MAPA LIMA
+                // =================================================
+                async geocodificarDireccionVenta() {
+                    // La venta sigue guardando la dirección normalmente. La ubicación se confirma desde el mapa.
+                    return true;
+                },
+                async buscarDireccionEnMapa() {
+                    const item = this.geoSeleccionado;
+                    const texto = String(this.geoBusqueda || (item?.direccionEntrega || '')).trim();
+                    if (!item) {
+                        this.notificarToast('warning', 'Primero selecciona una entrega.');
+                        return;
+                    }
+                    if (!texto) {
+                        this.notificarToast('warning', 'Esta entrega no tiene una dirección registrada.');
+                        return;
+                    }
+                    this.geoBuscando = true;
+                    this.geoResultados = [];
+                    try {
+                        const distrito = String(item.distrito || '').trim();
+                        const q = `${texto}${distrito ? ', ' + distrito : ''}, Lima, Peru`;
+                        const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&countrycodes=pe&q=' + encodeURIComponent(q);
+                        const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                        if (!r.ok) throw new Error('No se pudo consultar el buscador de direcciones.');
+                        const data = await r.json();
+                        this.geoResultados = Array.isArray(data) ? data : [];
+                        if (!this.geoResultados.length) {
+                            this.notificarToast('warning', 'No encontramos esa dirección. Prueba agregando calle, número, urbanización o referencia.');
+                        } else {
+                            this.notificarToast('success', `${this.geoResultados.length} ubicación(es) encontradas. Revisa y confirma la correcta.`);
+                        }
+                    } catch (e) {
+                        console.error('ERROR BUSCANDO DIRECCIÓN:', e);
+                        this.notificarToast('error', 'No se pudo buscar la dirección. Puedes colocar el punto manualmente en el mapa.');
+                    } finally {
+                        this.geoBuscando = false;
+                    }
+                },
+                seleccionarResultadoGeo(resultado) {
+                    if (!resultado) return;
+                    const lat = Number(resultado.lat), lng = Number(resultado.lon);
+                    if (!isFinite(lat) || !isFinite(lng)) return;
+                    this.geoResultadoElegido = resultado;
+                    this.geoManualLat = String(lat);
+                    this.geoManualLng = String(lng);
+                    this.geoMarcadorPendiente = true;
+                    this.colocarPuntoTemporal(lat, lng, true);
+                    if (this.geoMapa) this.geoMapa.setView([lat, lng], 17);
+                    this.notificarToast('info', 'Ubicación encontrada. Revisa el punto y confirma para dejarlo fijo.');
+                },
+                seleccionarEntregaParaMapa(item) {
+                    if (!item) return;
+                    this.geoSeleccionado = item;
+                    this.geoBusqueda = String(item.direccionEntrega || '').trim();
+                    this.geoResultados = [];
+                    this.geoResultadoElegido = null;
+                    this.geoManualLat = String(item.latitud || '');
+                    this.geoManualLng = String(item.longitud || '');
+                    this.geoMarcadorPendiente = false;
+                    this.$nextTick(() => {
+                        if (this.geoMapa && item.latitud && item.longitud) {
+                            this.geoMapa.setView([Number(item.latitud), Number(item.longitud)], Math.max(this.geoMapa.getZoom(), 16));
+                            this.activarMarcadorSeleccionado(item);
+                        }
+                    });
+                    this.notificarToast('info', item.latitud && item.longitud ? 'Entrega seleccionada. Puedes reubicar el punto buscando la dirección o moviendo el marcador.' : 'Entrega seleccionada. Busca la dirección para ubicarla en Lima.');
+                },
+                colocarPuntoTemporal(lat, lng, editable = true) {
+                    if (!this.geoMapa || !window.L) return;
+                    if (this.geoMarcadorTemporal) this.geoMarcadorTemporal.remove();
+                    this.geoMarcadorTemporal = L.marker([lat, lng], { draggable: !!editable }).addTo(this.geoMapa);
+                    this.geoMarcadorTemporal.bindPopup('<b>Ubicación a confirmar</b><br>Arrastra el punto si es necesario y luego pulsa <b>Confirmar ubicación</b>.').openPopup();
+                    if (editable) {
+                        this.geoMarcadorTemporal.on('dragend', (e) => {
+                            const pos = e.target.getLatLng();
+                            this.geoManualLat = String(pos.lat);
+                            this.geoManualLng = String(pos.lng);
+                            this.geoMarcadorPendiente = true;
+                        });
+                    }
+                    this.geoManualLat = String(lat);
+                    this.geoManualLng = String(lng);
+                    this.geoMarcadorPendiente = true;
+                },
+                async colocarMarcadorEnMapa(lat, lng) {
+                    const item = this.geoSeleccionado;
+                    if (!item) {
+                        this.notificarToast('warning', 'Primero selecciona una entrega de la lista.');
+                        return;
+                    }
+                    const nlat = Number(lat), nlng = Number(lng);
+                    if (!isFinite(nlat) || !isFinite(nlng)) return;
+                    this.colocarPuntoTemporal(nlat, nlng, true);
+                    this.notificarToast('info', 'Punto preparado. Pulsa “Confirmar ubicación” para guardarlo en Firebase.');
+                },
+                async confirmarUbicacionGeo() {
+                    const item = this.geoSeleccionado;
+                    const lat = Number(this.geoManualLat), lng = Number(this.geoManualLng);
+                    if (!item || !isFinite(lat) || !isFinite(lng)) {
+                        Swal.fire('Ubicación incompleta', 'Selecciona una entrega y una ubicación válida.', 'warning');
+                        return;
+                    }
+                    try {
+                        Swal.fire({ title: 'Guardando ubicación...', text: 'Fijando el punto de entrega en Firebase.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                        const rel = item.ventaGrupoId
+                            ? this.productos.filter(p => String(p.ventaGrupoId || '') === String(item.ventaGrupoId))
+                            : [item];
+                        const updates = {};
+                        rel.forEach(p => {
+                            updates[`productos/${p.id}/latitud`] = String(lat);
+                            updates[`productos/${p.id}/longitud`] = String(lng);
+                        });
+                        await window.fb.update(window.fb.ref(window.db), updates);
+                        if (this.geoMarcadorTemporal) {
+                            this.geoMarcadorTemporal.remove();
+                            this.geoMarcadorTemporal = null;
+                        }
+                        this.geoManualLat = String(lat);
+                        this.geoManualLng = String(lng);
+                        this.geoMarcadorPendiente = false;
+                        this.geoResultadoElegido = null;
+                        this.geoResultados = [];
+                        this.geoSeleccionado = {...item, latitud:String(lat), longitud:String(lng)};
+                        Swal.close();
+                        this.actualizarMapaGeo();
+                        this.notificarToast('success', 'Ubicación confirmada. El punto queda fijo en el mapa.');
+                    } catch(e) {
+                        Swal.close();
+                        Swal.fire('No se pudo guardar', e?.message || 'Firebase rechazó la ubicación.', 'error');
+                    }
+                },
+                activarMarcadorSeleccionado(item) {
+                    if (!this.geoMapa) return;
+                    const grupo = String(item.ventaGrupoId || item.id);
+                    this.geoMarkers.forEach(obj => {
+                        if (obj?.marker) obj.marker.dragging?.disable();
+                    });
+                    const encontrado = this.geoMarkers.find(obj => obj.grupo === grupo);
+                    if (encontrado?.marker) {
+                        encontrado.marker.dragging?.enable();
+                        encontrado.marker.off('dragend');
+                        encontrado.marker.on('dragend', (e) => {
+                            const pos = e.target.getLatLng();
+                            this.geoManualLat = String(pos.lat);
+                            this.geoManualLng = String(pos.lng);
+                            this.geoSeleccionado = item;
+                            this.geoMarcadorPendiente = true;
+                            this.notificarToast('info', 'Marcador movido. Pulsa “Confirmar ubicación” para guardar la nueva posición.');
+                        });
+                        encontrado.marker.bindPopup(`<b>${this.escapeHtml(item.clienteNombre||'Cliente')}</b><br>${this.escapeHtml(item.direccionEntrega||'Entrega')}<br>${this.escapeHtml(item.distrito||'')}<br><span style="color:#e11d48;font-weight:700">Arrastra este marcador para reubicarlo</span>`).openPopup();
+                    }
+                },
+                inicializarMapaGeo() {
+                    if(!window.L) { this.notificarToast('error','No se pudo cargar el mapa. Verifica tu conexión a Internet.'); return; }
+                    this.$nextTick(()=>{
+                        const el=document.getElementById('mapaPetSmart'); if(!el) return;
+                        if(this.geoMapa){this.geoMapa.invalidateSize();this.actualizarMapaGeo();return;}
+                        this.geoMapa=L.map(el,{zoomControl:true}).setView([-12.0464,-77.0428],11);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(this.geoMapa);
+                        this.geoMapa.on('click', e => {
+                            if (this.geoSeleccionado) this.colocarMarcadorEnMapa(e.latlng.lat, e.latlng.lng);
+                            else this.notificarToast('warning', 'Primero selecciona una entrega.');
+                        });
+                        this.actualizarMapaGeo();
+                    });
+                },
+                actualizarMapaGeo() {
+                    if(!this.geoMapa||!window.L) return;
+                    this.geoMarkers.forEach(obj=>obj?.marker?.remove?.()); this.geoMarkers=[];
+                    const ventas=this.productos.filter(p=>p.estado==='vendido'&&p.latitud!==undefined&&p.longitud!==undefined&&p.latitud!==''&&p.longitud!=='');
+                    const bounds=[];
+                    const vistos=new Set();
+                    ventas.forEach(item=>{
+                        const grupo=String(item.ventaGrupoId || item.id); if(vistos.has(grupo)) return; vistos.add(grupo);
+                        const lat=Number(item.latitud),lng=Number(item.longitud); if(!isFinite(lat)||!isFinite(lng)) return;
+                        const m=L.marker([lat,lng], {draggable:false}).addTo(this.geoMapa);
+                        m.bindPopup(`<b>${this.escapeHtml(item.clienteNombre||'Cliente')}</b><br>${this.escapeHtml(item.direccionEntrega||'Entrega')}<br>${this.escapeHtml(item.distrito||'')}<br>Pedido: ${this.escapeHtml(item.comprobanteNumero||'—')}`);
+                        m.on('click',()=>this.seleccionarEntregaParaMapa(item));
+                        this.geoMarkers.push({marker:m,grupo,item}); bounds.push([lat,lng]);
+                    });
+                    if(bounds.length) this.geoMapa.fitBounds(bounds,{padding:[40,40],maxZoom:16});
+                    if (this.geoSeleccionado?.latitud && this.geoSeleccionado?.longitud) this.activarMarcadorSeleccionado(this.geoSeleccionado);
+                },
+                guardarCoordenadasManual() {
+                    this.confirmarUbicacionGeo();
+                },
+                // =================================================
                 // VER VENTA
                 // =================================================
                 async editarVenta(item) {
@@ -2650,7 +3367,7 @@ body.dark{background:#070d19!important}
                         const comision = venta.canalVenta === 'Falabella' ? Number(venta.comision) || 0 : 0;
                         const confLogistico = venta.canalVenta === 'Falabella' ? Number(venta.confLogistico) || 0 : 0;
                         const perfilFacebook = venta.canalVenta === 'Facebook' ? String(venta.perfilFacebook || '') : '';
-                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, fechaEntrega: String(venta.fechaEntrega || ''), envio: String(venta.envio || '').trim(), clienteNombre: String(venta.clienteNombre || '').trim(), clienteTelefono: this.limpiarCelular(venta.clienteTelefono || ''), distrito: String(venta.distrito || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim(), tipoComprobante: venta.tipoComprobante || 'Boleta', tipoDocumento: venta.tipoComprobante === 'Boleta' ? (venta.tipoDocumento || 'DNI') : '', numeroDocumento: venta.tipoComprobante === 'Boleta' ? String(venta.numeroDocumento || '').replace(/\D/g, '') : '', ruc: venta.tipoComprobante === 'Factura' ? String(venta.ruc || '').replace(/\D/g, '') : '', razonSocial: venta.tipoComprobante === 'Factura' ? String(venta.razonSocial || '').trim() : '' };
+                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, fechaEntrega: String(venta.fechaEntrega || ''), envio: String(venta.envio || '').trim(), clienteNombre: String(venta.clienteNombre || '').trim(), clienteTelefono: this.limpiarCelular(venta.clienteTelefono || ''), distrito: String(venta.distrito || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), latitud: String(venta.latitud || '').trim(), longitud: String(venta.longitud || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim(), tipoComprobante: venta.tipoComprobante || 'Boleta', tipoDocumento: venta.tipoComprobante === 'Boleta' ? (venta.tipoDocumento || 'DNI') : '', numeroDocumento: venta.tipoComprobante === 'Boleta' ? String(venta.numeroDocumento || '').replace(/\D/g, '') : '', ruc: venta.tipoComprobante === 'Factura' ? String(venta.ruc || '').replace(/\D/g, '') : '', razonSocial: venta.tipoComprobante === 'Factura' ? String(venta.razonSocial || '').trim() : '' };
                         await window.fb.update(window.fb.ref(window.db, `productos/${venta.id}`), datos);
                         await this.guardarRegistroVentaAdicional(venta, datos);
                         Swal.close();
@@ -2688,7 +3405,7 @@ body.dark{background:#070d19!important}
                                         <div class="min-w-0">
                                             <div class="text-[10px] uppercase tracking-[0.2em] font-black opacity-80">Registro de venta</div>
                                             <div class="text-2xl font-black mt-1 truncate">${this.escapeHtml(item.nombre || 'Producto')}</div>
-                                            <div class="text-xs opacity-80 mt-1">SKU: ${this.escapeHtml(item.sku || 'N/A')}</div>
+                                            <div class="text-xs opacity-80 mt-1">UPC: ${this.escapeHtml(this.normalizarSKUBusqueda(item.sku) || 'N/A')}</div>
                                         </div>
                                         <div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-cart-shopping text-xl"></i></div>
                                     </div>
@@ -2718,6 +3435,41 @@ body.dark{background:#070d19!important}
                     }).then(result => {
                         if (result.isDenied) this.editarVenta(item);
                     });
+                },
+                // =================================================
+                // ELIMINAR VENTA + LIMPIAR CLIENTE SI YA NO TIENE VENTAS
+                // =================================================
+                async eliminarVenta(item) {
+                    if (!item?.id) return;
+                    const grupo = String(item.ventaGrupoId || '').trim();
+                    const relacionadas = grupo
+                        ? this.productos.filter(p => p.estado === 'vendido' && String(p.ventaGrupoId || '') === grupo)
+                        : [item];
+                    const nombres = relacionadas.map(p => p.nombre || 'Producto').slice(0, 3).join(', ');
+                    const confirmacion = await Swal.fire({
+                        title: '¿Eliminar esta venta?',
+                        html: `<div class="text-left text-sm"><b>${this.escapeHtml(nombres)}</b>${relacionadas.length > 1 ? `<br><br>Esta operación contiene <b>${relacionadas.length} productos</b> y se eliminará completa.` : ''}<br><br>Los productos volverán a <b>Disponible</b>. Si el cliente no conserva ninguna otra venta, sus datos también serán eliminados.</div>`,
+                        icon: 'warning', showCancelButton: true, confirmButtonColor: '#e11d48', cancelButtonColor: '#64748b', confirmButtonText: 'Sí, eliminar venta', cancelButtonText: 'Cancelar'
+                    });
+                    if (!confirmacion.isConfirmed) return;
+                    try {
+                        Swal.fire({ title:'Eliminando venta...', text:'Restaurando inventario y depurando cliente.', allowOutsideClick:false, didOpen:()=>Swal.showLoading() });
+                        const updates = {};
+                        const camposVenta = ['fechaVenta','fechaEntrega','envio','clienteNombre','clienteTelefono','clienteId','distrito','direccionEntrega','latitud','longitud','canalVenta','perfilFacebook','medioPago','comision','confLogistico','observacion','tipoComprobante','tipoDocumento','numeroDocumento','ruc','razonSocial','comprobanteNumero','ventaGrupoId'];
+                        relacionadas.forEach(p => {
+                            updates[`productos/${p.id}/estado`] = 'disponible';
+                            camposVenta.forEach(c => { updates[`productos/${p.id}/${c}`] = null; });
+                            updates[`ventas/${p.id}`] = null;
+                        });
+                        await window.fb.update(window.fb.ref(window.db), updates);
+                        await this.limpiarClientesHuerfanos();
+                        Swal.close();
+                        this.notificarToast('success', 'Venta eliminada. Inventario y clientes sin ventas quedaron depurados.');
+                    } catch (error) {
+                        console.error('ERROR ELIMINANDO VENTA:', error);
+                        Swal.close();
+                        Swal.fire({icon:'error', title:'No se pudo eliminar la venta', text:error?.message || 'Error desconocido'});
+                    }
                 },
                 // =================================================
                 // WHATSAPP
@@ -3054,52 +3806,32 @@ body.dark{background:#070d19!important}
                 async eliminarProducto(
                     id
                 ) {
-                    const result =
-                        await Swal.fire({
-                            title:
-                                '¿Eliminar unidad?',
-                            text:
-                                'Esta acción no se puede deshacer.',
-                            icon:
-                                'warning',
-                            showCancelButton:
-                                true,
-                            confirmButtonColor:
-                                '#e11d48',
-                            cancelButtonColor:
-                                '#64748b',
-                            confirmButtonText:
-                                'Sí, eliminar',
-                            cancelButtonText:
-                                'Cancelar'
-                        });
-                    if (
-                        !result.isConfirmed
-                    ) {
-                        return;
-                    }
+                    const item = this.productos.find(p => p.id === id);
+                    if (!item) return;
+                    const result = await Swal.fire({
+                        title: '¿Eliminar unidad?',
+                        html: `<div class="text-sm">Esta acción eliminará el registro del inventario${item.estado === 'vendido' ? ', su venta asociada y, si ya no existen otras ventas, también los datos del cliente.' : ' y limpiará cualquier cliente que haya quedado sin ventas.'}</div>`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#e11d48',
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    });
+                    if (!result.isConfirmed) return;
                     try {
-                        await window.fb.remove(
-                            window.fb.ref(
-                                window.db,
-                                `productos/${id}`
-                            )
-                        );
-                        Swal.fire(
-                            'Eliminado',
-                            'La unidad fue eliminada.',
-                            'success'
-                        );
-                    }
-                    catch (error) {
-                        console.error(
-                            error
-                        );
-                        Swal.fire(
-                            'Error',
-                            'No se pudo eliminar la unidad.',
-                            'error'
-                        );
+                        Swal.fire({ title:'Eliminando...', text:'Actualizando inventario, ventas y clientes.', allowOutsideClick:false, didOpen:()=>Swal.showLoading() });
+                        const updates = {};
+                        updates[`productos/${id}`] = null;
+                        if (item.estado === 'vendido') updates[`ventas/${id}`] = null;
+                        await window.fb.update(window.fb.ref(window.db), updates);
+                        await this.limpiarClientesHuerfanos();
+                        Swal.close();
+                        Swal.fire('Eliminado', item.estado === 'vendido' ? 'La unidad, su venta y cualquier cliente que haya quedado sin ventas fueron depurados.' : 'La unidad fue eliminada y se limpiaron clientes sin ventas.', 'success');
+                    } catch (error) {
+                        console.error('ERROR ELIMINANDO PRODUCTO:', error);
+                        Swal.close();
+                        Swal.fire('Error', error?.message || 'No se pudo eliminar la unidad.', 'error');
                     }
                 },
                 // =================================================
@@ -3171,6 +3903,11 @@ body.dark{background:#070d19!important}
             </button>
 <button :class="activeTab === 'clientes' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'clientes'" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2">
 <i class="fa-solid fa-users"></i> Clientes
+            </button>
+<button :class="activeTab === 'geo' ? 'bg-rose-600 text-white shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'geo'; inicializarMapaGeo()" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-map-location-dot"></i> Mapa de ventas</button>
+<button :class="activeTab === 'catalogo' ? 'bg-violet-600 text-white shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'catalogo'" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-images"></i> Catálogo</button>
+<button :class="activeTab === 'finanzas' ? 'bg-slate-900 text-white shadow-lg dark:bg-amber-500 dark:text-slate-950' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'finanzas'" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2">
+<i class="fa-solid fa-landmark"></i> Finanzas
             </button>
 </div></aside><main class="inventory-main"><div x-show="activeTab === 'inventario'" x-transition="">
 <!-- =====================================================
@@ -3434,7 +4171,7 @@ body.dark{background:#070d19!important}
                                 Foto
                             </th>
 <th class="py-3 px-4">
-                                Producto / SKU
+                                Producto / UPC
                             </th>
 <th class="py-3 px-4 text-center">
                                 Talla
@@ -3479,21 +4216,12 @@ body.dark{background:#070d19!important}
                                 " class="transition-colors">
 <!-- FOTO -->
 <td class="py-3 px-3 text-center">
-<div class="w-16 h-16 rounded-xl bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 overflow-hidden flex items-center justify-center mx-auto">
-<template x-if="
-                                                item.imagenUrl
-                                            ">
-<img :alt="
-                                                    item.nombre
-                                                " :src="
-                                                    item.imagenUrl
-                                                " class="w-full h-full object-cover"/>
+<div class="w-20 h-20 mx-auto flex items-center justify-center">
+<template x-if="item.imagenUrl">
+<img :alt="item.nombre" :src="item.imagenUrl" class="w-20 h-20 object-contain block"/>
 </template>
-<template x-if="
-                                                !item.imagenUrl
-                                            ">
-<i class="fa-solid fa-paw text-slate-400 dark:text-slate-500 text-lg">
-</i>
+<template x-if="!item.imagenUrl">
+<i class="fa-solid fa-paw text-slate-400 dark:text-slate-500 text-lg"></i>
 </template>
 </div>
 </td>
@@ -3517,7 +4245,7 @@ body.dark{background:#070d19!important}
 </template>
 <div class="flex items-center gap-2 mt-1">
 <div class="text-[11px] text-slate-500 dark:text-slate-400 font-mono truncate">
-                                            SKU: <span x-text="item.sku || 'N/A'"></span>
+                                            UPC: <span x-text="normalizarSKUBusqueda(item.sku) || 'N/A'"></span>
 </div>
 </div>
 </td>
@@ -3713,6 +4441,9 @@ body.dark{background:#070d19!important}
 <button @click="verVenta(item)" class="p-1.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 rounded-lg" title="Ver venta">
 <i class="fa-solid fa-eye"></i>
 </button>
+<button @click="abrirReportePedido(item)" class="p-1.5 bg-violet-500/10 text-violet-600 dark:text-violet-400 hover:bg-violet-500/20 rounded-lg" title="Generar reporte de pedido">
+<i class="fa-solid fa-file-invoice"></i>
+</button>
 <button @click="editarVenta(item)" class="p-1.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 rounded-lg" title="Editar venta">
 <i class="fa-solid fa-pen-to-square"></i>
 </button>
@@ -3776,7 +4507,7 @@ body.dark{background:#070d19!important}
                     </div>
 </div>
 <div class="p-4 border-b border-slate-200 dark:border-slate-700 grid grid-cols-1 md:grid-cols-4 gap-3">
-<div class="relative md:col-span-2"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroVentasTexto" type="text" placeholder="Buscar cliente, producto, SKU, celular, canal..." class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm"></div>
+<div class="relative md:col-span-2"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroVentasTexto" type="text" placeholder="Buscar cliente, producto, UPC, celular, canal..." class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm"></div>
 <input x-model="filtroVentasDni" inputmode="numeric" type="text" placeholder="Filtrar por DNI" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm">
 <input x-model="filtroVentasFecha" type="date" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm">
 </div>
@@ -3792,6 +4523,7 @@ body.dark{background:#070d19!important}
 <th class="py-4 px-4">Canal Venta</th>
 <th class="py-4 px-4">Distrito</th>
 <th class="py-4 px-4 text-right">Monto Total</th>
+<th class="py-4 px-4 text-center">Pedido</th><th class="py-4 px-4 text-center">Eliminar</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
@@ -3800,7 +4532,7 @@ body.dark{background:#070d19!important}
 <td class="py-4 px-4 text-sm font-bold whitespace-nowrap" x-text="formatearFecha(item.fechaVenta)"></td>
 <td class="py-4 px-4">
 <div class="font-black text-sm text-slate-800 dark:text-slate-100" x-text="item.nombre || 'Sin nombre'"></div>
-<div class="text-[10px] text-slate-400 font-bold mt-1" x-text="item.sku || ''"></div>
+<div class="text-[10px] text-slate-400 font-bold mt-1" x-text="normalizarSKUBusqueda(item.sku) || ''"></div>
 </td>
 <td class="py-4 px-4 text-sm font-bold" x-text="item.clienteNombre || 'Sin registrar'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="obtenerDniItem(item) || '—'"></td>
@@ -3808,10 +4540,20 @@ body.dark{background:#070d19!important}
 <td class="py-4 px-4 text-sm font-bold" x-text="item.canalVenta || '—'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="item.distrito || '—'"></td>
 <td class="py-4 px-4 text-right text-sm font-black text-emerald-600 dark:text-emerald-400">S/ <span x-text="formatMonto(item.precioVenta)"></span></td>
+<td class="py-4 px-4 text-center">
+<div class="flex items-center justify-center gap-2">
+<button @click="abrirReportePedido(item)" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-violet-500/10 text-violet-700 dark:text-violet-300 hover:bg-violet-500 hover:text-white text-xs font-black transition-colors" title="Generar reporte de pedido">
+<i class="fa-solid fa-file-invoice"></i><span>Pedido</span>
+</button>
+</div>
+</td>
+<td class="py-4 px-4 text-center">
+<button @click="eliminarVenta(item)" class="p-2 rounded-xl bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white transition-colors" title="Eliminar venta"><i class="fa-solid fa-trash"></i></button>
+</td>
 </tr>
 </template>
 <tr x-show="ventasRegistradas.length === 0">
-<td class="py-12 text-center text-slate-400" colspan="8">No hay ventas registradas todavía.</td>
+<td class="py-12 text-center text-slate-400" colspan="10">No hay ventas registradas todavía.</td>
 </tr>
 </tbody>
 </table>
@@ -3827,9 +4569,10 @@ body.dark{background:#070d19!important}
                         </h2>
 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Clientes registrados automáticamente desde las ventas.</p>
 </div>
-<div class="px-4 py-2 rounded-xl bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 text-sm font-black">
-<span x-text="clientesRegistrados.length"></span> clientes
-                    </div>
+<div class="flex items-center gap-2">
+<div class="px-4 py-2 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-sm font-black"><span x-text="clientesRegistrados.length"></span> clientes</div>
+<button @click="reiniciarClientesDesdeCero()" class="px-3 py-2 rounded-xl bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white text-xs font-black"><i class="fa-solid fa-trash-can mr-1"></i>Eliminar todos</button><button @click="limpiarClientesHuerfanos().then(()=>notificarToast('success','Clientes huérfanos eliminados.'))" class="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200 text-xs font-black"><i class="fa-solid fa-broom mr-1"></i>Limpiar huérfanos</button>
+</div>
 </div>
 <div class="p-4 border-b border-slate-200 dark:border-slate-700 grid grid-cols-1 md:grid-cols-5 gap-3">
 <div class="relative md:col-span-2"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroClientesTexto" type="text" placeholder="Buscar por nombre, razón social, DNI, RUC o celular..." class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm"></div>
@@ -3865,5 +4608,243 @@ body.dark{background:#070d19!important}
 </table>
 </div>
 </div>
-</div></main></div></div></body>
+</div><div style="display:none;" x-show="activeTab === 'geo'" x-transition>
+<div class="space-y-5">
+<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden">
+<div class="p-5 border-b border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3"><div><div class="text-[10px] uppercase tracking-[0.2em] font-black text-rose-600">PetSmart Geo</div><h2 class="text-2xl font-black">Mapa de ventas y entregas — Lima</h2><p class="text-xs text-slate-400 mt-1">Busca la dirección registrada del cliente, revisa el resultado en el mapa, mueve el marcador si hace falta y confirma. La ubicación queda guardada y permanece fija.</p></div><button @click="actualizarMapaGeo()" class="px-4 py-2.5 rounded-xl bg-rose-600 text-white font-black text-sm"><i class="fa-solid fa-rotate mr-1"></i>Actualizar mapa</button></div>
+<div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-0">
+<div id="mapaPetSmart" class="w-full h-[620px] bg-slate-100"></div>
+<div class="p-5 border-l border-slate-200 dark:border-slate-700 space-y-4">
+<div class="rounded-2xl bg-rose-500/10 p-4"><div class="text-[10px] uppercase font-black text-rose-600">Entregas geolocalizadas</div><div class="text-3xl font-black mt-1" x-text="new Set(productos.filter(p=>p.estado==='vendido' && p.latitud && p.longitud).map(p=>p.ventaGrupoId || p.id)).size"></div></div>
+<div class="rounded-2xl border border-rose-200 bg-rose-50 dark:bg-rose-950/20 dark:border-rose-900 p-4"><div class="font-black text-sm mb-1">📍 Ubicación por dirección</div><p class="text-[11px] text-slate-600 dark:text-slate-300">1. Selecciona una entrega. 2. Busca su dirección. 3. Elige el resultado correcto. 4. Ajusta el marcador. 5. Confirma para dejarlo fijo.</p><div class="mt-2 text-[10px] font-bold" x-show="geoSeleccionado"><span class="text-rose-600">Entrega seleccionada:</span> <span x-text="geoSeleccionado?.clienteNombre || '—'"></span></div></div>
+<div x-show="geoSeleccionado" x-transition class="rounded-2xl border border-slate-200 dark:border-slate-700 p-4 space-y-3">
+<div><div class="text-[10px] uppercase tracking-wider font-black text-slate-400">Dirección del cliente</div><div class="text-xs font-bold mt-1" x-text="geoSeleccionado?.direccionEntrega || 'Sin dirección registrada'"></div><div class="text-[10px] text-slate-400 mt-1" x-text="geoSeleccionado?.distrito || 'Sin distrito'"></div></div>
+<div class="flex gap-2"><input x-model="geoBusqueda" @keydown.enter.prevent="buscarDireccionEnMapa()" type="text" class="flex-1 min-w-0 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Buscar dirección en Lima..."><button @click="buscarDireccionEnMapa()" :disabled="geoBuscando" class="px-3 py-2.5 rounded-xl bg-indigo-600 text-white text-[10px] font-black disabled:opacity-50"><i class="fa-solid fa-location-dot mr-1"></i><span x-text="geoBuscando ? 'Buscando...' : 'Ubicar'"></span></button></div>
+<div x-show="geoResultados.length" class="space-y-2 max-h-44 overflow-auto"><template x-for="(resultado,idx) in geoResultados" :key="'resgeo-'+idx"><button @click="seleccionarResultadoGeo(resultado)" class="w-full text-left p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/20"><div class="text-[10px] font-black text-indigo-600" x-text="'Resultado '+(idx+1)"></div><div class="text-[10px] leading-relaxed mt-1" x-text="resultado.display_name"></div></button></template></div>
+<div x-show="geoMarcadorPendiente" class="rounded-xl bg-amber-500/10 border border-amber-500/20 p-3"><div class="text-[10px] font-black text-amber-600">Ubicación pendiente de confirmación</div><div class="text-[10px] text-slate-500 mt-1">Puedes mover el marcador directamente en el mapa y luego guardar la nueva posición.</div><button @click="confirmarUbicacionGeo()" class="mt-2 w-full px-3 py-2.5 rounded-xl bg-emerald-600 text-white text-[10px] font-black"><i class="fa-solid fa-circle-check mr-1"></i>Confirmar ubicación</button></div>
+</div>
+<div class="space-y-2 max-h-[320px] overflow-auto"><template x-for="item in productos.filter(p=>p.estado==='vendido')" :key="'geo-'+item.id"><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-700" :class="geoSeleccionado?.id===item.id ? 'ring-2 ring-rose-500 bg-rose-50/50 dark:bg-rose-950/20' : ''"><div class="flex items-start justify-between gap-2"><div class="min-w-0"><div class="font-black text-xs truncate" x-text="item.clienteNombre || 'Cliente'"></div><div class="text-[10px] text-slate-400" x-text="(item.distrito || 'Sin distrito') + (item.direccionEntrega ? ' · '+item.direccionEntrega : '')"></div></div><span class="text-[9px] font-black px-2 py-1 rounded-full" :class="item.latitud && item.longitud ? 'bg-emerald-500/10 text-emerald-600' : 'bg-amber-500/10 text-amber-600'" x-text="item.latitud && item.longitud ? 'FIJO' : 'SIN UBICAR'"></span></div><button @click="seleccionarEntregaParaMapa(item)" class="mt-2 w-full px-2.5 py-2 rounded-lg bg-rose-500 text-white text-[10px] font-black"><i class="fa-solid fa-crosshairs mr-1"></i><span x-text="item.latitud && item.longitud ? 'Ver / reubicar entrega' : 'Seleccionar entrega' "></span></button></div></template></div>
+</div></div></div></div>
+</div>
+<div style="display:none;" x-show="activeTab === 'catalogo'" x-transition>
+<div class="space-y-5">
+<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden">
+<div class="p-5 border-b border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3"><div><div class="text-[10px] uppercase tracking-[0.2em] font-black text-violet-600">PetSmart Catalog</div><h2 class="text-2xl font-black">Constructor de catálogo</h2><p class="text-xs text-slate-400 mt-1">Elige los productos que quieres mostrar. El catálogo no incluye precio ni UPC.</p></div><div class="flex flex-wrap gap-2"><button @click="seleccionarTodosCatalogo()" class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-900 text-xs font-black">Seleccionar todos</button><button @click="limpiarSeleccionCatalogo()" class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-900 text-xs font-black">Limpiar</button><button @click="exportarCatalogoJPEG()" class="px-3 py-2 rounded-lg bg-violet-600 text-white text-xs font-black"><i class="fa-solid fa-image mr-1"></i>JPEG</button><button @click="exportarCatalogoPDF()" class="px-3 py-2 rounded-lg bg-rose-600 text-white text-xs font-black"><i class="fa-solid fa-file-pdf mr-1"></i>PDF</button></div></div>
+<div class="p-5 grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-5">
+<div><input x-model="catalogoFiltro" placeholder="Buscar producto..." class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border px-4 py-3 text-sm mb-3"><div class="max-h-[600px] overflow-auto space-y-2"><template x-for="p in productosCatalogoDisponibles" :key="'cat-select-'+p.id"><label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-violet-50 dark:hover:bg-slate-900"><input type="checkbox" :checked="catalogoSeleccionados.includes(p.id)" @change="toggleCatalogoProducto(p.id)" class="w-4 h-4"><img :src="p.imagenUrl || ''" class="w-12 h-12 object-contain rounded-lg"><span class="min-w-0"><span class="block font-black text-xs truncate" x-text="p.nombre"></span><span class="block text-[10px] text-slate-400" x-text="p.talla || 'Única'"></span></span></label></template></div></div>
+<div><div id="catalogoExportable" class="bg-white text-slate-900 p-8 min-h-[900px]"><div class="text-center pb-5 border-b-2 border-slate-200"><template x-if="configNegocio.logoUrl"><img :src="configNegocio.logoUrl" class="max-h-24 max-w-[220px] mx-auto object-contain"></template><div class="text-3xl font-black mt-3" x-text="catalogoTitulo"></div><div class="text-xs text-slate-500 mt-1">Productos seleccionados</div></div><div class="grid grid-cols-2 md:grid-cols-3 gap-6 mt-7"><template x-for="p in productosSeleccionadosCatalogo" :key="'cat-preview-'+p.id"><div class="rounded-2xl border border-slate-200 p-4 bg-white text-center shadow-sm"><div class="h-48 flex items-center justify-center"><img :src="p.imagenUrl || ''" class="max-h-48 max-w-full object-contain"></div><div class="font-black text-base mt-3" x-text="p.nombre"></div><div class="text-xs text-slate-500 mt-1" x-text="[p.detalle,p.talla && 'Talla '+p.talla].filter(Boolean).join(' · ')"></div></div></template></div></div></div>
+</div></div></div>
+</div>
+<div style="display:none;" x-show="activeTab === 'finanzas'" x-transition>
+<div class="space-y-5">
+  <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden">
+    <div class="p-6 border-b border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 text-white dark:bg-amber-500 dark:text-slate-950 text-[10px] font-black uppercase tracking-widest mb-2"><i class="fa-solid fa-shield-halved"></i> Gestión financiera PetSmart</div>
+        <h2 class="text-xl md:text-2xl font-black text-slate-900 dark:text-white">Dos pozos financieros autónomos</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Las ventas alimentan automáticamente Capital y Mancomunado. Las entradas y salidas manuales son independientes.</p>
+      </div>
+      <div class="px-4 py-3 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-300 text-xs font-black"><i class="fa-solid fa-circle-info mr-1"></i> Las salidas nunca alteran inventario ni ventas.</div>
+    </div>
+
+    <div class="p-5 grid grid-cols-1 xl:grid-cols-2 gap-5">
+      <div class="fin-pool rounded-3xl bg-gradient-to-br from-amber-500 to-orange-600 text-white p-6 shadow-lg">
+        <div class="flex items-center justify-between gap-3"><div><div class="text-[10px] uppercase tracking-[0.2em] font-black opacity-80">Pozo 1</div><div class="text-2xl font-black mt-1">Capital</div></div><div class="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center"><i class="fa-solid fa-coins text-xl"></i></div></div>
+        <div class="text-4xl font-black fin-number mt-6">S/ <span x-text="formatMonto(saldoPozoCapital)"></span></div>
+        <div class="text-xs opacity-80 mt-1">Saldo disponible del pozo Capital</div>
+        <div class="grid grid-cols-2 gap-3 mt-6 text-xs">
+          <div class="rounded-2xl bg-white/10 p-3"><div class="opacity-70">Capital recuperado por ventas</div><div class="font-black text-lg mt-1">S/ <span x-text="formatMonto(capitalAutomatico)"></span></div></div>
+          <div class="rounded-2xl bg-white/10 p-3"><div class="opacity-70">Salidas</div><div class="font-black text-lg mt-1">S/ <span x-text="formatMonto(salidasCapital)"></span></div></div>
+        </div>
+      </div>
+      <div class="fin-pool rounded-3xl bg-gradient-to-br from-emerald-500 to-green-700 text-white p-6 shadow-lg">
+        <div class="flex items-center justify-between gap-3"><div><div class="text-[10px] uppercase tracking-[0.2em] font-black opacity-70">Pozo 2</div><div class="text-2xl font-black mt-1">Mancomunado</div></div><div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center"><i class="fa-solid fa-handshake text-xl"></i></div></div>
+        <div class="text-4xl font-black fin-number mt-6">S/ <span x-text="formatMonto(saldoPozoMancomunado)"></span></div>
+        <div class="text-xs opacity-70 mt-1">Ganancias netas acumuladas y movimientos propios</div>
+        <div class="grid grid-cols-2 gap-3 mt-6 text-xs">
+          <div class="rounded-2xl bg-white/10 p-3"><div class="opacity-70">Ganancia neta por ventas</div><div class="font-black text-lg mt-1">S/ <span x-text="formatMonto(gananciasAutomaticas)"></span></div></div>
+          <div class="rounded-2xl bg-white/10 p-3"><div class="opacity-70">Salidas</div><div class="font-black text-lg mt-1">S/ <span x-text="formatMonto(salidasMancomunado)"></span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-5 pb-5 grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-200 dark:border-slate-700"><div class="text-[10px] uppercase tracking-wider text-slate-400 font-black">Ventas registradas</div><div class="text-2xl font-black mt-1"><span x-text="ventasFinancieras.length"></span></div></div>
+      <div class="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-200 dark:border-slate-700"><div class="text-[10px] uppercase tracking-wider text-slate-400 font-black">Capital histórico</div><div class="text-2xl font-black mt-1 text-amber-600">S/ <span x-text="formatMonto(totalCapitalHistorico)"></span></div></div>
+      <div class="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-200 dark:border-slate-700"><div class="text-[10px] uppercase tracking-wider text-slate-400 font-black">Ganancia histórica</div><div class="text-2xl font-black mt-1 text-emerald-600">S/ <span x-text="formatMonto(totalGananciaHistorica)"></span></div></div>
+      <div class="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-200 dark:border-slate-700"><div class="text-[10px] uppercase tracking-wider text-slate-400 font-black">Movimientos manuales</div><div class="text-2xl font-black mt-1"><span x-text="movimientosFinancieros.length"></span></div></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-[420px_minmax(0,1fr)] gap-5">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl p-5">
+      <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-plus-minus"></i></div><div><h3 class="font-black text-lg">Registrar movimiento</h3><p class="text-[11px] text-slate-400">Compras, pagos, aportes, retiros y otros.</p></div></div>
+      <div class="space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-[11px] font-black mb-1.5">Pozo</label><select x-model="finanzaForm.pozo" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm font-bold"><option value="capital">Capital</option><option value="mancomunado">Mancomunado</option></select></div>
+          <div><label class="block text-[11px] font-black mb-1.5">Movimiento</label><select x-model="finanzaForm.tipo" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm font-bold"><option value="salida">Salida</option><option value="ingreso">Ingreso</option></select></div>
+        </div>
+        <div><label class="block text-[11px] font-black mb-1.5">Monto (S/)</label><input x-model.number="finanzaForm.monto" min="0" step="0.01" type="number" class="w-full rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-300 dark:border-emerald-800 px-3 py-3 text-lg font-black" placeholder="0.00"></div>
+        <div><label class="block text-[11px] font-black mb-1.5">Concepto</label><input x-model="finanzaForm.concepto" type="text" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm" placeholder="Ej: Compra de mercadería"></div>
+        <div><label class="block text-[11px] font-black mb-1.5">Fecha</label><input x-model="finanzaForm.fecha" type="date" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm"></div>
+        <div><label class="block text-[11px] font-black mb-1.5">Observación</label><textarea x-model="finanzaForm.observacion" rows="3" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm resize-none" placeholder="Proveedor, motivo, referencia, etc."></textarea></div>
+        <button @click="registrarMovimientoFinanciero()" class="w-full px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-slate-950 text-white font-black flex items-center justify-center gap-2"><i class="fa-solid fa-floppy-disk"></i> Guardar movimiento</button>
+        <div x-show="finanzasErrorPermisos" class="text-[11px] text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-xl p-3"><b>Atención:</b> Firebase todavía no tiene permisos para <code>finanzas/movimientos</code>. La pestaña puede calcular automáticamente las ventas, pero los movimientos manuales no se podrán guardar hasta agregar esa ruta a las reglas.</div>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex flex-col md:flex-row md:items-center md:justify-between gap-3"><div><h3 class="font-black text-lg">Historial de movimientos manuales</h3><p class="text-[11px] text-slate-400">Las ventas automáticas se reflejan arriba y no se duplican aquí.</p></div><span class="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 text-xs font-black"><span x-text="movimientosFinancieros.length"></span> movimientos</span></div>
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[820px] text-left">
+          <thead class="bg-slate-50 dark:bg-slate-900/70"><tr class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-black"><th class="py-3 px-4">Fecha</th><th class="py-3 px-4">Pozo</th><th class="py-3 px-4">Tipo</th><th class="py-3 px-4">Concepto</th><th class="py-3 px-4 text-right">Monto</th><th class="py-3 px-4 text-center">Acción</th></tr></thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+            <template x-for="mov in movimientosFinancierosOrdenados" :key="mov.key">
+              <tr class="fin-movement-row">
+                <td class="py-3 px-4 text-sm font-bold whitespace-nowrap" x-text="formatearFecha(mov.fecha)"></td>
+                <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-black" :class="mov.pozo === 'capital' ? 'bg-amber-500/10 text-amber-700 dark:text-amber-300' : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'" x-text="mov.pozo === 'capital' ? 'Capital' : 'Mancomunado'"></span></td>
+                <td class="py-3 px-4"><span class="font-black text-xs" :class="mov.tipo === 'salida' ? 'text-rose-600' : 'text-emerald-600'" x-text="mov.tipo === 'salida' ? 'Salida' : 'Ingreso'"></span></td>
+                <td class="py-3 px-4"><div class="font-bold text-sm" x-text="mov.concepto || '—'"></div><div class="text-[10px] text-slate-400 mt-1" x-text="mov.observacion || ''"></div></td>
+                <td class="py-3 px-4 text-right font-black" :class="mov.tipo === 'salida' ? 'text-rose-600' : 'text-emerald-600'">S/ <span x-text="formatMonto(mov.monto)"></span></td>
+                <td class="py-3 px-4 text-center"><button @click="eliminarMovimientoFinanciero(mov)" class="p-2 rounded-lg bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white" title="Eliminar movimiento"><i class="fa-solid fa-trash"></i></button></td>
+              </tr>
+            </template>
+            <tr x-show="movimientosFinancieros.length === 0"><td colspan="6" class="py-12 text-center text-slate-400">Todavía no hay movimientos manuales.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4 text-xs text-blue-800 dark:text-blue-200">
+    <div class="font-black mb-1"><i class="fa-solid fa-calculator mr-1"></i> Cómo se alimentan los pozos</div>
+    <div>• <b>Capital:</b> cada unidad vendida devuelve automáticamente su <b>costo unitario</b> al Pozo Capital.</div>
+    <div>• <b>Mancomunado:</b> cada unidad vendida aporta automáticamente su <b>ganancia neta real</b> (precio − costo − comisión − logística cuando corresponda).</div>
+    <div>• Las compras de mercadería y otros pagos se registran como <b>salidas manuales</b> del pozo que tú elijas. No cambian el inventario ni modifican las ventas.</div>
+  </div>
+</div>
+</div></main></div></div>
+<!-- =====================================================
+     MODAL REPORTE PROFESIONAL DE PEDIDO
+     ====================================================== -->
+<div class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 z-[95]" style="display:none;" x-cloak x-show="modalReportePedido" x-transition.opacity>
+  <div class="w-full max-w-[1450px] pedido-modal-scroll bg-white dark:bg-slate-800 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700">
+    <div class="pedido-report-actions sticky top-0 z-20 bg-white/95 dark:bg-slate-800/95 backdrop-blur border-b border-slate-200 dark:border-slate-700 px-4 sm:px-6 py-4 flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+      <div>
+        <div class="text-[10px] uppercase tracking-[0.22em] font-black text-violet-600 dark:text-violet-400">PetSmart · Comunicación al cliente</div>
+        <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Reporte profesional de pedido</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Edita los datos del envío y genera una versión lista para imprimir, guardar como PDF o descargar como JPEG.</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button @click="copiarResumenPedido()" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-black text-sm flex items-center gap-2"><i class="fa-solid fa-copy"></i> Copiar resumen</button>
+        <button @click="descargarReportePedidoJpeg()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm flex items-center gap-2 shadow-lg"><i class="fa-solid fa-image"></i> Descargar JPEG</button>
+        <button @click="imprimirReportePedido()" class="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-black text-sm flex items-center gap-2 shadow-lg"><i class="fa-solid fa-print"></i> Imprimir / PDF</button>
+        <button @click="cerrarReportePedido()" class="w-11 h-11 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-rose-500 hover:text-white flex items-center justify-center" title="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+
+    <div class="p-3 sm:p-5 lg:p-6 pedido-editor">
+      <div class="pedido-form-card space-y-4">
+        <div class="flex items-center gap-3 pb-3 border-b border-slate-200 dark:border-slate-700">
+          <div class="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-pen-to-square"></i></div>
+          <div><div class="font-black text-slate-900 dark:text-white">Datos editables</div><div class="text-[11px] text-slate-500 dark:text-slate-400">Nada de esto modifica el inventario.</div></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="col-span-1"><label class="block text-[11px] font-black mb-1.5">N.º de pedido</label><input x-model="reportePedido.pedidoNumero" type="text" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm font-black" placeholder="12061"></div>
+          <div class="col-span-1"><label class="block text-[11px] font-black mb-1.5">Fecha del pedido</label><input x-model="reportePedido.fechaPedido" type="date" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm"></div>
+        </div>
+        <div><label class="block text-[11px] font-black mb-1.5">Cliente</label><input x-model="reportePedido.clienteNombre" type="text" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm" placeholder="Nombre completo"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-[11px] font-black mb-1.5">DNI</label><input x-model="reportePedido.dni" type="text" inputmode="numeric" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm" placeholder="00000000"></div>
+          <div><label class="block text-[11px] font-black mb-1.5">Teléfono</label><input x-model="reportePedido.clienteTelefono" type="text" inputmode="numeric" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm" placeholder="999999999"></div>
+        </div>
+        <div><label class="block text-[11px] font-black mb-1.5">Dirección de envío</label><textarea x-model="reportePedido.direccion" rows="3" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm resize-none" placeholder="Av. ..., distrito, Lima"></textarea></div>
+        <div><label class="block text-[11px] font-black mb-1.5">Método de pago</label><input x-model="reportePedido.metodoPago" type="text" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm" placeholder="Yape"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-[11px] font-black mb-1.5">Fecha estimada de entrega</label><input x-model="reportePedido.fechaEntrega" type="date" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm"></div>
+          <div><label class="block text-[11px] font-black mb-1.5">Horario estimado</label><input x-model="reportePedido.horarioEntrega" type="text" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm" placeholder="11:30 am - 1:30 pm"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-[11px] font-black mb-1.5">Precio de productos (S/)</label><input x-model.number="reportePedido.precioProductos" min="0" step="0.01" type="number" class="w-full rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-300 dark:border-emerald-800 px-3 py-2.5 text-sm font-black text-emerald-700 dark:text-emerald-300"></div>
+          <div><label class="block text-[11px] font-black mb-1.5">Costo de envío (S/)</label><input x-model.number="reportePedido.costoEnvio" min="0" step="0.01" type="number" class="w-full rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 px-3 py-2.5 text-sm font-black text-amber-700 dark:text-amber-300"></div>
+        </div>
+        <div class="rounded-2xl bg-slate-900 text-white p-4 flex items-center justify-between gap-4">
+          <div><div class="text-[10px] uppercase tracking-wider text-slate-400 font-black">Total del pedido</div><div class="text-[11px] text-slate-400 mt-1">Precio + envío · sin IGV</div></div>
+          <div class="text-2xl font-black">S/ <span x-text="formatMonto(reportePedidoTotal)"></span></div>
+        </div>
+        <div><label class="block text-[11px] font-black mb-1.5">Observación / mensaje</label><textarea x-model="reportePedido.observacion" rows="3" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm resize-none" placeholder="Estamos preparando tu pedido..."></textarea></div>
+        <div class="rounded-2xl bg-blue-500/10 border border-blue-500/20 p-3 text-xs text-blue-800 dark:text-blue-200 flex gap-2"><i class="fa-solid fa-circle-info mt-0.5"></i><span>El reporte es independiente: puedes cambiar precio, envío, dirección, fechas y mensaje sin alterar la venta ni el inventario.</span></div>
+      </div>
+
+      <div class="pedido-preview-wrap min-w-0">
+        <div id="reportePedidoPreview" class="pedido-paper">
+          <div class="pedido-paper-inner">
+            <div class="pedido-brand">
+              <template x-if="configNegocio.logoUrl">
+                <img :src="configNegocio.logoUrl" alt="PetSmart">
+              </template>
+              <template x-if="!configNegocio.logoUrl">
+                <div class="pedido-brand-fallback">PETSMART</div>
+              </template>
+              <div class="pedido-title">Recibimos tu solicitud de compra</div>
+              <div class="pedido-order">Orden # <span x-text="reportePedido.pedidoNumero || '—'"></span></div>
+            </div>
+
+            <div class="pedido-greeting">Hola&nbsp; <strong x-text="reportePedido.clienteNombre || 'Cliente'"></strong>,<br><br>¡Muchas gracias por confiar en nosotros! Aquí tienes el detalle de tu compra:</div>
+
+            <div class="pedido-section-title">Detalle del Pedido</div>
+            <table class="pedido-table">
+              <thead><tr><th>Producto / Accesorio</th><th>Cantidad</th><th>Total</th></tr></thead>
+              <tbody>
+                <template x-for="(producto,index) in reportePedido.items" :key="'reporte-item-'+index">
+                  <tr>
+                    <td>
+                      <div class="pedido-product">
+                        <template x-if="producto.imagenUrl"><img class="pedido-product-img" :src="producto.imagenUrl" :alt="producto.nombre"></template>
+                        <template x-if="!producto.imagenUrl"><div class="pedido-product-img flex items-center justify-center"><i class="fa-solid fa-paw text-slate-400 text-xl"></i></div></template>
+                        <div class="min-w-0">
+                          <div class="pedido-product-name" x-text="producto.nombre"></div>
+                          <div class="pedido-product-detail" x-text="[producto.detalle, producto.talla ? 'Talla ' + producto.talla : '', producto.upc ? 'UPC ' + producto.upc : ''].filter(Boolean).join(' · ')"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td x-text="producto.cantidad"></td>
+                    <td>S/ <span x-text="formatMonto(producto.total)"></span></td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+
+            <div class="pedido-totals">
+              <div class="pedido-total-row"><span>Precio de productos:</span><span>S/ <span x-text="formatMonto(reportePedido.precioProductos)"></span></span></div>
+              <div class="pedido-total-row"><span>Costo de Envío:</span><span>S/ <span x-text="formatMonto(reportePedido.costoEnvio)"></span></span></div>
+              <div class="pedido-total-row grand"><span>Monto Total:</span><span>S/ <span x-text="formatMonto(reportePedidoTotal)"></span></span></div>
+            </div>
+
+            <div class="pedido-delivery-title">Información de Entrega y Pago</div>
+            <div class="pedido-delivery">
+              <div><strong>Método de Pago:</strong>&nbsp; <span x-text="reportePedido.metodoPago || '—'"></span></div>
+              <div><strong>Dirección de Envío:</strong>&nbsp; <span x-text="reportePedido.direccion || '—'"></span></div>
+              <div><strong>Teléfono de Contacto:</strong>&nbsp; <span x-text="reportePedido.clienteTelefono || '—'"></span></div>
+              <div><strong>Fecha Estimada de Entrega:</strong>&nbsp; <span x-text="formatearFechaLarga(reportePedido.fechaEntrega)"></span></div>
+              <div><strong>Horario Estimado de Entrega:</strong>&nbsp; <span x-text="reportePedido.horarioEntrega || '—'"></span></div>
+            </div>
+
+            <div class="pedido-next">
+              <strong>¿Qué sigue ahora?</strong><br>
+              <span x-text="reportePedido.observacion || 'Estamos preparando tu pedido. Apenas el repartidor salga en ruta, te avisaremos para que estés atento a la entrega.'"></span>
+            </div>
+
+            <div class="pedido-footer">
+              Si tienes alguna duda, escríbenos directamente a nuestro WhatsApp.<br>
+              <strong>¡Gracias por tu preferencia!</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
 </html>
