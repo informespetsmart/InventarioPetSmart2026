@@ -30,8 +30,6 @@
 <!-- =========================================================
          HTML2CANVAS
     ========================================================== -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
 </script>
@@ -333,7 +331,7 @@ body.dark{background:#070d19!important}
         ? 'dark bg-slate-900 text-slate-100'
         : 'bg-slate-100 text-slate-800'
     " class="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 font-sans transition-colors duration-300" x-data="inventarioApp()">
-<div class="max-w-[1540px] mx-auto space-y-6">
+<div class="max-w-[1540px] mx-auto space-y-6" x-show="accesoAutorizado" x-cloak>
 <!-- =====================================================
              ENCABEZADO
         ====================================================== -->
@@ -677,14 +675,14 @@ body.dark{background:#070d19!important}
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Cliente *</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" placeholder="Nombre completo" required type="text" x-model="ventaForm.clienteNombre"/></div>
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Teléfono</label><input @input="ventaForm.clienteTelefono = limpiarCelular(ventaForm.clienteTelefono)" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" inputmode="numeric" maxlength="9" pattern="[0-9]{9}" placeholder="999999999" type="tel" x-model="ventaForm.clienteTelefono"/></div>
 </div>
-<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Distrito</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" placeholder="Ej: Miraflores" type="text" x-model="ventaForm.distrito"/></div><div class="md:col-span-2"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Dirección de entrega</label><textarea class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium resize-none" rows="2" placeholder="Av. ..., número, referencia" x-model="ventaForm.direccionEntrega"></textarea><div class="flex flex-wrap items-center gap-2 mt-2"><button type="button" @click="geocodificarDireccionVenta()" class="px-3 py-2 rounded-lg bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white text-xs font-black"><i class="fa-solid fa-location-crosshairs mr-1"></i>Localizar automáticamente</button><span class="text-[10px] text-slate-400" x-show="ventaForm.latitud && ventaForm.longitud">📍 <span x-text="ventaForm.latitud"></span>, <span x-text="ventaForm.longitud"></span></span></div></div>
+<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Distrito</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" placeholder="Ej: Miraflores" type="text" x-model="ventaForm.distrito"/></div><div class="md:col-span-2"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Dirección de entrega</label><textarea class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium resize-none" rows="2" placeholder="Av. ..., número, referencia" x-model="ventaForm.direccionEntrega"></textarea></div></div>
 </div>
 
 <!-- COMPROBANTE -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Tipo de comprobante</label><select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold" x-model="ventaForm.tipoComprobante"><option value="Boleta">Boleta</option><option value="Factura">Factura</option></select></div>
 <div x-show="ventaForm.tipoComprobante === 'Boleta'"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Tipo de documento</label><select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold" x-model="ventaForm.tipoDocumento"><option value="DNI">DNI</option><option value="Carnet de Extranjería">Carnet de Extranjería</option><option value="Pasaporte">Pasaporte</option></select></div>
-<div x-show="ventaForm.tipoComprobante === 'Boleta'"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Número de documento</label><input @input="ventaForm.numeroDocumento = String(ventaForm.numeroDocumento).replace(/\D/g,'')" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" inputmode="numeric" type="text" x-model="ventaForm.numeroDocumento"/></div>
+<div x-show="ventaForm.tipoComprobante === 'Boleta'"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Número de documento</label><input @input="ventaForm.numeroDocumento = sanitizarDocumento(ventaForm.tipoDocumento, ventaForm.numeroDocumento)" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" inputmode="numeric" :maxlength="maxDigitosDocumento(ventaForm.tipoDocumento)" type="text" x-model="ventaForm.numeroDocumento"/></div>
 <div x-show="ventaForm.tipoComprobante === 'Factura'"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">RUC</label><input @input="ventaForm.ruc = String(ventaForm.ruc).replace(/\D/g,'')" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" inputmode="numeric" maxlength="11" type="text" x-model="ventaForm.ruc"/></div>
 <div x-show="ventaForm.tipoComprobante === 'Factura'"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Razón Social</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" type="text" x-model="ventaForm.razonSocial"/></div>
 </div>
@@ -747,7 +745,7 @@ body.dark{background:#070d19!important}
 <div><label class="block text-xs font-black mb-1.5">Teléfono</label><input @input="ventaEditando.clienteTelefono = limpiarCelular(ventaEditando.clienteTelefono)" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" inputmode="numeric" maxlength="9" pattern="[0-9]{9}" type="tel" x-model="ventaEditando.clienteTelefono"/></div>
 <div><label class="block text-xs font-black mb-1.5">Tipo de comprobante</label><select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold" x-model="ventaEditando.tipoComprobante"><option value="Boleta">Boleta</option><option value="Factura">Factura</option></select></div>
 <div x-show="ventaEditando.tipoComprobante === 'Boleta'"><label class="block text-xs font-black mb-1.5">Tipo de documento</label><select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold" x-model="ventaEditando.tipoDocumento"><option value="DNI">DNI</option><option value="Carnet de Extranjería">Carnet de Extranjería</option><option value="Pasaporte">Pasaporte</option></select></div>
-<div x-show="ventaEditando.tipoComprobante === 'Boleta'"><label class="block text-xs font-black mb-1.5">Número de documento</label><input @input="ventaEditando.numeroDocumento = String(ventaEditando.numeroDocumento).replace(/\D/g,'')" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" inputmode="numeric" type="text" x-model="ventaEditando.numeroDocumento"/></div>
+<div x-show="ventaEditando.tipoComprobante === 'Boleta'"><label class="block text-xs font-black mb-1.5">Número de documento</label><input @input="ventaEditando.numeroDocumento = sanitizarDocumento(ventaEditando.tipoDocumento, ventaEditando.numeroDocumento)" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" inputmode="numeric" :maxlength="maxDigitosDocumento(ventaEditando.tipoDocumento)" type="text" x-model="ventaEditando.numeroDocumento"/></div>
 <div x-show="ventaEditando.tipoComprobante === 'Factura'"><label class="block text-xs font-black mb-1.5">RUC</label><input @input="ventaEditando.ruc = String(ventaEditando.ruc).replace(/\D/g,'')" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" inputmode="numeric" maxlength="11" type="text" x-model="ventaEditando.ruc"/></div>
 <div x-show="ventaEditando.tipoComprobante === 'Factura'"><label class="block text-xs font-black mb-1.5">Razón Social</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm" type="text" x-model="ventaEditando.razonSocial"/></div>
 </div>
@@ -838,6 +836,48 @@ body.dark{background:#070d19!important}
 <!-- =================================================
                      DATOS NEGOCIO
                 ================================================== -->
+<!-- =================================================
+                     RESPALDO Y RESTAURACIÓN
+                ================================================== -->
+<div class="bg-gradient-to-br from-indigo-50 via-white to-emerald-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 rounded-2xl p-6 border border-indigo-200 dark:border-slate-700 shadow-sm mb-6">
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shrink-0">
+<i class="fa-solid fa-database text-lg"></i>
+</div>
+<div>
+<h4 class="text-lg font-black">Respaldo y restauración</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-2xl">
+Protege todos los datos almacenados en Firebase antes de actualizar el sistema. El respaldo incluye Inventario, Ventas, Clientes, Finanzas y Configuración.
+</p>
+<div class="mt-3 flex flex-wrap gap-2 text-[10px] font-black uppercase tracking-wider">
+<span class="px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">Productos</span>
+<span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">Ventas</span>
+<span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300">Clientes</span>
+<span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300">Finanzas</span>
+<span class="px-2.5 py-1 rounded-full bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300">Configuración</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-2 shrink-0">
+<button @click="exportarRespaldoCompleto()" type="button" class="px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs shadow-lg flex items-center justify-center gap-2 transition-all">
+<i class="fa-solid fa-cloud-arrow-down"></i> Exportar respaldo
+</button>
+<button @click="document.getElementById('inputImportarRespaldo').click()" type="button" class="px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shadow-lg flex items-center justify-center gap-2 transition-all">
+<i class="fa-solid fa-cloud-arrow-up"></i> Importar respaldo
+</button>
+<input id="inputImportarRespaldo" type="file" accept=".json,application/json" class="hidden" @change="importarRespaldo($event)" />
+</div>
+</div>
+<div class="mt-5 rounded-xl bg-white/80 dark:bg-slate-950/60 border border-indigo-100 dark:border-slate-700 p-4">
+<div class="flex items-start gap-3">
+<i class="fa-solid fa-shield-halved text-indigo-600 dark:text-indigo-400 mt-0.5"></i>
+<div class="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+<b>Recomendación:</b> exporta un respaldo antes de subir una nueva versión a GitHub Pages. Una actualización compatible normalmente conservará los datos automáticamente; el archivo JSON queda como copia de seguridad para restaurarlos si una futura versión requiere migración.
+</div>
+</div>
+</div>
+</div>
 <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <div class="flex items-center gap-3 mb-5">
 <div class="w-11 h-11 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center">
@@ -1077,23 +1117,12 @@ body.dark{background:#070d19!important}
                 // ESTADO
                 // =================================================
                 firebaseInicializado: false,
+                accesoAutorizado: false,
+                accesoIntentos: 0,
                 darkMode:
                     true,
                 activeTab:
                     'inventario',
-                geoMapa: null,
-                geoMarkers: [],
-                geoCargando: false,
-                geoError: '',
-                geoManualLat: '',
-                geoManualLng: '',
-                geoSeleccionado: null,
-                geoMarcadorPendiente: false,
-                geoBusqueda: '',
-                geoResultados: [],
-                geoBuscando: false,
-                geoMarcadorTemporal: null,
-                geoResultadoElegido: null,
                 catalogoSeleccionados: [],
                 catalogoFiltro: '',
                 catalogoTitulo: 'Catálogo PetSmart',
@@ -1179,6 +1208,53 @@ body.dark{background:#070d19!important}
                     costoEnvio: 0,
                     observacion: '',
                     items: []
+                },
+                // =================================================
+                // ACCESO AL INVENTARIO
+                // =================================================
+                async solicitarAccesoInventario() {
+                    if (this.accesoAutorizado) return true;
+                    const { value: pass } = await Swal.fire({
+                        title: 'Acceso al Inventario',
+                        text: 'Ingresa la contraseña para continuar.',
+                        input: 'password',
+                        inputPlaceholder: 'Contraseña',
+                        inputAttributes: { autocomplete: 'current-password', autocapitalize: 'off', autocorrect: 'off' },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'Ingresar',
+                        confirmButtonColor: '#4f46e5',
+                        showCancelButton: false,
+                        preConfirm: (value) => {
+                            if (value !== 'K4t329102025**') {
+                                Swal.showValidationMessage('Contraseña incorrecta');
+                                return false;
+                            }
+                            return true;
+                        }
+                    });
+                    if (pass === true) {
+                        this.accesoAutorizado = true;
+                        return true;
+                    }
+                    return false;
+                },
+                // =================================================
+                // VALIDACIÓN DE DOCUMENTOS
+                // =================================================
+                maxDigitosDocumento(tipo) {
+                    const t = String(tipo || 'DNI').toUpperCase();
+                    if (t === 'DNI') return 8;
+                    if (t.includes('CARNET')) return 9;
+                    if (t === 'PASAPORTE') return 9;
+                    return 8;
+                },
+                sanitizarDocumento(tipo, valor) {
+                    return String(valor ?? '').replace(/\D/g, '').slice(0, this.maxDigitosDocumento(tipo));
+                },
+                documentoValido(tipo, valor) {
+                    const n = this.sanitizarDocumento(tipo, valor);
+                    return n.length === this.maxDigitosDocumento(tipo);
                 },
                 // =================================================
                 // ADMIN
@@ -1304,6 +1380,7 @@ body.dark{background:#070d19!important}
                     const skuURL = params.get('sku');
                     if (skuURL) this.busqueda = skuURL.trim();
                     this.inicializarFirebase();
+                    setTimeout(() => this.solicitarAccesoInventario(), 250);
                 },
                 // =================================================
                 // FIREBASE
@@ -1400,6 +1477,52 @@ body.dark{background:#070d19!important}
                         }
                     );
                 },
+                async sincronizarClientesDesdeProductosVendidos() {
+                    // V28.3: los clientes son registros independientes en /clientes.
+                    // Si una versión anterior eliminó clientes, los datos de la venta
+                    // siguen siendo una fuente válida para reconstruirlos.
+                    if (!window.db || !window.fb || !Array.isArray(this.productos) || !this.productos.length) return;
+                    try {
+                        const snap = await window.fb.get(window.fb.ref(window.db, 'clientes'));
+                        const clientes = snap.val() || {};
+                        const lista = Object.entries(clientes).map(([key, c]) => ({ key, ...(c || {}) }));
+                        const encontrados = new Set();
+
+                        for (const p of this.productos.filter(x => x.estado === 'vendido')) {
+                            const nombre = String(p.clienteNombre || '').trim();
+                            const documento = String(p.numeroDocumento || '').trim();
+                            const ruc = String(p.ruc || '').trim();
+                            if (!nombre && !documento && !ruc) continue;
+
+                            const yaExiste = lista.some(c => {
+                                const mismoId = p.clienteId && String(c.clienteId || c.key) === String(p.clienteId);
+                                const mismoDoc = documento && this.normalizarDocumento(c.documento || c.numeroDocumento) === this.normalizarDocumento(documento);
+                                const mismoRuc = ruc && this.normalizarDocumento(c.ruc) === this.normalizarDocumento(ruc);
+                                const mismoNombre = nombre && this.normalizarTextoCliente(c.nombre) === this.normalizarTextoCliente(nombre);
+                                return mismoId || mismoDoc || mismoRuc || mismoNombre;
+                            });
+                            if (yaExiste) continue;
+
+                            const clienteId = p.clienteId || window.fb.push(window.fb.ref(window.db, 'clientes')).key;
+                            if (encontrados.has(String(clienteId))) continue;
+                            encontrados.add(String(clienteId));
+                            await window.fb.set(window.fb.ref(window.db, `clientes/${clienteId}`), {
+                                clienteId,
+                                nombre,
+                                razonSocial: String(p.razonSocial || '').trim(),
+                                celular: this.limpiarCelular(p.clienteTelefono || ''),
+                                documento: this.normalizarDocumento(documento),
+                                tipoDocumento: p.tipoDocumento || '',
+                                ruc: this.normalizarDocumento(ruc),
+                                nombreNormalizado: this.normalizarTextoCliente(nombre),
+                                actualizadoEn: new Date().toISOString(),
+                                ventaGrupoId: p.ventaGrupoId || ''
+                            });
+                        }
+                    } catch (error) {
+                        console.warn('No se pudieron reconstruir clientes desde ventas:', error);
+                    }
+                },
                 escucharClientes() {
                     const clientesRef = window.fb.ref(window.db, 'clientes');
                     window.fb.onValue(clientesRef, snapshot => {
@@ -1409,6 +1532,7 @@ body.dark{background:#070d19!important}
                             ...cliente
                         }));
                         this.programarLimpiezaClientesHuerfanos();
+                        this.sincronizarClientesDesdeProductosVendidos();
                     }, error => {
                         console.error(error);
                         this.clientesData = [];
@@ -1569,6 +1693,160 @@ body.dark{background:#070d19!important}
                     });
                 },
                 // =================================================
+                // RESPALDO Y RESTAURACIÓN COMPLETA
+                // =================================================
+                async obtenerDatosRespaldo() {
+                    if (!window.db || !window.fb) throw new Error('Firebase todavía no está disponible.');
+
+                    // IMPORTANTE: no leemos la raíz de Firebase. Las reglas de seguridad
+                    // pueden permitir lectura de cada módulo y bloquear la raíz completa.
+                    // Por eso el respaldo se construye leyendo únicamente las rutas que
+                    // realmente utiliza esta aplicación.
+                    const rutas = [
+                        ['productos', 'productos'],
+                        ['ventas', 'ventas'],
+                        ['clientes', 'clientes'],
+                        ['finanzas/movimientos', 'finanzas/movimientos'],
+                        ['configuracion', 'configuracion']
+                    ];
+
+                    const resultados = await Promise.all(
+                        rutas.map(async ([clave, ruta]) => {
+                            try {
+                                const snapshot = await window.fb.get(window.fb.ref(window.db, ruta));
+                                return [clave, snapshot.exists() ? (snapshot.val() || {}) : {}];
+                            } catch (error) {
+                                throw new Error(`No se pudo leer ${ruta}. Verifica los permisos de lectura de Firebase. ${error?.message || error}`);
+                            }
+                        })
+                    );
+
+                    const data = Object.fromEntries(resultados);
+                    return {
+                        backupFormat: 'PETSMART_FIREBASE_BACKUP',
+                        backupVersion: 2,
+                        appVersion: 'V28.3',
+                        createdAt: new Date().toISOString(),
+                        scope: rutas.map(([clave, ruta]) => ruta),
+                        data
+                    };
+                },
+                contarRegistrosRespaldo(data) {
+                    const count = value => value && typeof value === 'object' ? Object.keys(value).length : 0;
+                    const movimientosData = data?.['finanzas/movimientos'] ?? data?.finanzas?.movimientos;
+                    return {
+                        productos: count(data?.productos),
+                        ventas: count(data?.ventas),
+                        clientes: count(data?.clientes),
+                        movimientos: count(movimientosData),
+                        categorias: Array.isArray(data?.configuracion?.categorias) ? data.configuracion.categorias.length : count(data?.configuracion?.categorias),
+                        tallas: Array.isArray(data?.configuracion?.tallas) ? data.configuracion.tallas.length : count(data?.configuracion?.tallas)
+                    };
+                },
+                descargarJSON(nombre, contenido) {
+                    const blob = new Blob([JSON.stringify(contenido, null, 2)], { type: 'application/json;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = nombre;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    setTimeout(() => URL.revokeObjectURL(url), 1000);
+                },
+                async exportarRespaldoCompleto(silencioso = false) {
+                    try {
+                        if (!window.db || !window.fb) {
+                            throw new Error('No hay conexión con Firebase.');
+                        }
+                        if (!silencioso) {
+                            Swal.fire({ title: 'Preparando respaldo...', text: 'Leyendo todos los datos de PetSmart', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                        }
+                        const respaldo = await this.obtenerDatosRespaldo();
+                        const c = this.contarRegistrosRespaldo(respaldo.data);
+                        const fecha = new Date();
+                        const sello = fecha.toISOString().replace(/[:.]/g, '-').replace('T', '_').slice(0, 19);
+                        this.descargarJSON(`PetSmart_Backup_${sello}.json`, respaldo);
+                        if (!silencioso) {
+                            Swal.close();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Respaldo generado correctamente',
+                                html: `<div class="text-left text-sm space-y-1"><p><b>Productos:</b> ${c.productos}</p><p><b>Ventas:</b> ${c.ventas}</p><p><b>Clientes:</b> ${c.clientes}</p><p><b>Movimientos financieros:</b> ${c.movimientos}</p><p><b>Categorías:</b> ${c.categorias}</p><p><b>Tallas:</b> ${c.tallas}</p><p class="pt-2 text-slate-500">Guarda este archivo en un lugar seguro antes de actualizar el sistema.</p></div>`,
+                                confirmButtonColor: '#4f46e5'
+                            });
+                        }
+                        return respaldo;
+                    } catch (error) {
+                        Swal.close();
+                        console.error('ERROR RESPALDO:', error);
+                        if (!silencioso) Swal.fire('No se pudo generar el respaldo', error?.message || 'Error inesperado al leer Firebase.', 'error');
+                        throw error;
+                    }
+                },
+                async importarRespaldo(evento) {
+                    const archivo = evento?.target?.files?.[0];
+                    if (!archivo) return;
+                    try {
+                        const texto = await archivo.text();
+                        let respaldo;
+                        try { respaldo = JSON.parse(texto); } catch { throw new Error('El archivo no contiene un JSON válido.'); }
+                        if (!respaldo || respaldo.backupFormat !== 'PETSMART_FIREBASE_BACKUP' || !respaldo.data || typeof respaldo.data !== 'object') {
+                            throw new Error('Este archivo no es un respaldo válido de PetSmart.');
+                        }
+                        if (!respaldo.data.productos || !respaldo.data.ventas || !respaldo.data.clientes || !respaldo.data.configuracion) {
+                            throw new Error('El respaldo está incompleto: faltan una o más áreas principales de PetSmart.');
+                        }
+                        const data = respaldo.data;
+                        const c = this.contarRegistrosRespaldo(data);
+                        const fechaBackup = respaldo.createdAt ? new Date(respaldo.createdAt).toLocaleString('es-PE') : 'fecha no disponible';
+                        const confirmacion = await Swal.fire({
+                            icon: 'warning',
+                            title: 'Restaurar respaldo',
+                            html: `<div class="text-left text-sm"><p class="mb-3">Vas a reemplazar los datos actuales de las áreas respaldadas por la información de este archivo:</p><div class="grid grid-cols-2 gap-2 text-xs"><div><b>Productos:</b> ${c.productos}</div><div><b>Ventas:</b> ${c.ventas}</div><div><b>Clientes:</b> ${c.clientes}</div><div><b>Finanzas:</b> ${c.movimientos}</div></div><p class="mt-3 text-slate-500"><b>Respaldo:</b> ${fechaBackup}</p><p class="mt-3 text-rose-600 font-bold">Antes de restaurar, el sistema descargará automáticamente un respaldo de los datos actuales.</p></div>`,
+                            showCancelButton: true,
+                            confirmButtonText: 'Sí, restaurar',
+                            cancelButtonText: 'Cancelar',
+                            confirmButtonColor: '#e11d48',
+                            reverseButtons: true
+                        });
+                        if (!confirmacion.isConfirmed) return;
+
+                        // Seguro previo: si algo sale mal durante la restauración, el usuario conserva una copia de lo actual.
+                        await this.exportarRespaldoCompleto(true);
+                        Swal.fire({ title: 'Restaurando datos...', text: 'Restaurando módulo por módulo', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+                        // Restauramos cada ruta por separado. Igual que en la exportación,
+                        // evitamos escribir la raíz de Firebase porque las reglas pueden
+                        // bloquear esa operación aunque permitan cada módulo.
+                        const rutasRestaurables = [
+                            ['productos', data.productos || {}],
+                            ['ventas', data.ventas || {}],
+                            ['clientes', data.clientes || {}],
+                            ['finanzas/movimientos', data['finanzas/movimientos'] || {}],
+                            ['configuracion', data.configuracion || {}]
+                        ];
+                        for (const [ruta, valor] of rutasRestaurables) {
+                            await window.fb.set(window.fb.ref(window.db, ruta), valor);
+                        }
+
+                        Swal.close();
+                        evento.target.value = '';
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Restauración completada',
+                            html: `<p class="text-sm">Los datos del respaldo fueron restaurados correctamente.</p><p class="text-xs text-slate-500 mt-2">Productos: ${c.productos} · Ventas: ${c.ventas} · Clientes: ${c.clientes} · Finanzas: ${c.movimientos}</p>`,
+                            confirmButtonColor: '#059669'
+                        });
+                        window.location.reload();
+                    } catch (error) {
+                        Swal.close();
+                        if (evento?.target) evento.target.value = '';
+                        console.error('ERROR RESTAURACIÓN:', error);
+                        Swal.fire({ icon: 'error', title: 'No se pudo restaurar', html: `<p>${String(error?.message || error)}</p><p class="text-xs text-slate-500 mt-3">Los datos no deben considerarse restaurados hasta verificar el sistema.</p>` });
+                    }
+                },
+                // =================================================
                 // CONFIG
                 // =================================================
                 escucharConfiguracion() {
@@ -1715,13 +1993,11 @@ body.dark{background:#070d19!important}
                 // LIMPIEZA AUTOMÁTICA DE CLIENTES HUÉRFANOS
                 // =================================================
                 programarLimpiezaClientesHuerfanos() {
-                    if (this._limpiezaClientesProgramada) return;
-                    this._limpiezaClientesProgramada = true;
-                    clearTimeout(this._timerLimpiezaClientes);
-                    this._timerLimpiezaClientes = setTimeout(() => {
-                        this._limpiezaClientesProgramada = false;
-                        this.limpiarClientesHuerfanos().catch(e => console.warn('Limpieza de clientes:', e));
-                    }, 700);
+                    // V28.2: DESACTIVADO. Los clientes son datos independientes y
+                    // nunca deben eliminarse automáticamente por no estar asociados
+                    // a una venta/producto actualmente marcado como vendido.
+                    // El usuario puede conservar clientes históricos o futuros.
+                    return;
                 },
                 async limpiarClientesHuerfanos() {
                     if (!window.db || !window.fb) return;
@@ -1838,32 +2114,31 @@ body.dark{background:#070d19!important}
                     return lista;
                 },
                 get clientesRegistrados() {
-                    // Solo mostramos clientes que tengan una venta activa/histórica real.
-                    // Los registros huérfanos de clientes/ nunca vuelven a aparecer en pantalla.
-                    const candidatos = [];
-                    // La lista visible se alimenta SOLO de productos actualmente vendidos.
-                    // Así ningún registro viejo de /ventas puede volver a mostrar clientes eliminados.
-                    this.productos.filter(p => p.estado === 'vendido').forEach(v => candidatos.push({
-                        key: v.clienteId || ('producto:' + v.id),
-                        nombre: v.clienteNombre || '', razonSocial: v.razonSocial || '',
-                        celular: v.clienteTelefono || '', documento: v.numeroDocumento || '',
-                        tipoDocumento: v.tipoDocumento || '', ruc: v.ruc || '', clienteId: v.clienteId || ''
-                    }));
-                    const lista = [];
-                    for (const cliente of candidatos) {
+                    // V28.3: la pestaña Clientes muestra los registros reales de /clientes.
+                    // No se eliminan ni se ocultan clientes por no tener una venta activa.
+                    const origen = Array.isArray(this.clientesData) ? this.clientesData : [];
+                    const resultado = [];
+                    for (const cliente of origen) {
                         const nombre = String(cliente.nombre || '').trim();
                         const razonSocial = String(cliente.razonSocial || '').trim();
                         const celular = this.limpiarCelular(cliente.celular || '');
-                        const documento = this.normalizarDocumento(cliente.documento || '');
+                        const documento = this.normalizarDocumento(cliente.documento || cliente.numeroDocumento || '');
                         const ruc = this.normalizarDocumento(cliente.ruc || '');
                         const nombreNorm = this.normalizarTextoCliente(nombre);
-                        let existente = null;
-                        if (cliente.clienteId) existente = lista.find(c => c.key === cliente.clienteId);
-                        if (!existente && documento) existente = lista.find(c => c.documento === documento);
-                        if (!existente && ruc) existente = lista.find(c => c.ruc === ruc);
-                        if (!existente && nombreNorm) existente = lista.find(c => c.nombreNorm === nombreNorm);
-                        const nuevo = { key: String(cliente.clienteId || cliente.key || ''), nombre, razonSocial, celular, documento, tipoDocumento: cliente.tipoDocumento || '', ruc, nombreNorm, clienteId: String(cliente.clienteId || '') };
-                        if (!existente) lista.push(nuevo);
+                        const clienteId = String(cliente.clienteId || cliente.key || '');
+                        const existente = resultado.find(c =>
+                            (clienteId && c.clienteId === clienteId) ||
+                            (documento && c.documento === documento) ||
+                            (ruc && c.ruc === ruc) ||
+                            (nombreNorm && c.nombreNorm === nombreNorm)
+                        );
+                        const nuevo = {
+                            key: String(cliente.key || clienteId),
+                            nombre, razonSocial, celular, documento,
+                            tipoDocumento: cliente.tipoDocumento || '', ruc,
+                            nombreNorm, clienteId
+                        };
+                        if (!existente) resultado.push(nuevo);
                         else {
                             existente.nombre = existente.nombre || nuevo.nombre;
                             existente.razonSocial = existente.razonSocial || nuevo.razonSocial;
@@ -1871,14 +2146,13 @@ body.dark{background:#070d19!important}
                             existente.documento = existente.documento || nuevo.documento;
                             existente.ruc = existente.ruc || nuevo.ruc;
                             existente.tipoDocumento = existente.tipoDocumento || nuevo.tipoDocumento;
-                            if ((!existente.key || existente.key.startsWith('venta:') || existente.key.startsWith('producto:')) && nuevo.clienteId) existente.key = nuevo.clienteId;
                         }
                     }
                     const texto = this.normalizarTextoCliente(this.filtroClientesTexto);
                     const dni = this.normalizarDocumento(this.filtroClientesDni);
                     const ruc = this.normalizarDocumento(this.filtroClientesRuc);
                     const tel = this.normalizarDocumento(this.filtroClientesTelefono);
-                    return lista.filter(c => {
+                    return resultado.filter(c => {
                         const textoOk = !texto || [c.nombre,c.razonSocial,c.documento,c.ruc,c.celular].some(v => this.normalizarTextoCliente(v).includes(texto));
                         const dniOk = !dni || c.documento.includes(dni);
                         const rucOk = !ruc || c.ruc.includes(ruc);
@@ -2199,6 +2473,14 @@ body.dark{background:#070d19!important}
                     if (!String(f.concepto || '').trim()) { Swal.fire('Atención', 'Indica el concepto del movimiento.', 'warning'); return; }
                     if (!['capital','mancomunado'].includes(f.pozo)) { Swal.fire('Atención', 'Selecciona un pozo válido.', 'warning'); return; }
                     if (!['ingreso','salida'].includes(f.tipo)) { Swal.fire('Atención', 'Selecciona ingreso o salida.', 'warning'); return; }
+                    if (f.tipo === 'salida') {
+                        const saldoDisponible = f.pozo === 'capital' ? Number(this.saldoPozoCapital) || 0 : Number(this.saldoPozoMancomunado) || 0;
+                        if (monto > saldoDisponible + 0.000001) {
+                            const nombrePozo = f.pozo === 'capital' ? 'Capital' : 'Mancomunado';
+                            Swal.fire({ icon:'warning', title:'Saldo insuficiente', html:`No puedes registrar una salida de <b>S/ ${this.formatMonto(monto)}</b> porque el pozo <b>${nombrePozo}</b> solo tiene disponible <b>S/ ${this.formatMonto(saldoDisponible)}</b>.` });
+                            return;
+                        }
+                    }
                     try {
                         Swal.fire({ title:'Guardando movimiento...', allowOutsideClick:false, didOpen:()=>Swal.showLoading() });
                         const movRef = window.fb.push(window.fb.ref(window.db, 'finanzas/movimientos'));
@@ -2986,12 +3268,10 @@ body.dark{background:#070d19!important}
                     if (this.ventaForm.clienteTelefono && this.ventaForm.clienteTelefono.length !== 9) { Swal.fire('Atención', 'El celular debe tener exactamente 9 dígitos.', 'warning'); return; }
                     if (this.ventaForm.canalVenta === 'Facebook' && !this.ventaForm.perfilFacebook) { Swal.fire('Atención', 'Selecciona el perfil de Facebook que realizó la venta.', 'warning'); return; }
                     if (this.ventaForm.tipoComprobante === 'Boleta' && !this.ventaForm.numeroDocumento) { Swal.fire('Atención', 'Ingresa el número del documento para la boleta.', 'warning'); return; }
+                    if (this.ventaForm.tipoComprobante === 'Boleta' && !this.documentoValido(this.ventaForm.tipoDocumento, this.ventaForm.numeroDocumento)) { Swal.fire('Documento incompleto', `El ${this.ventaForm.tipoDocumento || 'documento'} debe tener exactamente ${this.maxDigitosDocumento(this.ventaForm.tipoDocumento)} dígitos.`, 'warning'); return; }
                     if (this.ventaForm.tipoComprobante === 'Factura' && (!this.ventaForm.ruc || !String(this.ventaForm.razonSocial || '').trim())) { Swal.fire('Atención', 'Ingresa el RUC y la Razón Social para la factura.', 'warning'); return; }
 
                     try {
-                        if (!this.ventaForm.latitud || !this.ventaForm.longitud) {
-                            await this.geocodificarDireccionVenta();
-                        }
                         Swal.fire({ title: 'Guardando venta...', text: `Registrando ${this.ventaItemsValidos.length} producto(s) y el cliente.`, allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
                         // Volvemos a leer Firebase para evitar vender un SKU que cambió de estado mientras el modal estaba abierto.
@@ -3141,195 +3421,7 @@ body.dark{background:#070d19!important}
                         Swal.fire({ icon: 'error', title: 'No se pudo guardar la venta', text: error?.message || 'Error desconocido' });
                     }
                 },
-                // =================================================
-                // =================================================
-                // GEOLOCALIZACIÓN DE ENTREGAS - MAPA LIMA
-                // =================================================
-                async geocodificarDireccionVenta() {
-                    // La venta sigue guardando la dirección normalmente. La ubicación se confirma desde el mapa.
-                    return true;
-                },
-                async buscarDireccionEnMapa() {
-                    const item = this.geoSeleccionado;
-                    const texto = String(this.geoBusqueda || (item?.direccionEntrega || '')).trim();
-                    if (!item) {
-                        this.notificarToast('warning', 'Primero selecciona una entrega.');
-                        return;
-                    }
-                    if (!texto) {
-                        this.notificarToast('warning', 'Esta entrega no tiene una dirección registrada.');
-                        return;
-                    }
-                    this.geoBuscando = true;
-                    this.geoResultados = [];
-                    try {
-                        const distrito = String(item.distrito || '').trim();
-                        const q = `${texto}${distrito ? ', ' + distrito : ''}, Lima, Peru`;
-                        const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&countrycodes=pe&q=' + encodeURIComponent(q);
-                        const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
-                        if (!r.ok) throw new Error('No se pudo consultar el buscador de direcciones.');
-                        const data = await r.json();
-                        this.geoResultados = Array.isArray(data) ? data : [];
-                        if (!this.geoResultados.length) {
-                            this.notificarToast('warning', 'No encontramos esa dirección. Prueba agregando calle, número, urbanización o referencia.');
-                        } else {
-                            this.notificarToast('success', `${this.geoResultados.length} ubicación(es) encontradas. Revisa y confirma la correcta.`);
-                        }
-                    } catch (e) {
-                        console.error('ERROR BUSCANDO DIRECCIÓN:', e);
-                        this.notificarToast('error', 'No se pudo buscar la dirección. Puedes colocar el punto manualmente en el mapa.');
-                    } finally {
-                        this.geoBuscando = false;
-                    }
-                },
-                seleccionarResultadoGeo(resultado) {
-                    if (!resultado) return;
-                    const lat = Number(resultado.lat), lng = Number(resultado.lon);
-                    if (!isFinite(lat) || !isFinite(lng)) return;
-                    this.geoResultadoElegido = resultado;
-                    this.geoManualLat = String(lat);
-                    this.geoManualLng = String(lng);
-                    this.geoMarcadorPendiente = true;
-                    this.colocarPuntoTemporal(lat, lng, true);
-                    if (this.geoMapa) this.geoMapa.setView([lat, lng], 17);
-                    this.notificarToast('info', 'Ubicación encontrada. Revisa el punto y confirma para dejarlo fijo.');
-                },
-                seleccionarEntregaParaMapa(item) {
-                    if (!item) return;
-                    this.geoSeleccionado = item;
-                    this.geoBusqueda = String(item.direccionEntrega || '').trim();
-                    this.geoResultados = [];
-                    this.geoResultadoElegido = null;
-                    this.geoManualLat = String(item.latitud || '');
-                    this.geoManualLng = String(item.longitud || '');
-                    this.geoMarcadorPendiente = false;
-                    this.$nextTick(() => {
-                        if (this.geoMapa && item.latitud && item.longitud) {
-                            this.geoMapa.setView([Number(item.latitud), Number(item.longitud)], Math.max(this.geoMapa.getZoom(), 16));
-                            this.activarMarcadorSeleccionado(item);
-                        }
-                    });
-                    this.notificarToast('info', item.latitud && item.longitud ? 'Entrega seleccionada. Puedes reubicar el punto buscando la dirección o moviendo el marcador.' : 'Entrega seleccionada. Busca la dirección para ubicarla en Lima.');
-                },
-                colocarPuntoTemporal(lat, lng, editable = true) {
-                    if (!this.geoMapa || !window.L) return;
-                    if (this.geoMarcadorTemporal) this.geoMarcadorTemporal.remove();
-                    this.geoMarcadorTemporal = L.marker([lat, lng], { draggable: !!editable }).addTo(this.geoMapa);
-                    this.geoMarcadorTemporal.bindPopup('<b>Ubicación a confirmar</b><br>Arrastra el punto si es necesario y luego pulsa <b>Confirmar ubicación</b>.').openPopup();
-                    if (editable) {
-                        this.geoMarcadorTemporal.on('dragend', (e) => {
-                            const pos = e.target.getLatLng();
-                            this.geoManualLat = String(pos.lat);
-                            this.geoManualLng = String(pos.lng);
-                            this.geoMarcadorPendiente = true;
-                        });
-                    }
-                    this.geoManualLat = String(lat);
-                    this.geoManualLng = String(lng);
-                    this.geoMarcadorPendiente = true;
-                },
-                async colocarMarcadorEnMapa(lat, lng) {
-                    const item = this.geoSeleccionado;
-                    if (!item) {
-                        this.notificarToast('warning', 'Primero selecciona una entrega de la lista.');
-                        return;
-                    }
-                    const nlat = Number(lat), nlng = Number(lng);
-                    if (!isFinite(nlat) || !isFinite(nlng)) return;
-                    this.colocarPuntoTemporal(nlat, nlng, true);
-                    this.notificarToast('info', 'Punto preparado. Pulsa “Confirmar ubicación” para guardarlo en Firebase.');
-                },
-                async confirmarUbicacionGeo() {
-                    const item = this.geoSeleccionado;
-                    const lat = Number(this.geoManualLat), lng = Number(this.geoManualLng);
-                    if (!item || !isFinite(lat) || !isFinite(lng)) {
-                        Swal.fire('Ubicación incompleta', 'Selecciona una entrega y una ubicación válida.', 'warning');
-                        return;
-                    }
-                    try {
-                        Swal.fire({ title: 'Guardando ubicación...', text: 'Fijando el punto de entrega en Firebase.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-                        const rel = item.ventaGrupoId
-                            ? this.productos.filter(p => String(p.ventaGrupoId || '') === String(item.ventaGrupoId))
-                            : [item];
-                        const updates = {};
-                        rel.forEach(p => {
-                            updates[`productos/${p.id}/latitud`] = String(lat);
-                            updates[`productos/${p.id}/longitud`] = String(lng);
-                        });
-                        await window.fb.update(window.fb.ref(window.db), updates);
-                        if (this.geoMarcadorTemporal) {
-                            this.geoMarcadorTemporal.remove();
-                            this.geoMarcadorTemporal = null;
-                        }
-                        this.geoManualLat = String(lat);
-                        this.geoManualLng = String(lng);
-                        this.geoMarcadorPendiente = false;
-                        this.geoResultadoElegido = null;
-                        this.geoResultados = [];
-                        this.geoSeleccionado = {...item, latitud:String(lat), longitud:String(lng)};
-                        Swal.close();
-                        this.actualizarMapaGeo();
-                        this.notificarToast('success', 'Ubicación confirmada. El punto queda fijo en el mapa.');
-                    } catch(e) {
-                        Swal.close();
-                        Swal.fire('No se pudo guardar', e?.message || 'Firebase rechazó la ubicación.', 'error');
-                    }
-                },
-                activarMarcadorSeleccionado(item) {
-                    if (!this.geoMapa) return;
-                    const grupo = String(item.ventaGrupoId || item.id);
-                    this.geoMarkers.forEach(obj => {
-                        if (obj?.marker) obj.marker.dragging?.disable();
-                    });
-                    const encontrado = this.geoMarkers.find(obj => obj.grupo === grupo);
-                    if (encontrado?.marker) {
-                        encontrado.marker.dragging?.enable();
-                        encontrado.marker.off('dragend');
-                        encontrado.marker.on('dragend', (e) => {
-                            const pos = e.target.getLatLng();
-                            this.geoManualLat = String(pos.lat);
-                            this.geoManualLng = String(pos.lng);
-                            this.geoSeleccionado = item;
-                            this.geoMarcadorPendiente = true;
-                            this.notificarToast('info', 'Marcador movido. Pulsa “Confirmar ubicación” para guardar la nueva posición.');
-                        });
-                        encontrado.marker.bindPopup(`<b>${this.escapeHtml(item.clienteNombre||'Cliente')}</b><br>${this.escapeHtml(item.direccionEntrega||'Entrega')}<br>${this.escapeHtml(item.distrito||'')}<br><span style="color:#e11d48;font-weight:700">Arrastra este marcador para reubicarlo</span>`).openPopup();
-                    }
-                },
-                inicializarMapaGeo() {
-                    if(!window.L) { this.notificarToast('error','No se pudo cargar el mapa. Verifica tu conexión a Internet.'); return; }
-                    this.$nextTick(()=>{
-                        const el=document.getElementById('mapaPetSmart'); if(!el) return;
-                        if(this.geoMapa){this.geoMapa.invalidateSize();this.actualizarMapaGeo();return;}
-                        this.geoMapa=L.map(el,{zoomControl:true}).setView([-12.0464,-77.0428],11);
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(this.geoMapa);
-                        this.geoMapa.on('click', e => {
-                            if (this.geoSeleccionado) this.colocarMarcadorEnMapa(e.latlng.lat, e.latlng.lng);
-                            else this.notificarToast('warning', 'Primero selecciona una entrega.');
-                        });
-                        this.actualizarMapaGeo();
-                    });
-                },
-                actualizarMapaGeo() {
-                    if(!this.geoMapa||!window.L) return;
-                    this.geoMarkers.forEach(obj=>obj?.marker?.remove?.()); this.geoMarkers=[];
-                    const ventas=this.productos.filter(p=>p.estado==='vendido'&&p.latitud!==undefined&&p.longitud!==undefined&&p.latitud!==''&&p.longitud!=='');
-                    const bounds=[];
-                    const vistos=new Set();
-                    ventas.forEach(item=>{
-                        const grupo=String(item.ventaGrupoId || item.id); if(vistos.has(grupo)) return; vistos.add(grupo);
-                        const lat=Number(item.latitud),lng=Number(item.longitud); if(!isFinite(lat)||!isFinite(lng)) return;
-                        const m=L.marker([lat,lng], {draggable:false}).addTo(this.geoMapa);
-                        m.bindPopup(`<b>${this.escapeHtml(item.clienteNombre||'Cliente')}</b><br>${this.escapeHtml(item.direccionEntrega||'Entrega')}<br>${this.escapeHtml(item.distrito||'')}<br>Pedido: ${this.escapeHtml(item.comprobanteNumero||'—')}`);
-                        m.on('click',()=>this.seleccionarEntregaParaMapa(item));
-                        this.geoMarkers.push({marker:m,grupo,item}); bounds.push([lat,lng]);
-                    });
-                    if(bounds.length) this.geoMapa.fitBounds(bounds,{padding:[40,40],maxZoom:16});
-                    if (this.geoSeleccionado?.latitud && this.geoSeleccionado?.longitud) this.activarMarcadorSeleccionado(this.geoSeleccionado);
-                },
-                guardarCoordenadasManual() {
-                    this.confirmarUbicacionGeo();
-                },
+
                 // =================================================
                 // VER VENTA
                 // =================================================
@@ -3361,6 +3453,9 @@ body.dark{background:#070d19!important}
                     if (!String(venta.clienteNombre || '').trim()) { Swal.fire('Atención', 'Debes registrar el nombre del cliente.', 'warning'); return; }
                     if (!venta.fechaVenta) { Swal.fire('Atención', 'Debes registrar la fecha de venta.', 'warning'); return; }
                     if (venta.canalVenta === 'Facebook' && !venta.perfilFacebook) { Swal.fire('Atención', 'Selecciona el perfil de Facebook.', 'warning'); return; }
+                    if (venta.tipoComprobante === 'Boleta' && venta.numeroDocumento && !this.documentoValido(venta.tipoDocumento, venta.numeroDocumento)) {
+                        Swal.fire('Documento incompleto', `El ${venta.tipoDocumento || 'documento'} debe tener exactamente ${this.maxDigitosDocumento(venta.tipoDocumento)} dígitos.`, 'warning'); return;
+                    }
                     try {
                         Swal.fire({ title: 'Guardando cambios...', text: 'Actualizando el registro de venta.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                         const precio = Number(venta.precioVenta) || 0;
@@ -3904,7 +3999,6 @@ body.dark{background:#070d19!important}
 <button :class="activeTab === 'clientes' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'clientes'" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2">
 <i class="fa-solid fa-users"></i> Clientes
             </button>
-<button :class="activeTab === 'geo' ? 'bg-rose-600 text-white shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'geo'; inicializarMapaGeo()" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-map-location-dot"></i> Mapa de ventas</button>
 <button :class="activeTab === 'catalogo' ? 'bg-violet-600 text-white shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'catalogo'" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-images"></i> Catálogo</button>
 <button :class="activeTab === 'finanzas' ? 'bg-slate-900 text-white shadow-lg dark:bg-amber-500 dark:text-slate-950' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'finanzas'" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2">
 <i class="fa-solid fa-landmark"></i> Finanzas
@@ -4571,7 +4665,7 @@ body.dark{background:#070d19!important}
 </div>
 <div class="flex items-center gap-2">
 <div class="px-4 py-2 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-sm font-black"><span x-text="clientesRegistrados.length"></span> clientes</div>
-<button @click="reiniciarClientesDesdeCero()" class="px-3 py-2 rounded-xl bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white text-xs font-black"><i class="fa-solid fa-trash-can mr-1"></i>Eliminar todos</button><button @click="limpiarClientesHuerfanos().then(()=>notificarToast('success','Clientes huérfanos eliminados.'))" class="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200 text-xs font-black"><i class="fa-solid fa-broom mr-1"></i>Limpiar huérfanos</button>
+
 </div>
 </div>
 <div class="p-4 border-b border-slate-200 dark:border-slate-700 grid grid-cols-1 md:grid-cols-5 gap-3">
@@ -4608,25 +4702,7 @@ body.dark{background:#070d19!important}
 </table>
 </div>
 </div>
-</div><div style="display:none;" x-show="activeTab === 'geo'" x-transition>
-<div class="space-y-5">
-<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden">
-<div class="p-5 border-b border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3"><div><div class="text-[10px] uppercase tracking-[0.2em] font-black text-rose-600">PetSmart Geo</div><h2 class="text-2xl font-black">Mapa de ventas y entregas — Lima</h2><p class="text-xs text-slate-400 mt-1">Busca la dirección registrada del cliente, revisa el resultado en el mapa, mueve el marcador si hace falta y confirma. La ubicación queda guardada y permanece fija.</p></div><button @click="actualizarMapaGeo()" class="px-4 py-2.5 rounded-xl bg-rose-600 text-white font-black text-sm"><i class="fa-solid fa-rotate mr-1"></i>Actualizar mapa</button></div>
-<div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-0">
-<div id="mapaPetSmart" class="w-full h-[620px] bg-slate-100"></div>
-<div class="p-5 border-l border-slate-200 dark:border-slate-700 space-y-4">
-<div class="rounded-2xl bg-rose-500/10 p-4"><div class="text-[10px] uppercase font-black text-rose-600">Entregas geolocalizadas</div><div class="text-3xl font-black mt-1" x-text="new Set(productos.filter(p=>p.estado==='vendido' && p.latitud && p.longitud).map(p=>p.ventaGrupoId || p.id)).size"></div></div>
-<div class="rounded-2xl border border-rose-200 bg-rose-50 dark:bg-rose-950/20 dark:border-rose-900 p-4"><div class="font-black text-sm mb-1">📍 Ubicación por dirección</div><p class="text-[11px] text-slate-600 dark:text-slate-300">1. Selecciona una entrega. 2. Busca su dirección. 3. Elige el resultado correcto. 4. Ajusta el marcador. 5. Confirma para dejarlo fijo.</p><div class="mt-2 text-[10px] font-bold" x-show="geoSeleccionado"><span class="text-rose-600">Entrega seleccionada:</span> <span x-text="geoSeleccionado?.clienteNombre || '—'"></span></div></div>
-<div x-show="geoSeleccionado" x-transition class="rounded-2xl border border-slate-200 dark:border-slate-700 p-4 space-y-3">
-<div><div class="text-[10px] uppercase tracking-wider font-black text-slate-400">Dirección del cliente</div><div class="text-xs font-bold mt-1" x-text="geoSeleccionado?.direccionEntrega || 'Sin dirección registrada'"></div><div class="text-[10px] text-slate-400 mt-1" x-text="geoSeleccionado?.distrito || 'Sin distrito'"></div></div>
-<div class="flex gap-2"><input x-model="geoBusqueda" @keydown.enter.prevent="buscarDireccionEnMapa()" type="text" class="flex-1 min-w-0 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Buscar dirección en Lima..."><button @click="buscarDireccionEnMapa()" :disabled="geoBuscando" class="px-3 py-2.5 rounded-xl bg-indigo-600 text-white text-[10px] font-black disabled:opacity-50"><i class="fa-solid fa-location-dot mr-1"></i><span x-text="geoBuscando ? 'Buscando...' : 'Ubicar'"></span></button></div>
-<div x-show="geoResultados.length" class="space-y-2 max-h-44 overflow-auto"><template x-for="(resultado,idx) in geoResultados" :key="'resgeo-'+idx"><button @click="seleccionarResultadoGeo(resultado)" class="w-full text-left p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/20"><div class="text-[10px] font-black text-indigo-600" x-text="'Resultado '+(idx+1)"></div><div class="text-[10px] leading-relaxed mt-1" x-text="resultado.display_name"></div></button></template></div>
-<div x-show="geoMarcadorPendiente" class="rounded-xl bg-amber-500/10 border border-amber-500/20 p-3"><div class="text-[10px] font-black text-amber-600">Ubicación pendiente de confirmación</div><div class="text-[10px] text-slate-500 mt-1">Puedes mover el marcador directamente en el mapa y luego guardar la nueva posición.</div><button @click="confirmarUbicacionGeo()" class="mt-2 w-full px-3 py-2.5 rounded-xl bg-emerald-600 text-white text-[10px] font-black"><i class="fa-solid fa-circle-check mr-1"></i>Confirmar ubicación</button></div>
-</div>
-<div class="space-y-2 max-h-[320px] overflow-auto"><template x-for="item in productos.filter(p=>p.estado==='vendido')" :key="'geo-'+item.id"><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-700" :class="geoSeleccionado?.id===item.id ? 'ring-2 ring-rose-500 bg-rose-50/50 dark:bg-rose-950/20' : ''"><div class="flex items-start justify-between gap-2"><div class="min-w-0"><div class="font-black text-xs truncate" x-text="item.clienteNombre || 'Cliente'"></div><div class="text-[10px] text-slate-400" x-text="(item.distrito || 'Sin distrito') + (item.direccionEntrega ? ' · '+item.direccionEntrega : '')"></div></div><span class="text-[9px] font-black px-2 py-1 rounded-full" :class="item.latitud && item.longitud ? 'bg-emerald-500/10 text-emerald-600' : 'bg-amber-500/10 text-amber-600'" x-text="item.latitud && item.longitud ? 'FIJO' : 'SIN UBICAR'"></span></div><button @click="seleccionarEntregaParaMapa(item)" class="mt-2 w-full px-2.5 py-2 rounded-lg bg-rose-500 text-white text-[10px] font-black"><i class="fa-solid fa-crosshairs mr-1"></i><span x-text="item.latitud && item.longitud ? 'Ver / reubicar entrega' : 'Seleccionar entrega' "></span></button></div></template></div>
-</div></div></div></div>
-</div>
-<div style="display:none;" x-show="activeTab === 'catalogo'" x-transition>
+</div><div style="display:none;" x-show="activeTab === 'catalogo'" x-transition>
 <div class="space-y-5">
 <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden">
 <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3"><div><div class="text-[10px] uppercase tracking-[0.2em] font-black text-violet-600">PetSmart Catalog</div><h2 class="text-2xl font-black">Constructor de catálogo</h2><p class="text-xs text-slate-400 mt-1">Elige los productos que quieres mostrar. El catálogo no incluye precio ni UPC.</p></div><div class="flex flex-wrap gap-2"><button @click="seleccionarTodosCatalogo()" class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-900 text-xs font-black">Seleccionar todos</button><button @click="limpiarSeleccionCatalogo()" class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-900 text-xs font-black">Limpiar</button><button @click="exportarCatalogoJPEG()" class="px-3 py-2 rounded-lg bg-violet-600 text-white text-xs font-black"><i class="fa-solid fa-image mr-1"></i>JPEG</button><button @click="exportarCatalogoPDF()" class="px-3 py-2 rounded-lg bg-rose-600 text-white text-xs font-black"><i class="fa-solid fa-file-pdf mr-1"></i>PDF</button></div></div>
@@ -4832,12 +4908,12 @@ body.dark{background:#070d19!important}
             </div>
 
             <div class="pedido-next">
-              <strong>¿Qué sigue ahora?</strong><br>
+              <strong>Detalles / Observaciones</strong><br>
               <span x-text="reportePedido.observacion || 'Estamos preparando tu pedido. Apenas el repartidor salga en ruta, te avisaremos para que estés atento a la entrega.'"></span>
             </div>
 
             <div class="pedido-footer">
-              Si tienes alguna duda, escríbenos directamente a nuestro WhatsApp.<br>
+              Si tienes alguna duda, escríbenos directamente a nuestro WhatsApp: <strong>984464009</strong>.<br>
               <strong>¡Gracias por tu preferencia!</strong>
             </div>
           </div>
