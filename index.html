@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Inventario PetSmart · V10 UPC + Reporte + Gestión Financiera</title>
+<title>PetSmart · Inventario y Ventas V29 · Vales Profesionales</title>
 <!-- =========================================================
          TAILWIND
     ========================================================== -->
@@ -323,14 +323,71 @@ body.dark{background:#070d19!important}
 .fin-pool:after{content:"";position:absolute;width:150px;height:150px;border-radius:999px;right:-55px;top:-70px;background:rgba(255,255,255,.16);pointer-events:none}
 .fin-number{font-variant-numeric:tabular-nums}
 .fin-movement-row{transition:background .18s ease}
+/* V28.7 — modal de venta restaurado al layout estable de V27 */
+.venta-modal-backdrop{overflow:auto!important;}
+.venta-modal-backdrop > .venta-modal-shell{width:min(1024px,calc(100vw - 32px))!important;max-width:1024px!important;max-height:94vh!important;overflow-y:auto!important;overflow-x:hidden!important;box-sizing:border-box!important;}
+.venta-modal-backdrop .venta-modal-shell{position:relative!important;}
+.venta-modal-backdrop form{width:100%;box-sizing:border-box;}
+.venta-modal-backdrop input,.venta-modal-backdrop select,.venta-modal-backdrop textarea{max-width:100%;box-sizing:border-box;}
+@media(max-width:640px){.venta-modal-backdrop{padding:8px!important}.venta-modal-backdrop > .venta-modal-shell{width:calc(100vw - 16px)!important;max-width:none!important;max-height:96vh!important}.venta-modal-backdrop form{padding:16px!important}}
+
+/* V28.7 — login completamente opaco */
+.acceso-bloqueo{position:fixed;inset:0;z-index:99998;background:#020617;display:flex;align-items:center;justify-content:center;padding:24px}
+.acceso-bloqueo-card{width:min(420px,100%);background:linear-gradient(145deg,#0f172a,#111827);border:1px solid rgba(148,163,184,.2);box-shadow:0 30px 100px rgba(0,0,0,.65);border-radius:28px;padding:28px;text-align:center;color:#fff}
 .fin-movement-row:hover{background:rgba(245,158,11,.05)}
 </style>
+
+<style id="vales-professional-style">
+/* VALE PREMIUM v2 — composición comercial + exportación segura */
+.vale-digital-export{width:1120px!important;height:700px!important;min-height:700px!important;max-width:none!important;margin:0;display:grid;grid-template-columns:34% 66%;background:#fff;border-radius:30px;overflow:hidden;position:relative;isolation:isolate;box-shadow:none;font-family:Inter,Arial,Helvetica,sans-serif;box-sizing:border-box}
+.vale-digital-export *{box-sizing:border-box}
+.vale-left{position:relative;min-height:700px;height:700px;padding:38px 42px 34px;color:#fff;background:linear-gradient(145deg,#052e63 0%,#07488b 54%,#0b66b7 100%);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.vale-left:after{content:"";position:absolute;top:0;right:-1px;width:26px;height:100%;background:#fff;clip-path:polygon(0 0,100% 0,100% 100%,0 100%);opacity:.98}
+.vale-left:before{content:"";position:absolute;width:390px;height:390px;border:2px solid rgba(255,255,255,.09);border-radius:50%;right:-220px;bottom:-145px;box-shadow:0 0 0 30px rgba(255,255,255,.035),0 0 0 60px rgba(255,255,255,.025),0 0 0 90px rgba(255,255,255,.018)}
+.vale-brand{min-height:125px;display:flex;align-items:center;position:relative;z-index:3}.vale-logo{width:420px;max-width:100%;height:150px;max-height:150px;object-fit:contain;object-position:left center;filter:drop-shadow(0 10px 22px rgba(0,0,0,.24))}.vale-brand-text{font-size:30px;font-weight:950;letter-spacing:.02em}
+.vale-kicker{font-size:12px;font-weight:950;letter-spacing:.22em;margin-top:25px;opacity:.9}.vale-title{font-size:64px;line-height:.88;font-weight:950;letter-spacing:-.055em;margin-top:14px;text-transform:uppercase;position:relative;z-index:2}.vale-title:after{content:"";display:block;width:92px;height:6px;border-radius:99px;background:#f6a23a;margin-top:19px}.vale-copy{max-width:290px;font-size:14px;line-height:1.55;font-weight:650;opacity:.9;margin-top:18px}
+.vale-code-label{font-size:9px;font-weight:950;letter-spacing:.2em;opacity:.72}.vale-code-side{margin-top:8px;display:inline-block;padding:12px 15px;border:2px solid #f6a23a;border-radius:12px;background:#f6a23a;color:#082f5f;font:950 18px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;max-width:100%;overflow-wrap:anywhere}
+.vale-right{position:relative;height:700px;padding:30px 38px 25px;background:linear-gradient(145deg,#ffffff 0%,#f8fbfe 100%);overflow:hidden;display:flex;flex-direction:column}.vale-right:before{content:"";position:absolute;width:520px;height:520px;right:-280px;top:-275px;border-radius:50%;border:90px solid rgba(242,139,40,.055);box-shadow:0 0 0 26px rgba(10,77,145,.018),0 0 0 52px rgba(242,139,40,.018)}.vale-right:after{content:"";position:absolute;left:0;bottom:0;width:62%;height:5px;background:linear-gradient(90deg,#0a4d91 0%,#0a4d91 72%,#f28b28 72%,#f28b28 100%);opacity:.95}
+.vale-right-head{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:15px;flex:0 0 auto}.vale-pill{display:inline-flex;align-items:center;padding:9px 15px;border-radius:999px;background:#eef5fb;color:#0a4d91;font-size:10px;font-weight:950;letter-spacing:.14em;border:1px solid #d8e7f5;box-shadow:0 4px 12px rgba(10,77,145,.06)}
+.vale-main-card{position:relative;z-index:2;margin-top:16px;padding:26px 30px 23px;border:2px solid #0a4d91;border-radius:26px;background:rgba(255,255,255,.985);box-shadow:10px 12px 0 #f28b28,0 18px 35px rgba(10,77,145,.09);flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden}.vale-main-card:after{content:"";position:absolute;inset:8px;border:1px solid #dbe7f2;border-radius:20px;pointer-events:none}.vale-main-card:before{content:"";position:absolute;right:22px;top:18px;width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,rgba(10,77,145,.06),rgba(242,139,40,.12));transform:rotate(12deg);pointer-events:none}
+.vale-benefit-kicker{font-size:10px;letter-spacing:.2em;font-weight:950;color:#f28b28;position:relative;z-index:2}.vale-benefit{margin-top:7px;color:#0a4d91;font-size:52px;line-height:1.02;font-weight:950;letter-spacing:-.045em;max-width:100%;text-transform:uppercase;overflow-wrap:anywhere;word-break:normal;position:relative;z-index:2}.vale-divider{height:4px;width:145px;flex:0 0 auto;background:linear-gradient(90deg,#0a4d91 0%,#0a4d91 58%,#f28b28 58%,#f28b28 100%);border-radius:99px;margin:16px 0 14px;box-shadow:0 3px 8px rgba(10,77,145,.12)}
+.vale-code-label-dark{font-size:9px;letter-spacing:.2em;font-weight:950;color:#7a8795;position:relative;z-index:2}.vale-code-main{margin-top:7px;color:#061f3f;font:950 48px/1.02 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.13em;text-shadow:0 2px 0 rgba(242,139,40,.18);overflow-wrap:anywhere;word-break:break-word;position:relative;z-index:2;max-width:100%}
+.vale-data-grid{margin-top:17px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px;position:relative;z-index:2}.vale-data-grid>div{border-top:1px solid #dbe4ee;padding-top:8px;min-width:0}.vale-data-label{font-size:8px;letter-spacing:.16em;font-weight:950;color:#8a97a5}.vale-data-value{font-size:13px;font-weight:900;color:#173858;margin-top:3px;white-space:normal;overflow:visible;text-overflow:clip;max-width:100%;overflow-wrap:anywhere;word-break:break-word;line-height:1.18;min-height:16px}
+.vale-data-client{grid-column:1/-1}.vale-data-client .vale-data-value{font-size:14.95px;font-weight:950;color:#101820;line-height:1.15}.vale-data-address{grid-column:1/-1}.vale-data-address .vale-data-value{font-size:12.5px;color:#173858}.vale-footer{position:relative;z-index:2;display:block;margin-top:12px;color:#657589;font-size:9px;font-weight:750;flex:0 0 auto}.vale-footer-main{display:flex;align-items:center;justify-content:space-between;gap:12px}.vale-footer-paws{display:flex;align-items:center;gap:9px;color:#f28b28}.vale-footer-paws i{font-size:17px;opacity:.58}.vale-terms{margin-top:8px;padding:10px 12px;border-radius:13px;background:linear-gradient(135deg,#0b355f,#0a477f);color:#eaf4ff;border-left:4px solid #f28b28;font-size:8.8px;line-height:1.38;box-shadow:0 7px 16px rgba(8,47,95,.09);overflow:hidden}.vale-terms strong{display:block;color:#f7a34d;text-transform:uppercase;letter-spacing:.12em;font-size:8.25px;margin-bottom:3px}
+/* Huellas uniformes, grandes y semitransparentes */
+.vale-paw{position:absolute;z-index:1;color:#0a4d91;opacity:.105;font-size:62px!important;line-height:1;filter:none;pointer-events:none}.vale-paw i{font-size:1em}.paw-one{right:32px;top:88px;transform:rotate(20deg)}.paw-two{right:135px;bottom:88px;transform:rotate(-18deg)}.paw-three{left:38%;bottom:34px;transform:rotate(14deg)}.paw-four{right:25%;top:245px;transform:rotate(-20deg)}.paw-five{left:8%;top:165px;transform:rotate(-22deg)}.paw-six{right:8%;bottom:205px;transform:rotate(24deg)}.paw-seven{left:26%;top:350px;transform:rotate(9deg)}.paw-eight{right:43%;top:120px;transform:rotate(-14deg)}.paw-nine{left:58%;bottom:118px;transform:rotate(18deg)}.paw-ten{right:5%;top:395px;transform:rotate(-12deg)}.paw-eleven{left:12%;bottom:78px;transform:rotate(17deg)}.paw-twelve{right:19%;top:145px;transform:rotate(25deg)}.paw-thirteen{left:47%;top:285px;transform:rotate(-10deg)}.paw-fourteen{right:34%;bottom:52px;transform:rotate(-25deg)}.paw-fifteen{left:72%;top:75px;transform:rotate(11deg)}.paw-sixteen{left:5%;bottom:245px;transform:rotate(-16deg)}
+/* Evita cortes al reducir ventana: el área de exportación sigue siendo fija */
+@media(max-width:900px){.vale-digital-export{width:1120px!important;height:700px!important;grid-template-columns:34% 66%;transform-origin:top left}.vale-left{min-height:700px;height:700px;padding:38px 42px 34px}.vale-right{height:700px;padding:30px 38px 25px}.vale-title{font-size:64px}.vale-benefit{font-size:52px}.vale-code-main{font-size:43px}}
+</style>
+
 </head>
 <body :class="
         darkMode
         ? 'dark bg-slate-900 text-slate-100'
         : 'bg-slate-100 text-slate-800'
     " class="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 font-sans transition-colors duration-300" x-data="inventarioApp()">
+<div class="acceso-bloqueo" x-show="!accesoAutorizado" x-cloak role="dialog" aria-modal="true" aria-label="Acceso al sistema">
+  <div class="acceso-bloqueo-card">
+    <div class="mx-auto w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-900/30 mb-5">
+      <i class="fa-solid fa-lock text-2xl"></i>
+    </div>
+    <div class="text-[11px] uppercase tracking-[.22em] font-black text-indigo-300">PetSmart · Sistema protegido</div>
+    <h2 class="text-2xl font-black mt-2">Acceso restringido</h2>
+    <p class="text-sm text-slate-400 mt-2 mb-6">Ingresa la contraseña para acceder al sistema. El contenido permanece completamente oculto mientras esta pantalla esté activa.</p>
+    <form @submit.prevent="iniciarSesion()" autocomplete="off" class="text-left">
+      <label class="block text-xs font-black text-slate-300 mb-2">Contraseña</label>
+      <div class="relative">
+        <input x-ref="loginPassword" x-model="loginPassword" :type="mostrarLoginPassword ? 'text' : 'password'" autocomplete="new-password" autocapitalize="off" autocorrect="off" spellcheck="false" class="w-full rounded-2xl bg-slate-950 border border-slate-700 text-white px-4 py-3.5 pr-12 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20" placeholder="Ingresa tu contraseña" />
+        <button type="button" @click="mostrarLoginPassword = !mostrarLoginPassword" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800" :aria-label="mostrarLoginPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"><i :class="mostrarLoginPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
+      </div>
+      <div x-show="loginError" x-text="loginError" class="mt-3 text-sm font-bold text-rose-300 bg-rose-500/10 border border-rose-500/20 rounded-xl px-3 py-2"></div>
+      <button type="submit" class="w-full mt-4 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-black py-3.5 rounded-2xl transition-all shadow-lg shadow-indigo-950/30 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-right-to-bracket"></i> Ingresar al sistema
+      </button>
+    </form>
+    <div class="mt-5 text-[11px] text-slate-500 flex items-center justify-center gap-2"><i class="fa-solid fa-shield-halved"></i> Acceso protegido</div>
+  </div>
+</div>
 <div class="max-w-[1540px] mx-auto space-y-6" x-show="accesoAutorizado" x-cloak>
 <!-- =====================================================
              ENCABEZADO
@@ -347,6 +404,7 @@ body.dark{background:#070d19!important}
                 </p>
 </div>
 <div class="flex items-center gap-3 flex-wrap">
+<button @click="activeTab='vales'; cargarValesPromocionales()" class="bg-amber-500 hover:bg-amber-400 text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-lg flex items-center gap-2 text-sm"><i class="fa-solid fa-ticket"></i> Vales</button>
 <button @click="abrirAdmin()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-lg flex items-center gap-2 text-sm">
 <i class="fa-solid fa-user-gear"></i>
                     Admin
@@ -676,7 +734,18 @@ body.dark{background:#070d19!important}
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Teléfono</label><input @input="ventaForm.clienteTelefono = limpiarCelular(ventaForm.clienteTelefono)" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" inputmode="numeric" maxlength="9" pattern="[0-9]{9}" placeholder="999999999" type="tel" x-model="ventaForm.clienteTelefono"/></div>
 </div>
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Distrito</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium" placeholder="Ej: Miraflores" type="text" x-model="ventaForm.distrito"/></div><div class="md:col-span-2"><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Dirección de entrega</label><textarea class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium resize-none" rows="2" placeholder="Av. ..., número, referencia" x-model="ventaForm.direccionEntrega"></textarea></div></div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1">
+<div class="rounded-2xl border border-amber-300 dark:border-amber-800 bg-amber-50/70 dark:bg-amber-950/20 p-4">
+<div class="flex items-start justify-between gap-4"><div><div class="text-xs font-black uppercase tracking-wider text-amber-700 dark:text-amber-300"><i class="fa-solid fa-ticket mr-1"></i> Emitir vale promocional</div><div class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">Si lo activas, al guardar esta venta se generará un código único para la próxima compra.</div></div>
+<label class="inline-flex items-center gap-2 cursor-pointer shrink-0"><input type="checkbox" x-model="ventaForm.generarVale" class="sr-only peer"><span class="relative w-12 h-7 rounded-full bg-slate-300 dark:bg-slate-700 peer-checked:bg-amber-500 transition-colors"><span class="absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></span></span></label></div>
+<div x-show="ventaForm.generarVale" x-transition class="mt-3 text-[11px] font-semibold text-amber-800 dark:text-amber-200"><i class="fa-solid fa-circle-check mr-1"></i> Se generará <b>Envío gratis en la próxima compra</b>. Vigencia: <span x-text="configNegocio.valeVigenciaDias || 30"></span> días.</div>
 </div>
+<div class="rounded-2xl border border-violet-200 dark:border-violet-800 bg-violet-50/70 dark:bg-violet-950/20 p-4">
+<div class="flex items-start justify-between gap-4"><div><div class="text-xs font-black uppercase tracking-wider text-violet-700 dark:text-violet-300"><i class="fa-solid fa-ticket mr-1"></i> Usar vale recibido</div><div class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">Actívalo si el cliente utiliza un vale en esta compra.</div></div>
+<label class="inline-flex items-center gap-2 cursor-pointer shrink-0"><input type="checkbox" x-model="ventaForm.usarVale" @change="if(!ventaForm.usarVale){ventaForm.valeCodigo='';valeValidado=null;}" class="sr-only peer"><span class="relative w-12 h-7 rounded-full bg-slate-300 dark:bg-slate-700 peer-checked:bg-violet-600 transition-colors"><span class="absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></span></span></label></div>
+<div x-show="ventaForm.usarVale" x-transition class="mt-3 grid grid-cols-[minmax(0,1fr)_auto] gap-2 items-end"><div><label class="block text-[10px] uppercase tracking-wider font-black text-slate-500 mb-1">Código del vale</label><input @input="ventaForm.valeCodigo = normalizarCodigoVale(ventaForm.valeCodigo)" class="w-full bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800 rounded-xl px-3 py-2.5 text-sm font-black font-mono uppercase tracking-wider" maxlength="20" placeholder="PS-26-XXXXXXX" type="text" x-model="ventaForm.valeCodigo"></div><button @click="validarValePromocional()" type="button" class="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-black"><i class="fa-solid fa-check mr-1"></i> Validar</button></div>
+<template x-if="ventaForm.usarVale && valeValidado"><div class="mt-2 rounded-xl bg-emerald-500/10 border border-emerald-300 dark:border-emerald-800 p-2.5 text-[10px] font-bold text-emerald-700 dark:text-emerald-300"><i class="fa-solid fa-circle-check mr-1"></i> Vale válido · <span x-text="valeValidado.codigo"></span> · <span x-text="valeValidado.beneficio || 'Envío gratis'"></span></div></template>
+</div></div>
 
 <!-- COMPROBANTE -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -713,6 +782,69 @@ body.dark{background:#070d19!important}
 <div class="flex justify-end gap-3 pt-2"><button @click="cerrarModalVenta()" class="px-5 py-3 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold" type="button">Cancelar</button><button class="px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-black shadow-lg flex items-center gap-2" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar/Registrar venta</button></div>
 </form>
 </div>
+</div>
+<!-- =====================================================
+             MODAL VALE DIGITAL
+        ====================================================== -->
+<div class="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 md:p-5 z-[70]" style="display:none;" x-show="modalValeGenerado" x-transition.opacity="">
+  <div class="w-full max-w-6xl max-h-[96vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-[28px] shadow-2xl border border-slate-200 dark:border-slate-700">
+    <div class="sticky top-0 z-10 px-5 md:px-7 py-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-700 flex items-center justify-between gap-4">
+      <div>
+        <div class="text-[10px] uppercase tracking-[.22em] font-black text-orange-500">Diseño digital</div>
+        <h3 class="text-xl md:text-2xl font-black text-slate-900 dark:text-white">Vale promocional</h3>
+      </div>
+      <button @click="modalValeGenerado=false" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-black">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="p-4 md:p-7 bg-slate-100 dark:bg-slate-950">
+      <div id="valeDigitalExport" class="vale-digital-export">
+        <div class="vale-left">
+          <div class="vale-left-top">
+            <div class="vale-brand">
+              <template x-if="configNegocio.logoUrl"><img :src="configNegocio.logoUrl" alt="Logo" class="vale-logo"></template>
+              <div x-show="!configNegocio.logoUrl" class="vale-brand-text" x-text="configNegocio.nombre || 'PetSmart'"></div>
+            </div>
+            <div class="vale-kicker">VALE PROMOCIONAL</div>
+            <div class="vale-title">UN REGALO<br>PARA TI</div>
+            <div class="vale-copy">Disfruta un beneficio especial en tu próxima compra.</div>
+          </div>
+          <div>
+            <div class="vale-code-label">CÓDIGO DEL VALE</div>
+            <div class="vale-code-side" x-text="valeGeneradoUltimaVenta?.codigo || '—'"></div>
+          </div>
+        </div>
+        <div class="vale-right">
+          <div class="vale-paw paw-one"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-two"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-three"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-four"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-five"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-six"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-seven"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-eight"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-nine"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-ten"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-eleven"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-twelve"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-thirteen"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-fourteen"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-fifteen"><i class="fa-solid fa-paw"></i></div><div class="vale-paw paw-sixteen"><i class="fa-solid fa-paw"></i></div>
+          <div class="vale-right-head"><span class="vale-pill">PETSMART · PROMOCIÓN</span></div>
+          <div class="vale-main-card">
+            <div class="vale-benefit-kicker">TU BENEFICIO</div>
+            <div class="vale-benefit" x-text="valeGeneradoUltimaVenta?.beneficio || 'Envío gratis en tu próxima compra'"></div>
+            <div class="vale-divider"></div>
+            <div class="vale-code-label-dark">CÓDIGO</div>
+            <div class="vale-code-main" x-text="valeGeneradoUltimaVenta?.codigo || '—'"></div>
+            <div class="vale-data-grid">
+              <div class="vale-data-client"><div class="vale-data-label">CLIENTE</div><div class="vale-data-value" x-text="valeGeneradoUltimaVenta?.clienteNombre || 'Cliente'"></div></div>
+              <div><div class="vale-data-label">VÁLIDO HASTA</div><div class="vale-data-value" x-text="valeGeneradoUltimaVenta?.fechaVencimiento || '—'"></div></div>
+              <div><div class="vale-data-label">USO</div><div class="vale-data-value">POR ÚNICA VEZ</div></div>
+              <div><div class="vale-data-label">DISTRITO</div><div class="vale-data-value" x-text="valeGeneradoUltimaVenta?.distrito || '—'"></div></div>
+              <div class="vale-data-address"><div class="vale-data-label">DIRECCIÓN</div><div class="vale-data-value" x-text="valeGeneradoUltimaVenta?.direccionEntrega || '—'"></div></div>
+            </div>
+          </div>
+          <div class="vale-footer"><div class="vale-footer-main"><span>Presenta este código en tu próxima compra.</span><span class="vale-footer-paws" aria-hidden="true"><i class="fa-solid fa-paw"></i><i class="fa-solid fa-paw"></i><i class="fa-solid fa-paw"></i><i class="fa-solid fa-paw"></i></span></div><div class="vale-terms"><strong>Términos y condiciones</strong>Vale válido para un solo uso. El beneficio de envío gratis aplica únicamente en la dirección registrada en el sistema al momento de la venta. Al utilizarlo se validará en el sistema con el nombre y DNI del cliente. Una vez confirmado el código, el vale quedará desactivado. No acumulable con otros beneficios y sujeto a las condiciones de envío vigentes de la tienda.</div></div>
+        </div>
+      </div>
+      <div class="mt-5 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        <div class="text-xs text-slate-500 dark:text-slate-400 font-semibold"><i class="fa-solid fa-circle-info mr-1 text-orange-500"></i>El diseño se genera en alta resolución para enviarlo directamente por WhatsApp.</div>
+        <div class="flex flex-wrap justify-end gap-2">
+          <button @click="copiarCodigoVale()" class="px-4 py-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-black text-sm"><i class="fa-solid fa-copy mr-2"></i>Copiar código</button>
+          <button @click="descargarValeImagen('png')" class="px-4 py-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-black text-sm shadow-lg"><i class="fa-solid fa-file-image mr-2"></i>Descargar PNG</button>
+          <button @click="descargarValeImagen('jpeg')" class="px-4 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black text-sm shadow-lg"><i class="fa-solid fa-file-image mr-2"></i>Descargar JPEG</button>
+          <button @click="imprimirValePromocional()" class="px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-sm"><i class="fa-solid fa-print mr-2"></i>Imprimir / PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- =====================================================
              MODAL EDITAR VENTA
@@ -878,6 +1010,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 </div>
 </div>
 </div>
+<div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-amber-200 dark:border-amber-900/60 shadow-sm mb-6"><div class="flex items-center gap-3 mb-5"><div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center"><i class="fa-solid fa-ticket"></i></div><div><h4 class="text-lg font-black">Vales promocionales</h4><p class="text-xs text-slate-500">Códigos únicos, asociados al cliente y de un solo uso.</p></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label class="block text-xs font-bold mb-1">Vigencia del vale (días)</label><input type="number" min="1" max="365" x-model.number="configNegocio.valeVigenciaDias" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2.5 font-bold"></div><div><label class="block text-xs font-bold mb-1">Distritos promocionales</label><input type="text" x-model="configNegocio.distritosValesTexto" @input="configNegocio.distritosVales=String(configNegocio.distritosValesTexto||'').split(',').map(v=>v.trim()).filter(Boolean)" placeholder="Surco, San Borja, Miraflores" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2.5"></div></div><div class="mt-4 flex items-center justify-between gap-3 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/40"><div class="text-xs"><b>Recomendación:</b> usar el vale como <b>envío gratis</b> en la próxima compra, con vencimiento y asociado al teléfono del cliente.</div><button @click="guardarConfiguracionNegocio()" type="button" class="shrink-0 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-white font-black text-xs">Guardar</button></div></div>
+<!-- V28.8: vales trasladados a pestaña Vales -->
 <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <div class="flex items-center gap-3 mb-5">
 <div class="w-11 h-11 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center">
@@ -1119,6 +1253,9 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 firebaseInicializado: false,
                 accesoAutorizado: false,
                 accesoIntentos: 0,
+                loginPassword: '',
+                loginError: '',
+                mostrarLoginPassword: false,
                 darkMode:
                     true,
                 activeTab:
@@ -1142,12 +1279,22 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     false,
                 modalReportePedido:
                     false,
+                modalValeGenerado:
+                    false,
                 finanzasCargando:
                     false,
                 movimientosFinancieros:
                     [],
                 finanzasErrorPermisos:
                     false,
+                valesPromocionalesData: [],
+                filtroValesTexto: '',
+                filtroValesEstado: 'todos',
+                filtroValesDistrito: 'todos',
+                filtroValesFecha: 'todos',
+                valeValidado: null,
+                valeReservado: false,
+                valeGeneradoUltimaVenta: null,
                 _limpiezaClientesProgramada: false,
                 editandoId:
                     null,
@@ -1212,32 +1359,34 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 // =================================================
                 // ACCESO AL INVENTARIO
                 // =================================================
-                async solicitarAccesoInventario() {
+                solicitarAccesoInventario() {
                     if (this.accesoAutorizado) return true;
-                    const { value: pass } = await Swal.fire({
-                        title: 'Acceso al Inventario',
-                        text: 'Ingresa la contraseña para continuar.',
-                        input: 'password',
-                        inputPlaceholder: 'Contraseña',
-                        inputAttributes: { autocomplete: 'current-password', autocapitalize: 'off', autocorrect: 'off' },
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        confirmButtonText: 'Ingresar',
-                        confirmButtonColor: '#4f46e5',
-                        showCancelButton: false,
-                        preConfirm: (value) => {
-                            if (value !== 'K4t329102025**') {
-                                Swal.showValidationMessage('Contraseña incorrecta');
-                                return false;
-                            }
-                            return true;
-                        }
+                    this.loginPassword = '';
+                    this.loginError = '';
+                    this.mostrarLoginPassword = false;
+                    this.$nextTick(() => {
+                        if (this.$refs.loginPassword) this.$refs.loginPassword.focus();
                     });
-                    if (pass === true) {
-                        this.accesoAutorizado = true;
-                        return true;
-                    }
                     return false;
+                },
+                async iniciarSesion() {
+                    const pass = String(this.loginPassword || '');
+                    if (pass !== 'K4t329102025**') {
+                        this.accesoIntentos = (this.accesoIntentos || 0) + 1;
+                        this.loginError = 'Contraseña incorrecta. Verifica e inténtalo nuevamente.';
+                        this.loginPassword = '';
+                        this.$nextTick(() => {
+                            if (this.$refs.loginPassword) this.$refs.loginPassword.focus();
+                        });
+                        return false;
+                    }
+                    this.loginError = '';
+                    this.accesoAutorizado = true;
+                    this.loginPassword = '';
+                    this.mostrarLoginPassword = false;
+                    // Firebase se inicia únicamente después de autorizar el acceso.
+                    if (!this.firebaseInicializado) await this.inicializarFirebase();
+                    return true;
                 },
                 // =================================================
                 // VALIDACIÓN DE DOCUMENTOS
@@ -1289,7 +1438,10 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     direccion:
                         '',
                     logoUrl:
-                        ''
+                        '',
+                    distritosVales: [],
+                    distritosValesTexto: '',
+                    valeVigenciaDias: 30
                 },
                 // =================================================
                 // CLOUDINARY
@@ -1367,7 +1519,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 ventaForm: {
                     clienteNombre: '', clienteTelefono: '', distrito: '', canalVenta: 'WhatsApp', perfilFacebook: '',
                     medioPago: 'Yape', precioVenta: 0, fechaVenta: fechaPeruActual(), fechaEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '',
-                    comision: 0, confLogistico: 0, observacion: '', direccionEntrega: '', latitud: '', longitud: ''
+                    comision: 0, confLogistico: 0, observacion: '', direccionEntrega: '', latitud: '', longitud: '', valeCodigo: '', generarVale: false
                 },
                 productos: [],
                 // =================================================
@@ -1379,8 +1531,9 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     const params = new URLSearchParams(window.location.search);
                     const skuURL = params.get('sku');
                     if (skuURL) this.busqueda = skuURL.trim();
-                    this.inicializarFirebase();
-                    setTimeout(() => this.solicitarAccesoInventario(), 250);
+                    // Primero bloqueamos completamente la interfaz y solicitamos la contraseña.
+                    // Firebase no se inicializa hasta que el acceso sea autorizado.
+                    setTimeout(() => this.solicitarAccesoInventario(), 50);
                 },
                 // =================================================
                 // FIREBASE
@@ -1693,6 +1846,122 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     });
                 },
                 // =================================================
+                // VALES PROMOCIONALES
+                // =================================================
+                normalizarCodigoVale(valor) { return String(valor || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0,20); },
+                generarCodigoValeUnico() { const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let codigo='PS-26-'; for(let i=0;i<7;i++) codigo+=chars[Math.floor(Math.random()*chars.length)]; return codigo; },
+                async validarValePromocional() {
+                    const codigo=this.normalizarCodigoVale(this.ventaForm.valeCodigo); this.ventaForm.valeCodigo=codigo; this.valeValidado=null;
+                    if(!codigo){Swal.fire('Vale promocional','Ingresa el código del vale.','warning');return false;}
+                    try{const snap=await window.fb.get(window.fb.ref(window.db,`valesPromocionales/${codigo}`)); if(!snap.exists()){Swal.fire('Vale no encontrado','El código no existe en el sistema.','warning');return false;} const vale=snap.val()||{}; if(vale.estado!=='disponible'){Swal.fire('Vale no disponible',vale.estado==='usado'?'Este vale ya fue utilizado.':'Este vale no está disponible.','warning');return false;} if(vale.fechaVencimiento&&new Date(vale.fechaVencimiento+'T23:59:59')<new Date()){Swal.fire('Vale vencido','La vigencia de este vale ha terminado.','warning');return false;} const tel=this.limpiarCelular(this.ventaForm.clienteTelefono||''); const telVale=this.limpiarCelular(vale.clienteTelefono||''); if(telVale&&tel&&telVale!==tel){Swal.fire('Vale no corresponde','Este vale está asociado a otro cliente/teléfono.','warning');return false;} this.valeValidado={codigo,...vale}; this.notificarToast('success','Vale válido y listo para usar'); return true;}catch(error){console.error(error);Swal.fire('No se pudo validar',error?.message||'Firebase rechazó la lectura del vale.','error');return false;}
+                },
+                async reservarValePromocional(codigo,ventaGrupoId){const ref=window.fb.ref(window.db,`valesPromocionales/${codigo}`);const r=await window.fb.runTransaction(ref,actual=>{if(!actual||actual.estado!=='disponible')return;return{...actual,estado:'reservado',reservadoEn:new Date().toISOString(),reservadoVentaGrupoId:ventaGrupoId};});if(!r.committed)throw new Error('El vale ya no está disponible.');this.valeReservado=true;},
+                async finalizarValePromocional(codigo,ventaGrupoId,totalVenta){if(!codigo)return;await window.fb.update(window.fb.ref(window.db,`valesPromocionales/${codigo}`),{estado:'usado',usadoEn:new Date().toISOString(),usadoVentaGrupoId:ventaGrupoId,montoVenta:Number(totalVenta)||0});this.valeReservado=false;},
+                async liberarValePromocional(codigo,ventaGrupoId){if(!codigo||!this.valeReservado)return;try{await window.fb.runTransaction(window.fb.ref(window.db,`valesPromocionales/${codigo}`),actual=>{if(actual&&actual.estado==='reservado'&&actual.reservadoVentaGrupoId===ventaGrupoId)return{...actual,estado:'disponible',reservadoEn:null,reservadoVentaGrupoId:null};return actual;});}catch(e){console.warn('No se pudo liberar el vale:',e);}this.valeReservado=false;},
+                distritoElegibleParaVale(distrito) {
+                    const lista = Array.isArray(this.configNegocio.distritosVales) ? this.configNegocio.distritosVales : [];
+                    if (!lista.length) return true;
+                    const d = this.normalizarTextoCliente(distrito || '');
+                    return lista.some(x => this.normalizarTextoCliente(x) === d);
+                },
+                async generarValePromocionalParaVenta({clienteId,clienteNombre,clienteTelefono,distrito,direccionEntrega,ventaGrupoId}){let codigo='';for(let i=0;i<8;i++){const candidato=this.generarCodigoValeUnico();const snap=await window.fb.get(window.fb.ref(window.db,`valesPromocionales/${candidato}`));if(!snap.exists()){codigo=candidato;break;}}if(!codigo)throw new Error('No se pudo generar un código único para el vale.');const dias=Math.max(1,Number(this.configNegocio.valeVigenciaDias||30));const venc=new Date();venc.setDate(venc.getDate()+dias);const fechaVencimiento=`${venc.getFullYear()}-${String(venc.getMonth()+1).padStart(2,'0')}-${String(venc.getDate()).padStart(2,'0')}`;const vale={codigo,estado:'disponible',beneficio:'Envío gratis en la próxima compra',clienteId:clienteId||'',clienteNombre:String(clienteNombre||'').trim(),clienteTelefono:this.limpiarCelular(clienteTelefono||''),distrito:String(distrito||'').trim(),direccionEntrega:String(direccionEntrega||'').trim(),ventaOrigen:ventaGrupoId||'',creadoEn:new Date().toISOString(),fechaVencimiento};await window.fb.set(window.fb.ref(window.db,`valesPromocionales/${codigo}`),vale);return vale;},
+                async cargarValesPromocionales() {
+                    try {
+                        const snap = await window.fb.get(window.fb.ref(window.db, 'valesPromocionales'));
+                        const data = snap.exists() ? (snap.val() || {}) : {};
+                        this.valesPromocionalesData = Object.entries(data).map(([codigo, vale]) => ({ codigo, ...(vale || {}) })).sort((a,b) => String(b.creadoEn||'').localeCompare(String(a.creadoEn||'')));
+                    } catch (e) { console.warn('No se pudieron cargar los vales:', e); this.valesPromocionalesData = []; }
+                },
+                estadoValeVisual(vale) {
+                    if (!vale) return '—';
+                    if (vale.estado === 'usado') return 'Usado';
+                    if (vale.fechaVencimiento && new Date(vale.fechaVencimiento + 'T23:59:59') < new Date()) return 'Vencido';
+                    if (vale.estado === 'reservado') return 'Reservado';
+                    return 'Disponible';
+                },
+                contarValesEstado(estado) { return (this.valesPromocionalesData || []).filter(v => this.estadoValeVisual(v) === estado).length; },
+                valesFiltrados() {
+                    const q=String(this.filtroValesTexto||'').trim().toLowerCase(), estado=this.filtroValesEstado||'todos', distrito=this.filtroValesDistrito||'todos', fecha=this.filtroValesFecha||'todos';
+                    const ahora=new Date(); ahora.setHours(0,0,0,0);
+                    return (this.valesPromocionalesData||[]).filter(v=>{
+                        const texto=[v.codigo,v.clienteNombre,v.clienteTelefono,v.distrito].map(x=>String(x||'').toLowerCase()).join(' ');
+                        if(q&&!texto.includes(q)) return false;
+                        if(estado!=='todos'&&this.estadoValeVisual(v).toLowerCase()!==estado) return false;
+                        if(distrito!=='todos'&&String(v.distrito||'')!==distrito) return false;
+                        if(fecha!=='todos'){ const f=v.fechaVencimiento?new Date(v.fechaVencimiento+'T23:59:59'):null; if(!f)return false; const dias=Math.ceil((f-ahora)/86400000); if(fecha==='7'&&(dias<0||dias>7))return false; if(fecha==='30'&&(dias<0||dias>30))return false; if(fecha==='vencidos'&&dias>=0)return false; }
+                        return true;
+                    });
+                },
+                distritosValesDisponibles(){ return [...new Set((this.valesPromocionalesData||[]).map(v=>String(v.distrito||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b)); },
+                copiarCodigoValeDesdeRegistro(codigo){ if(!codigo)return; navigator.clipboard?.writeText(codigo).then(()=>this.notificarToast('success','Código copiado')).catch(()=>this.notificarToast('warning','No se pudo copiar automáticamente.')); },
+                imprimirValeDesdeRegistro(vale){ this.valeGeneradoUltimaVenta=vale; this.imprimirValePromocional(); },
+                exportarValesCSV(){ const filas=this.valesFiltrados(), esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"'; const csv='\ufeff'+[['Código','Cliente','Teléfono','Distrito','Creado','Vencimiento','Estado'],...filas.map(v=>[v.codigo,v.clienteNombre,v.clienteTelefono,v.distrito,v.creadoEn,v.fechaVencimiento,this.estadoValeVisual(v)])].map(r=>r.map(esc).join(';')).join('\n'); const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vales_PetSmart_'+fechaPeruActual()+'.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);this.notificarToast('success',filas.length+' vale(s) exportado(s)'); },
+                async copiarCodigoVale() {
+                    const codigo = this.valeGeneradoUltimaVenta?.codigo || '';
+                    if (!codigo) return;
+                    try { await navigator.clipboard.writeText(codigo); this.notificarToast('success','Código copiado'); } catch(e) { this.notificarToast('warning','No se pudo copiar automáticamente.'); }
+                },
+                verValeDesdeRegistro(vale) {
+                    this.valeGeneradoUltimaVenta = JSON.parse(JSON.stringify(vale || {}));
+                    this.modalValeGenerado = true;
+                },
+                async descargarValeImagen(formato = 'png') {
+                    const source = document.getElementById('valeDigitalExport');
+                    const vale = this.valeGeneradoUltimaVenta;
+                    if (!source || !vale) { Swal.fire('Vale no disponible','No se encontró el diseño digital para exportar.','warning'); return; }
+                    if (!window.html2canvas) { Swal.fire('Generador no disponible','No se pudo cargar el generador de imágenes.','warning'); return; }
+                    const ext = String(formato).toLowerCase() === 'jpeg' ? 'jpeg' : 'png';
+                    try {
+                        Swal.fire({title: ext === 'png' ? 'Generando PNG...' : 'Generando JPEG...',text:'Preparando el vale digital en alta resolución',allowOutsideClick:false,didOpen:()=>Swal.showLoading()});
+                        await new Promise(resolve=>this.$nextTick(()=>setTimeout(resolve,220)));
+                        const EXPORT_W=1120, EXPORT_H=700;
+                        /* Esperamos a que el navegador termine de renderizar fuentes e imágenes. */
+                        if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch(e) {} }
+                        const imgs=[...source.querySelectorAll('img')];
+                        await Promise.all(imgs.map(img=>img.complete ? Promise.resolve() : new Promise(r=>{img.addEventListener('load',r,{once:true});img.addEventListener('error',r,{once:true});setTimeout(r,5000)})));
+                        /* Ajusta SOLO los campos potencialmente largos. El ajuste se aplica también a la vista, por lo que ambos quedan idénticos. */
+                        const fitFields=()=>{ source.querySelectorAll('.vale-data-value').forEach(el=>{ let size=13; el.style.fontSize=size+'px'; el.style.whiteSpace='normal'; el.style.overflow='visible'; el.style.textOverflow='clip'; while((el.scrollWidth>el.clientWidth || el.scrollHeight>32) && size>10){ size-=0.35; el.style.fontSize=size.toFixed(2)+'px'; } }); };
+                        fitFields();
+                        await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+                        /* html2canvas normal (sin foreignObject) es más estable con logos remotos.
+                           foreignObjectRendering puede activar el bloqueo de recursos externos del navegador. */
+                        const canvas=await window.html2canvas(source,{scale:4,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',imageTimeout:20000,logging:false,width:EXPORT_W,height:EXPORT_H,windowWidth:EXPORT_W,windowHeight:EXPORT_H,x:0,y:0,scrollX:0,scrollY:0,foreignObjectRendering:false,removeContainer:false,onclone:(doc)=>{
+                            const el=doc.getElementById('valeDigitalExport');
+                            if(el){
+                                el.style.width=EXPORT_W+'px';el.style.height=EXPORT_H+'px';el.style.maxWidth='none';el.style.minHeight=EXPORT_H+'px';el.style.maxHeight=EXPORT_H+'px';el.style.transform='none';el.style.overflow='hidden';el.style.margin='0';
+                                el.querySelectorAll('.vale-data-value').forEach(v=>{v.style.whiteSpace='normal';v.style.overflow='visible';v.style.textOverflow='clip';v.style.overflowWrap='anywhere';v.style.wordBreak='break-word';});
+                                /* Evita que una imagen remota fuerce al clon a recalcular tamaños distintos. */
+                                el.querySelectorAll('img').forEach(img=>{ img.setAttribute('crossorigin','anonymous'); img.style.maxWidth='100%'; img.style.maxHeight='100%'; });
+                            }
+                        }});
+                        const safeCode=String(vale.codigo||'vale').replace(/[^a-zA-Z0-9_-]/g,'_');
+                        const mime=ext==='png'?'image/png':'image/jpeg';
+                        const dataUrl=canvas.toDataURL(mime,ext==='png'?undefined:0.96);
+                        const a=document.createElement('a');a.download=`PetSmart_Vale_${safeCode}.${ext}`;a.href=dataUrl;document.body.appendChild(a);a.click();a.remove();
+                        Swal.close();this.notificarToast('success',`Vale ${ext.toUpperCase()} generado correctamente`);
+                    } catch(error) {
+                        console.error('ERROR EXPORTANDO VALE DIGITAL:',error);Swal.close();
+                        const msg=String(error?.message||'');
+                        Swal.fire('No se pudo generar la imagen',msg.includes('Security')||msg.includes('taint')||msg.includes('cross-origin')
+                            ? 'El navegador rechazó un recurso externo del vale (normalmente el logo). He preparado la exportación para evitar el modo que provoca este bloqueo. Recarga la página y vuelve a intentarlo.'
+                            : 'Ocurrió un error al convertir el vale en imagen. Recarga la página y vuelve a intentarlo.', 'warning');
+                    }
+                },
+                imprimirValePromocional() {
+                    const vale=this.valeGeneradoUltimaVenta;if(!vale)return;
+                    const nombre=this.configNegocio.nombre||'PetSmart';
+                    const logo=this.configNegocio.logoUrl?`<img src="${this.configNegocio.logoUrl}" class="logo">`:`<div class="brand">${nombre}</div>`;
+                    const w=window.open('','_blank','width=1180,height=900');
+                    if(!w){this.notificarToast('warning','Permite ventanas emergentes para imprimir el vale.');return;}
+                    const esc=(v)=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+                    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Vale ${esc(vale.codigo)}</title><style>
+                    *{box-sizing:border-box}body{margin:0;background:#edf3f8;font-family:Inter,Arial,sans-serif;color:#16324f;padding:30px}.ticket{width:1100px;max-width:96vw;margin:auto;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(8,47,95,.18);display:grid;grid-template-columns:34% 66%;min-height:560px}
+                    .left{background:linear-gradient(145deg,#07366d,#0b5aa6);color:#fff;padding:42px 38px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}.left:after{content:"";position:absolute;right:-1px;top:0;width:30px;height:100%;background:#fff;clip-path:polygon(0 0,100% 2%,0 4%,100% 6%,0 8%,100% 10%,0 12%,100% 14%,0 16%,100% 18%,0 20%,100% 22%,0 24%,100% 26%,0 28%,100% 30%,0 32%,100% 34%,0 36%,100% 38%,0 40%,100% 42%,0 44%,100% 46%,0 48%,100% 50%,0 52%,100% 54%,0 56%,100% 58%,0 60%,100% 62%,0 64%,100% 66%,0 68%,100% 70%,0 72%,100% 74%,0 76%,100% 78%,0 80%,100% 82%,0 84%,100% 86%,0 88%,100% 90%,0 92%,100% 94%,0 96%,100% 98%,0 100%)}.logo{max-width:160px;max-height:65px;object-fit:contain}.brand{font-size:25px;font-weight:900}.kicker{font-size:14px;font-weight:900;letter-spacing:.18em;margin-top:38px}.title{font-size:62px;line-height:.9;font-weight:950;letter-spacing:-.05em;margin-top:14px}.copy{font-size:14px;line-height:1.5;max-width:270px;margin-top:20px;opacity:.88}.code-label{font-size:10px;font-weight:900;letter-spacing:.2em;opacity:.7}.sidecode{margin-top:9px;background:#f28b28;color:#082f5f;border-radius:11px;padding:12px 14px;display:inline-block;font:900 18px monospace;letter-spacing:.08em}
+                    .right{padding:32px 40px 26px;position:relative}.right:before{content:"🐾";position:absolute;right:25px;top:25px;font-size:85px;opacity:.08;transform:rotate(20deg)}.pill{display:inline-block;background:#eef5fb;color:#0a4d91;border-radius:99px;padding:8px 14px;font-size:10px;font-weight:900;letter-spacing:.15em}.mini{float:right;font-size:25px}.card{margin-top:25px;border:2px solid #0a4d91;border-radius:24px;padding:30px 32px;box-shadow:10px 12px 0 #f28b28}.bk{font-size:11px;color:#f28b28;font-weight:900;letter-spacing:.2em}.benefit{font-size:48px;line-height:1.03;color:#0a4d91;font-weight:950;text-transform:uppercase;margin-top:8px;letter-spacing:-.04em}.line{height:3px;width:90px;background:#f28b28;margin:22px 0 18px;border-radius:99px}.label{font-size:10px;color:#7d8b9b;font-weight:900;letter-spacing:.2em}.code{font:950 45px monospace;letter-spacing:.1em;margin-top:5px;color:#123a63;overflow-wrap:anywhere}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;margin-top:25px}.box{border-top:1px solid #dbe4ee;padding-top:9px}.v{font-size:14px;font-weight:900;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.foot{margin-top:22px;color:#647589;font-size:11px;display:flex;justify-content:space-between}.paws{color:#f28b28;font-size:21px;letter-spacing:5px}@media print{body{padding:0;background:#fff}.ticket{width:100%;max-width:none;box-shadow:none;border-radius:0}}@media(max-width:900px){.ticket{grid-template-columns:1fr}.left{min-height:320px}.left:after{display:none}.title{font-size:48px}.right{padding:25px}.benefit{font-size:36px}}
+                    </style></head><body><div class="ticket"><div class="left"><div>${logo}</div><div><div class="kicker">VALE PROMOCIONAL</div><div class="title">UN REGALO<br>PARA TI</div><div class="copy">Disfruta un beneficio especial en tu próxima compra.</div></div><div><div class="code-label">CÓDIGO DEL VALE</div><div class="sidecode">${esc(vale.codigo)}</div></div></div><div class="right"><div><span class="pill">${esc(nombre)} · PROMOCIÓN</span></div><div class="card"><div class="bk">TU BENEFICIO</div><div class="benefit">${esc(vale.beneficio||'Envío gratis en tu próxima compra')}</div><div class="line"></div><div class="label">CÓDIGO</div><div class="code">${esc(vale.codigo)}</div><div class="grid"><div class="box client"><div class="label">CLIENTE</div><div class="v">${esc(vale.clienteNombre||'Cliente')}</div></div><div class="box"><div class="label">VÁLIDO HASTA</div><div class="v">${esc(vale.fechaVencimiento||'—')}</div></div><div class="box"><div class="label">DISTRITO</div><div class="v">${esc(vale.distrito||'—')}</div></div><div class="box"><div class="label">USO</div><div class="v">POR ÚNICA VEZ</div></div><div class="box address"><div class="label">DIRECCIÓN</div><div class="v">${esc(vale.direccionEntrega||'—')}</div></div></div></div><div class="foot"><span>Presenta este código en tu próxima compra.</span><span class="paws">🐾 🐾 🐾</span></div></div></div><script>window.onload=function(){setTimeout(function(){window.print()},450)}<\/script></body></html>`);
+                    w.document.close();
+                },
+                // =================================================
                 // RESPALDO Y RESTAURACIÓN COMPLETA
                 // =================================================
                 async obtenerDatosRespaldo() {
@@ -1707,7 +1976,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         ['ventas', 'ventas'],
                         ['clientes', 'clientes'],
                         ['finanzas/movimientos', 'finanzas/movimientos'],
-                        ['configuracion', 'configuracion']
+                        ['configuracion', 'configuracion'],
+                        ['valesPromocionales', 'valesPromocionales']
                     ];
 
                     const resultados = await Promise.all(
@@ -1724,8 +1994,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     const data = Object.fromEntries(resultados);
                     return {
                         backupFormat: 'PETSMART_FIREBASE_BACKUP',
-                        backupVersion: 2,
-                        appVersion: 'V28.3',
+                        backupVersion: 3,
+                        appVersion: 'V28.7',
                         createdAt: new Date().toISOString(),
                         scope: rutas.map(([clave, ruta]) => ruta),
                         data
@@ -1824,7 +2094,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                             ['ventas', data.ventas || {}],
                             ['clientes', data.clientes || {}],
                             ['finanzas/movimientos', data['finanzas/movimientos'] || {}],
-                            ['configuracion', data.configuracion || {}]
+                            ['configuracion', data.configuracion || {}],
+                            ['valesPromocionales', data.valesPromocionales || {}]
                         ];
                         for (const [ruta, valor] of rutasRestaurables) {
                             await window.fb.set(window.fb.ref(window.db, ruta), valor);
@@ -1904,6 +2175,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                                     ...this.configNegocio,
                                     ...data.negocio
                                 };
+                                this.configNegocio.distritosVales = Array.isArray(this.configNegocio.distritosVales) ? this.configNegocio.distritosVales : [];
+                                this.configNegocio.distritosValesTexto = this.configNegocio.distritosVales.join(', ');
                             }
                         },
                         error => {
@@ -1964,6 +2237,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 },
                 async guardarConfiguracionNegocio() {
                     try {
+                        this.configNegocio.distritosVales = Array.isArray(this.configNegocio.distritosVales) ? this.configNegocio.distritosVales : String(this.configNegocio.distritosValesTexto || '').split(',').map(v=>v.trim()).filter(Boolean);
                         await window.fb.update(
                             window.fb.ref(
                                 window.db,
@@ -2000,53 +2274,9 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     return;
                 },
                 async limpiarClientesHuerfanos() {
-                    if (!window.db || !window.fb) return;
-                    const [clientesSnap, ventasSnap, productosSnap] = await Promise.all([
-                        window.fb.get(window.fb.ref(window.db, 'clientes')),
-                        window.fb.get(window.fb.ref(window.db, 'ventas')),
-                        window.fb.get(window.fb.ref(window.db, 'productos'))
-                    ]);
-                    const clientes = clientesSnap.val() || {};
-                    const ventas = ventasSnap.val() || {};
-                    const productos = Object.entries(productosSnap.val() || {}).map(([id,p]) => ({id, ...(p||{})}));
-                    // FUENTE DE VERDAD: una venta existe si el producto sigue marcado como vendido.
-                    // Esto evita que registros antiguos de /ventas vuelvan a mostrar clientes eliminados.
-                    const vendidos = productos.filter(p => p.estado === 'vendido');
-                    const activos = new Set();
-                    const identidades = new Set();
-                    const registrar = v => {
-                        const cid = String(v?.clienteId || '').trim();
-                        if (cid) activos.add(cid);
-                        const n = this.normalizarTextoCliente(v?.clienteNombre || v?.nombre || '');
-                        const d = this.normalizarDocumento(v?.numeroDocumento || v?.documento || '');
-                        const r = this.normalizarDocumento(v?.ruc || '');
-                        if (n) identidades.add('n:' + n);
-                        if (d) identidades.add('d:' + d);
-                        if (r) identidades.add('r:' + r);
-                    };
-                    vendidos.forEach(registrar);
-                    const updates = {};
-                    // Si no queda ningún producto vendido, eliminamos definitivamente clientes y ventas antiguas.
-                    if (!vendidos.length) {
-                        if (Object.keys(clientes).length) updates['clientes'] = null;
-                        if (Object.keys(ventas).length) updates['ventas'] = null;
-                    } else {
-                        Object.entries(clientes).forEach(([key, c]) => {
-                            const cid = String(c?.clienteId || key);
-                            const n = this.normalizarTextoCliente(c?.nombre || '');
-                            const d = this.normalizarDocumento(c?.documento || c?.numeroDocumento || '');
-                            const r = this.normalizarDocumento(c?.ruc || '');
-                            const sigueActivo = activos.has(cid) || (n && identidades.has('n:' + n)) || (d && identidades.has('d:' + d)) || (r && identidades.has('r:' + r));
-                            if (!sigueActivo) updates[`clientes/${key}`] = null;
-                        });
-                        // Elimina /ventas que ya no tienen un producto vendido correspondiente.
-                        Object.keys(ventas).forEach(key => {
-                            const prod = productos.find(p => p.id === key);
-                            if (!prod || prod.estado !== 'vendido') updates[`ventas/${key}`] = null;
-                        });
-                    }
-                    if (Object.keys(updates).length) await window.fb.update(window.fb.ref(window.db), updates);
-                    this.clientesData = [];
+                    // V28.4: BLOQUEADO. Los clientes nunca se eliminan automáticamente.
+                    // Esta función queda como compatibilidad para versiones anteriores que la invocaban.
+                    return false;
                 },
                 async reiniciarClientesDesdeCero() {
                     const confirmacion = await Swal.fire({ title:'¿Eliminar TODOS los clientes?', html:'Esta acción eliminará todos los registros de <b>clientes</b>. Las ventas e inventario no se modificarán.', icon:'warning', showCancelButton:true, confirmButtonColor:'#e11d48', confirmButtonText:'Sí, empezar de cero', cancelButtonText:'Cancelar' });
@@ -3138,7 +3368,10 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 registrarVenta(item = null) {
                     this.productoVenta = item || null;
                     this.ventaItems = [{ sku: '', producto: null, error: '' }];
-                    this.ventaForm = { clienteNombre: '', clienteTelefono: '', distrito: '', direccionEntrega: '', latitud: '', longitud: '', canalVenta: 'WhatsApp', perfilFacebook: '', medioPago: 'Yape', fechaVenta: this.fechaPeru(), fechaEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '', comision: 0, confLogistico: 0, observacion: '' };
+                    this.ventaForm = { clienteNombre: '', clienteTelefono: '', distrito: '', direccionEntrega: '', latitud: '', longitud: '', canalVenta: 'WhatsApp', perfilFacebook: '', medioPago: 'Yape', fechaVenta: this.fechaPeru(), fechaEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '', comision: 0, confLogistico: 0, observacion: '' , valeCodigo: '', generarVale: false, usarVale: false };
+                    this.valeValidado = null;
+                    this.valeReservado = false;
+                    this.valeGeneradoUltimaVenta = null;
                     if (item && item.estado !== 'vendido') {
                         this.ventaItems[0] = { sku: item.sku || '', producto: item, error: '' };
                     }
@@ -3267,10 +3500,15 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     if (!this.ventaForm.clienteNombre.trim()) { Swal.fire('Atención', 'Debes registrar el nombre del cliente.', 'warning'); return; }
                     if (this.ventaForm.clienteTelefono && this.ventaForm.clienteTelefono.length !== 9) { Swal.fire('Atención', 'El celular debe tener exactamente 9 dígitos.', 'warning'); return; }
                     if (this.ventaForm.canalVenta === 'Facebook' && !this.ventaForm.perfilFacebook) { Swal.fire('Atención', 'Selecciona el perfil de Facebook que realizó la venta.', 'warning'); return; }
+                    if (this.ventaForm.generarVale && !this.ventaForm.clienteTelefono) { Swal.fire('Vale promocional', 'Para emitir un vale debes registrar el celular del cliente.', 'warning'); return; }
+                    if (this.ventaForm.generarVale && !this.distritoElegibleParaVale(this.ventaForm.distrito)) { Swal.fire('Vale promocional', `El distrito ${this.ventaForm.distrito || 'seleccionado'} no está configurado como distrito promocional. Puedes cambiarlo en Admin → Vales promocionales.`, 'warning'); return; }
+                    if (this.ventaForm.usarVale && !this.valeValidado) { Swal.fire('Vale promocional', 'Activa el uso de vale y valida el código antes de registrar la venta.', 'warning'); return; }
                     if (this.ventaForm.tipoComprobante === 'Boleta' && !this.ventaForm.numeroDocumento) { Swal.fire('Atención', 'Ingresa el número del documento para la boleta.', 'warning'); return; }
                     if (this.ventaForm.tipoComprobante === 'Boleta' && !this.documentoValido(this.ventaForm.tipoDocumento, this.ventaForm.numeroDocumento)) { Swal.fire('Documento incompleto', `El ${this.ventaForm.tipoDocumento || 'documento'} debe tener exactamente ${this.maxDigitosDocumento(this.ventaForm.tipoDocumento)} dígitos.`, 'warning'); return; }
                     if (this.ventaForm.tipoComprobante === 'Factura' && (!this.ventaForm.ruc || !String(this.ventaForm.razonSocial || '').trim())) { Swal.fire('Atención', 'Ingresa el RUC y la Razón Social para la factura.', 'warning'); return; }
 
+                    let codigoValeUsar = '';
+                    let ventaGrupoId = '';
                     try {
                         Swal.fire({ title: 'Guardando venta...', text: `Registrando ${this.ventaItemsValidos.length} producto(s) y el cliente.`, allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
@@ -3306,7 +3544,9 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         const numeroDocumento = tipoComprobante === 'Boleta' ? String(this.ventaForm.numeroDocumento || '').replace(/\D/g, '') : '';
                         const ruc = tipoComprobante === 'Factura' ? String(this.ventaForm.ruc || '').replace(/\D/g, '') : '';
                         const razonSocial = tipoComprobante === 'Factura' ? String(this.ventaForm.razonSocial || '').trim() : '';
-                        const ventaGrupoId = window.fb.push(window.fb.ref(window.db, 'ventas')).key;
+                        ventaGrupoId = window.fb.push(window.fb.ref(window.db, 'ventas')).key;
+                        codigoValeUsar = this.ventaForm.usarVale ? (this.valeValidado?.codigo || '') : '';
+                        if (codigoValeUsar) await this.reservarValePromocional(codigoValeUsar, ventaGrupoId);
                         const comprobanteNumero = await this.obtenerSiguienteNumeroComprobante();
                         const clienteId = await this.guardarClienteUnico({
                             nombre: clienteNombre, celular: clienteTelefono, documento: numeroDocumento,
@@ -3405,6 +3645,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 
                         // 3) El cliente ya fue creado/actualizado de forma única antes de marcar los productos.
 
+                        if (codigoValeUsar) await this.finalizarValePromocional(codigoValeUsar, ventaGrupoId, this.totalVentaSeleccionada);
                         Swal.close();
                         this.modalVenta = false;
                         this.productoVenta = null;
@@ -3414,8 +3655,16 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                             Swal.fire({ icon: 'warning', title: 'Venta registrada en inventario', html: `<div class="text-left text-sm">Los productos fueron marcados como <b>vendidos</b>, pero Firebase no permitió guardar algunos registros adicionales.<br><br><b>Rutas bloqueadas:</b><br>${fallosSecundarios.join('<br>')}<br><br>Esto confirma que las reglas de Firebase necesitan permisos para esas rutas.</div>` });
                         } else {
                             this.notificarToast('success', `${seleccionados.length} producto(s) vendidos correctamente`);
+                            if (this.ventaForm.generarVale) {
+                                try {
+                                    const vale = await this.generarValePromocionalParaVenta({clienteId, clienteNombre, clienteTelefono, distrito, direccionEntrega: this.ventaForm.direccionEntrega, ventaGrupoId});
+                                    this.valeGeneradoUltimaVenta = vale;
+                                    Swal.fire({icon:'success',title:'Venta registrada + vale generado',html:`<div class=\"text-sm\">Código: <b style=\"font-family:monospace;letter-spacing:.08em\">${vale.codigo}</b><br><span class=\"text-xs\">${vale.beneficio} · Válido hasta ${vale.fechaVencimiento}</span></div>`,confirmButtonColor:'#059669'});
+                                } catch(e) { console.warn('No se pudo generar el vale:',e); Swal.fire({icon:'warning',title:'Venta registrada',text:'La venta se guardó, pero no se pudo generar el vale promocional. Verifica los permisos de Firebase para valesPromocionales.',confirmButtonColor:'#d97706'}); }
+                            }
                         }
                     } catch (error) {
+                        if (typeof codigoValeUsar !== 'undefined' && codigoValeUsar && typeof ventaGrupoId !== 'undefined') await this.liberarValePromocional(codigoValeUsar, ventaGrupoId);
                         console.error('ERROR GUARDANDO VENTA MULTI-SKU:', error);
                         Swal.close();
                         Swal.fire({ icon: 'error', title: 'No se pudo guardar la venta', text: error?.message || 'Error desconocido' });
@@ -3462,7 +3711,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         const comision = venta.canalVenta === 'Falabella' ? Number(venta.comision) || 0 : 0;
                         const confLogistico = venta.canalVenta === 'Falabella' ? Number(venta.confLogistico) || 0 : 0;
                         const perfilFacebook = venta.canalVenta === 'Facebook' ? String(venta.perfilFacebook || '') : '';
-                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, fechaEntrega: String(venta.fechaEntrega || ''), envio: String(venta.envio || '').trim(), clienteNombre: String(venta.clienteNombre || '').trim(), clienteTelefono: this.limpiarCelular(venta.clienteTelefono || ''), distrito: String(venta.distrito || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), latitud: String(venta.latitud || '').trim(), longitud: String(venta.longitud || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim(), tipoComprobante: venta.tipoComprobante || 'Boleta', tipoDocumento: venta.tipoComprobante === 'Boleta' ? (venta.tipoDocumento || 'DNI') : '', numeroDocumento: venta.tipoComprobante === 'Boleta' ? String(venta.numeroDocumento || '').replace(/\D/g, '') : '', ruc: venta.tipoComprobante === 'Factura' ? String(venta.ruc || '').replace(/\D/g, '') : '', razonSocial: venta.tipoComprobante === 'Factura' ? String(venta.razonSocial || '').trim() : '' };
+                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, fechaEntrega: String(venta.fechaEntrega || ''), envio: String(venta.envio || '').trim(), clienteNombre: String(venta.clienteNombre || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), clienteTelefono: this.limpiarCelular(venta.clienteTelefono || ''), distrito: String(venta.distrito || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), latitud: String(venta.latitud || '').trim(), longitud: String(venta.longitud || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim(), tipoComprobante: venta.tipoComprobante || 'Boleta', tipoDocumento: venta.tipoComprobante === 'Boleta' ? (venta.tipoDocumento || 'DNI') : '', numeroDocumento: venta.tipoComprobante === 'Boleta' ? String(venta.numeroDocumento || '').replace(/\D/g, '') : '', ruc: venta.tipoComprobante === 'Factura' ? String(venta.ruc || '').replace(/\D/g, '') : '', razonSocial: venta.tipoComprobante === 'Factura' ? String(venta.razonSocial || '').trim() : '' };
                         await window.fb.update(window.fb.ref(window.db, `productos/${venta.id}`), datos);
                         await this.guardarRegistroVentaAdicional(venta, datos);
                         Swal.close();
@@ -3884,6 +4133,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     ) {
                         this.modalAdmin =
                             true;
+                        await this.cargarValesPromocionales();
                     }
                     else if (
                         pass
@@ -4000,7 +4250,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 <i class="fa-solid fa-users"></i> Clientes
             </button>
 <button :class="activeTab === 'catalogo' ? 'bg-violet-600 text-white shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'catalogo'" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-images"></i> Catálogo</button>
-<button :class="activeTab === 'finanzas' ? 'bg-slate-900 text-white shadow-lg dark:bg-amber-500 dark:text-slate-950' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'finanzas'" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2">
+<button :class="activeTab === 'vales' ? 'bg-yellow-400 text-slate-950 shadow-lg ring-2 ring-yellow-300' : 'text-slate-600 dark:text-slate-300 hover:bg-yellow-50 dark:hover:bg-slate-700'" @click="activeTab = 'vales'; cargarValesPromocionales()" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-ticket"></i> Vales</button>
+<button :class="activeTab === 'finanzas' ? 'bg-slate-900 text-white shadow-lg dark:bg-yellow-400 dark:text-slate-950' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" @click="activeTab = 'finanzas'" class="flex-1 min-w-[150px] px-5 py-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2">
 <i class="fa-solid fa-landmark"></i> Finanzas
             </button>
 </div></aside><main class="inventory-main"><div x-show="activeTab === 'inventario'" x-transition="">
@@ -4799,7 +5050,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
     <div>• Las compras de mercadería y otros pagos se registran como <b>salidas manuales</b> del pozo que tú elijas. No cambian el inventario ni modifican las ventas.</div>
   </div>
 </div>
-</div></main></div></div>
+</div><div x-show="activeTab === 'vales'" x-transition class="inventory-section"><div class="rounded-3xl overflow-hidden border border-blue-200 dark:border-blue-900/50 bg-white dark:bg-slate-900 shadow-xl"><div class="p-6 md:p-7 bg-gradient-to-br from-blue-800 to-blue-600 text-white relative overflow-hidden"><div class="absolute -right-8 -top-8 text-[130px] opacity-10">🐾</div><div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5"><div><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-black uppercase tracking-widest"><i class="fa-solid fa-ticket"></i> Centro de vales</div><h2 class="text-3xl font-black mt-3">Vales promocionales</h2><p class="text-sm text-blue-100 mt-1 max-w-2xl">Administra aquí todos los vales emitidos. Admin ya no contiene el historial de vales.</p></div><div class="flex flex-wrap gap-2"><button @click="cargarValesPromocionales()" class="px-4 py-3 rounded-xl bg-white/15 font-black text-xs"><i class="fa-solid fa-rotate"></i> Actualizar</button><button @click="exportarValesCSV()" class="px-4 py-3 rounded-xl bg-white text-blue-800 font-black text-xs"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button></div></div></div><div class="p-5 md:p-7"><div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6"><div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800"><div class="text-[10px] uppercase font-black text-slate-400">Total</div><div class="text-2xl font-black" x-text="valesPromocionalesData.length"></div></div><div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20"><div class="text-[10px] uppercase font-black text-emerald-600">Disponibles</div><div class="text-2xl font-black text-emerald-600" x-text="contarValesEstado('Disponible')"></div></div><div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/20"><div class="text-[10px] uppercase font-black text-blue-600">Usados</div><div class="text-2xl font-black text-blue-600" x-text="contarValesEstado('Usado')"></div></div><div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/20"><div class="text-[10px] uppercase font-black text-rose-600">Vencidos</div><div class="text-2xl font-black text-rose-600" x-text="contarValesEstado('Vencido')"></div></div><div class="p-4 rounded-2xl bg-violet-50 dark:bg-violet-950/20"><div class="text-[10px] uppercase font-black text-violet-600">Encontrados</div><div class="text-2xl font-black text-violet-600" x-text="valesFiltrados().length"></div></div></div><div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 mb-6"><div class="flex items-center gap-2 mb-4 font-black"><i class="fa-solid fa-magnifying-glass text-orange-500"></i> Buscador profesional</div><div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3"><div class="relative xl:col-span-2"><i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroValesTexto" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm" placeholder="Buscar por código, cliente, teléfono o distrito..."></div><select x-model="filtroValesEstado" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los estados</option><option value="disponible">Disponibles</option><option value="usado">Usados</option><option value="vencido">Vencidos</option><option value="reservado">Reservados</option></select><select x-model="filtroValesDistrito" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los distritos</option><template x-for="d in distritosValesDisponibles()" :key="d"><option :value="d" x-text="d"></option></template></select></div><div class="flex flex-wrap gap-2 mt-3"><select x-model="filtroValesFecha" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-bold"><option value="todos">Cualquier vencimiento</option><option value="7">Vencen en 7 días</option><option value="30">Vencen en 30 días</option><option value="vencidos">Ya vencidos</option></select><button @click="filtroValesTexto='';filtroValesEstado='todos';filtroValesDistrito='todos';filtroValesFecha='todos'" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-black"><i class="fa-solid fa-eraser"></i> Limpiar filtros</button></div></div><div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700"><table class="w-full text-left text-xs"><thead class="bg-slate-900 text-white"><tr><th class="px-4 py-4">Vale</th><th class="px-4 py-4">Cliente</th><th class="px-4 py-4">Contacto</th><th class="px-4 py-4">Distrito</th><th class="px-4 py-4">Vence</th><th class="px-4 py-4">Estado</th><th class="px-4 py-4 text-right">Acciones</th></tr></thead><tbody><template x-for="vale in valesFiltrados()" :key="vale.codigo"><tr class="border-t border-slate-100 dark:border-slate-800"><td class="px-4 py-4"><div class="font-mono font-black text-yellow-600" x-text="vale.codigo"></div><div class="text-[9px] text-slate-400" x-text="vale.creadoEn ? new Date(vale.creadoEn).toLocaleString('es-PE') : '—'"></div></td><td class="px-4 py-4 font-black" x-text="vale.clienteNombre || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.clienteTelefono || '—'"></td><td class="px-4 py-4" x-text="vale.distrito || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.fechaVencimiento || '—'"></td><td class="px-4 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-black" :class="estadoValeVisual(vale)==='Disponible'?'bg-emerald-100 text-emerald-700':estadoValeVisual(vale)==='Usado'?'bg-blue-100 text-blue-700':estadoValeVisual(vale)==='Reservado'?'bg-violet-100 text-violet-700':'bg-rose-100 text-rose-700'" x-text="estadoValeVisual(vale)"></span></td><td class="px-4 py-4"><div class="flex justify-end gap-2"><button @click="copiarCodigoValeDesdeRegistro(vale.codigo)" class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-700" title="Copiar código"><i class="fa-solid fa-copy"></i></button><button @click="verValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-blue-700 text-white" title="Ver y descargar vale"><i class="fa-solid fa-image"></i></button><button @click="imprimirValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-orange-500 text-white" title="Imprimir vale"><i class="fa-solid fa-print"></i></button></div></td></tr></template><tr x-show="!valesFiltrados().length"><td colspan="7" class="px-6 py-14 text-center"><div class="text-4xl">🐾</div><div class="font-black text-lg mt-2">No encontramos vales</div></td></tr></tbody></table></div><div class="mt-6 p-4 rounded-2xl border border-orange-200 bg-orange-50 dark:bg-orange-950/20 text-xs"><b>Almacenamiento:</b> los vales se guardan en <code>valesPromocionales</code> de Firebase y se gestionan desde esta pestaña, no desde Admin.</div></div></div></div>
+</main></div></div>
 <!-- =====================================================
      MODAL REPORTE PROFESIONAL DE PEDIDO
      ====================================================== -->
