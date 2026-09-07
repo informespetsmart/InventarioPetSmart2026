@@ -89,7 +89,7 @@
 .pedido-table td{padding:15px 12px;border-bottom:1px solid #d7dce3;vertical-align:middle;font-size:16px}
 .pedido-table td:nth-child(2),.pedido-table td:nth-child(3){text-align:right;white-space:nowrap}
 .pedido-product{display:flex;align-items:center;gap:14px;min-width:0}
-.pedido-product-img{width:110px;height:110px;border-radius:10px;object-fit:contain;border:0;background:transparent;flex:0 0 110px;display:block}
+.pedido-product-img{width:auto;height:auto;max-width:110px;max-height:110px;border-radius:10px;object-fit:contain;object-position:center;border:0;background:transparent;flex:0 0 auto;display:block}.pedido-product-img:not(img){width:110px;height:110px;flex:0 0 110px;display:flex;align-items:center;justify-content:center}
 .pedido-product-name{font-weight:800;line-height:1.25}
 .pedido-product-detail{font-size:12px;color:#6b7280;margin-top:4px}
 .pedido-totals{margin:20px 0 30px auto;max-width:500px}
@@ -360,12 +360,97 @@ body.dark{background:#070d19!important}
 @media(max-width:900px){.vale-digital-export{width:1120px!important;height:700px!important;grid-template-columns:34% 66%;transform-origin:top left}.vale-left{min-height:700px;height:700px;padding:38px 42px 34px}.vale-right{height:700px;padding:30px 38px 25px}.vale-title{font-size:64px}.vale-benefit{font-size:52px}.vale-code-main{font-size:43px}}
 </style>
 
+<style id="petsmart-catalog-premium">
+.catalogo-premium-shell{background:linear-gradient(135deg,#f5f8fc,#eef4fa);border:1px solid #dce5ef;border-radius:28px;box-shadow:0 20px 55px rgba(7,59,120,.10);overflow:hidden}
+.catalogo-premium-head{background:linear-gradient(135deg,#073b78,#0a5aab);color:#fff;position:relative;overflow:hidden}
+.catalogo-premium-head:after{content:"";position:absolute;width:330px;height:330px;border-radius:50%;right:-130px;top:-190px;border:48px solid rgba(255,255,255,.07)}
+.catalogo-premium-kicker{font-size:10px;font-weight:950;letter-spacing:.2em;text-transform:uppercase;color:#bcdcff}
+.catalogo-premium-title{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-weight:950;letter-spacing:-.045em}
+.catalogo-premium-card{background:#fff;border:1px solid #dce5ef;border-radius:22px;box-shadow:0 12px 35px rgba(21,61,100,.07)}
+.catalogo-premium-item{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.catalogo-premium-item:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(7,59,120,.10);border-color:#9fc4e9}
+.catalogo-export-premium{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:linear-gradient(135deg,#f5f8fc,#eef4fa);color:#10243b;position:relative;overflow:hidden}
+.catalogo-export-premium .cat-export-top{background:linear-gradient(135deg,#073b78,#0a5aab);color:#fff;border-radius:26px;padding:30px 34px;position:relative;overflow:hidden;box-shadow:0 18px 45px rgba(7,59,120,.18)}
+.catalogo-export-premium .cat-export-top:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-110px;top:-150px;border:38px solid rgba(255,255,255,.08)}
+.catalogo-export-premium .cat-export-logo{max-height:76px;max-width:230px;object-fit:contain;background:#fff;border-radius:14px;padding:8px}
+.catalogo-export-premium .cat-export-title{font-size:32px;line-height:1.05;font-weight:950;letter-spacing:-.045em;margin-top:14px}
+.catalogo-export-premium .cat-export-sub{font-size:11px;color:#dcecff;font-weight:750;margin-top:7px}
+.catalogo-export-premium .cat-paw{position:absolute;font-size:125px;right:30px;bottom:-42px;opacity:.07;transform:rotate(-12deg)}
+.catalogo-export-premium .cat-product{background:#fff;border:1px solid #dce5ef;border-radius:22px;padding:18px;box-shadow:0 12px 30px rgba(21,61,100,.07);min-height:290px;display:flex;flex-direction:column}
+.catalogo-export-premium .cat-photo{height:180px;border-radius:17px;background:#f5f7fa;border:1px solid #e4ebf2;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.catalogo-export-premium .cat-photo img{max-width:100%;max-height:170px;object-fit:contain}
+.catalogo-export-premium .cat-name{font-size:14px;font-weight:950;letter-spacing:-.015em;margin-top:14px;line-height:1.25}
+.catalogo-export-premium .cat-detail{font-size:10px;color:#6d7d8f;font-weight:700;margin-top:5px;line-height:1.4}
+.catalogo-export-premium .cat-chip{display:inline-flex;align-items:center;gap:5px;background:#edf5fd;color:#0b5db7;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:950;margin-top:auto;align-self:flex-start}
+.catalogo-export-premium .cat-footer{margin-top:20px;text-align:center;color:#7a8998;font-size:10px;font-weight:750}
+</style>
+<style id="petsmart-tracking-professional">.ps-tracking-page{background:linear-gradient(145deg,#073b78 0%,#0a5aab 48%,#0d6fc5 100%);min-height:100vh;position:relative;overflow:hidden}.ps-tracking-page:before{content:"";position:fixed;width:420px;height:420px;border-radius:50%;right:-180px;top:-190px;border:55px solid rgba(255,255,255,.07);pointer-events:none}.ps-tracking-page:after{content:"";position:fixed;width:320px;height:320px;border-radius:50%;left:-190px;bottom:-180px;border:45px solid rgba(255,255,255,.055);pointer-events:none}.ps-tracking-brand{position:relative;z-index:1}.ps-tracking-logo-wrap{display:inline-flex;align-items:center;justify-content:center;min-height:88px;min-width:210px;padding:6px 10px;background:transparent;border-radius:20px;filter:drop-shadow(0 14px 28px rgba(3,32,76,.22))}.ps-tracking-page .bg-white\/5{background:rgba(255,255,255,.10)!important;border-color:rgba(255,255,255,.18)!important;box-shadow:0 18px 45px rgba(3,32,76,.15)}.ps-tracking-page .border-white\/10{border-color:rgba(255,255,255,.18)!important}.ps-tracking-page .bg-white\/10{background:rgba(255,255,255,.12)!important}.ps-tracking-page .text-cyan-300{color:#dbeafe!important}.ps-tracking-page .text-emerald-300{color:#bbf7d0!important}</style>
+<style id="petsmart-tracking-v2">
+.ps-track-v2{min-height:100vh;background:linear-gradient(145deg,#06366f 0%,#0758a5 48%,#0b72cf 100%);color:#fff;position:relative;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.ps-track-v2:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-240px;top:-260px;border:70px solid rgba(255,255,255,.06)}.ps-track-v2:after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;left:-230px;bottom:-220px;border:55px solid rgba(255,255,255,.045)}.ps-track-wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:34px 18px 50px}.ps-track-logo{display:inline-flex;align-items:center;justify-content:center;min-width:190px;min-height:72px;padding:6px 10px;background:transparent;border-radius:18px;filter:drop-shadow(0 14px 28px rgba(1,26,63,.22))}.ps-track-logo img{max-width:230px;max-height:78px;object-fit:contain}.ps-track-logo img{max-width:190px;max-height:62px;object-fit:contain}.ps-track-eyebrow{margin-top:22px;font-size:11px;font-weight:900;letter-spacing:.28em;text-transform:uppercase;color:#dbeafe}.ps-track-title{margin-top:6px;font-size:clamp(30px,5vw,46px);font-weight:950;letter-spacing:-.035em;line-height:1.05}.ps-track-sub{margin-top:10px;color:#dbeafe;font-size:14px}.ps-track-card{background:#fff;color:#10243c;border-radius:30px;box-shadow:0 28px 80px rgba(1,27,65,.28);overflow:hidden}.ps-track-card-head{padding:26px 28px;background:linear-gradient(180deg,#fff,#f7fbff);border-bottom:1px solid #e5edf6}.ps-track-order{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.16em;color:#7890aa}.ps-track-number{font-size:30px;font-weight:950;margin-top:3px}.ps-track-pill{padding:9px 14px;border-radius:999px;background:#e9f7ff;color:#0566ad;font-weight:950;font-size:13px}.ps-track-progress{padding:30px 28px 28px}.ps-track-line{position:absolute;left:8%;right:8%;top:28px;height:6px;background:#dbe7f3;border-radius:999px}.ps-track-line-fill{position:absolute;left:8%;top:28px;height:6px;background:linear-gradient(90deg,#14b8a6,#06b6d4,#2563eb);border-radius:999px;transition:width .8s cubic-bezier(.22,.61,.36,1)}.ps-track-stages{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.ps-track-stage{text-align:center;position:relative;z-index:2}.ps-track-dot{width:54px;height:54px;margin:0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;background:#e8eef5;color:#9aaabd;border:4px solid #fff;box-shadow:0 5px 16px rgba(24,55,89,.10);transition:all .45s ease}.ps-track-stage.done .ps-track-dot{background:#0b75c9;color:#fff;box-shadow:0 8px 22px rgba(11,117,201,.28);transform:scale(1.02)}.ps-track-stage.current .ps-track-dot{background:#10b981;color:#fff;box-shadow:0 0 0 7px rgba(16,185,129,.12),0 12px 26px rgba(16,185,129,.30);transform:scale(1.12)}.ps-track-stage span{display:block;margin-top:10px;font-size:11px;font-weight:900;color:#8092a7}.ps-track-stage.done span,.ps-track-stage.current span{color:#0b5e9f}.ps-track-truck{position:absolute;top:2px;left:0;z-index:5;width:58px;height:58px;border-radius:18px;background:transparent;color:#0b63a9;display:flex;align-items:center;justify-content:center;box-shadow:none;transition:left .9s cubic-bezier(.22,.61,.36,1);transform:translateX(-50%);font-size:23px}.ps-track-truck i{transition:transform .35s ease}.ps-track-truck.moving i{transform:translateX(3px)}.ps-track-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 28px 28px}.ps-track-meta-box{padding:16px;border:1px solid #e1eaf3;background:#f8fbfe;border-radius:18px}.ps-track-meta-label{font-size:9px;text-transform:uppercase;letter-spacing:.16em;font-weight:950;color:#8ba0b5}.ps-track-meta-value{font-size:14px;font-weight:850;margin-top:5px}.ps-track-history{margin-top:18px;padding:22px 28px 28px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:26px}.ps-track-history-title{font-size:16px;font-weight:950}.ps-track-history-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.10)}.ps-track-history-item:last-child{border-bottom:0}.ps-track-history-dot{width:10px;height:10px;margin-top:5px;border-radius:50%;background:#5eead4;box-shadow:0 0 0 5px rgba(94,234,212,.10);flex:0 0 auto}.ps-track-history-main{font-weight:850}.ps-track-history-date{font-size:11px;color:#bfdbfe;margin-top:3px}.ps-track-error{background:#fff;color:#991b1b;border-radius:26px;padding:28px;text-align:center;box-shadow:0 20px 60px rgba(1,27,65,.2)}.ps-admin-track{background:linear-gradient(145deg,#06366f,#0a64b9);color:#fff;border-radius:30px;overflow:hidden;box-shadow:0 30px 90px rgba(2,30,72,.35)}.ps-admin-track-head{padding:26px 28px;background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border-bottom:1px solid rgba(255,255,255,.14)}.ps-admin-track-status{font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:#bfdbfe;font-weight:950}.ps-admin-track-title{font-size:28px;font-weight:950;margin-top:4px}.ps-admin-track-order{font-size:12px;color:#dbeafe;margin-top:5px}.ps-admin-status-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.ps-admin-status{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#eaf5ff;border-radius:16px;padding:14px 8px;font-size:11px;font-weight:950;transition:all .2s ease}.ps-admin-status:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.ps-admin-status.active{background:#10b981;border-color:#10b981;color:#fff;box-shadow:0 10px 24px rgba(16,185,129,.24)}.ps-admin-link{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:15px}.ps-admin-link code{display:block;margin-top:6px;color:#fff;font-size:12px;word-break:break-all}.ps-admin-action{border-radius:14px;padding:11px 15px;font-size:12px;font-weight:950}.ps-rebuy-card{border-radius:24px}.ps-rebuy-row{transition:transform .18s ease,box-shadow .18s ease}.ps-rebuy-row:hover{transform:translateY(-1px);box-shadow:0 10px 25px rgba(15,23,42,.06)}
+@media(max-width:720px){.ps-track-meta{grid-template-columns:1fr}.ps-admin-status-grid{grid-template-columns:1fr 1fr}.ps-track-stages{gap:0}.ps-track-dot{width:44px;height:44px;font-size:15px}.ps-track-line,.ps-track-line-fill{top:23px}.ps-track-truck{top:0;width:48px;height:48px;font-size:19px}.ps-track-stage span{font-size:9px}.ps-track-card-head,.ps-track-progress,.ps-track-meta{padding-left:18px;padding-right:18px}}
+</style>
+<style id="petsmart-tracking-effects">
+.ps-track-client-name{margin-top:8px;font-size:clamp(22px,4vw,32px);line-height:1.05;font-weight:950;letter-spacing:-.025em;color:#0b5e9f}
+.ps-track-meta-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ps-track-truck.moving{animation:psTruckBounce .65s ease-in-out}
+@keyframes psTruckBounce{0%,100%{transform:translateX(-50%) translateY(0)}45%{transform:translateX(-50%) translateY(-5px) rotate(-1deg)}70%{transform:translateX(-50%) translateY(0) rotate(1deg)}}
+.ps-track-thanks{margin:18px auto 0;display:flex;align-items:center;justify-content:center;gap:12px;padding:14px 20px;border-radius:18px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);font-size:clamp(18px,3vw,25px);font-weight:950;color:#fff;box-shadow:0 12px 35px rgba(3,32,76,.18)}
+.ps-track-thanks i{color:#fde68a}
+.ps-track-meta-value{overflow-wrap:anywhere}
+.ps-track-v2.is-destination .ps-track-truck:before,.ps-track-v2.is-destination .ps-track-truck:after{content:'✦';position:absolute;color:#fde047;font-size:18px;animation:psSpark 1s ease-in-out infinite}
+.ps-track-v2.is-destination .ps-track-truck:before{left:-14px;top:-10px;color:#fb7185}
+.ps-track-v2.is-destination .ps-track-truck:after{right:-13px;bottom:-10px;color:#22d3ee;animation-delay:.25s}
+.ps-track-v2.is-destination .ps-track-truck{box-shadow:0 0 0 7px rgba(250,204,21,.12),0 12px 30px rgba(0,44,97,.25)}
+@keyframes psSpark{0%,100%{opacity:.25;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.35) rotate(25deg)}}
+@media(max-width:720px){.ps-track-meta-three{grid-template-columns:1fr}.ps-track-client-name{font-size:22px}}
+</style>
 </head>
 <body :class="
         darkMode
         ? 'dark bg-slate-900 text-slate-100'
         : 'bg-slate-100 text-slate-800'
-    " class="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 font-sans transition-colors duration-300" x-data="inventarioApp()">
+    " class="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 font-sans transition-colors duration-300" x-data="inventarioApp()"><div x-show="modoSeguimientoCliente" x-cloak class="ps-track-v2" :class="{'is-destination': seguimientoClienteData?.estado==='En destino'}">
+  <div class="ps-track-wrap">
+    <div class="text-center mb-8">
+      <template x-if="configNegocio.logoUrl"><div class="ps-track-logo"><img :src="configNegocio.logoUrl" alt="PetSmart"></div></template>
+      <div class="ps-track-eyebrow">PetSmart · Seguimiento</div>
+      <div class="ps-track-title">Seguimiento de pedido</div>
+      <div class="ps-track-sub">Consulta el avance de tu pedido de forma rápida, clara y segura.</div>
+    </div>
+    <div x-show="seguimientoCargando" class="ps-track-error" style="color:#31506e"><i class="fa-solid fa-spinner fa-spin text-3xl text-blue-600"></i><div class="mt-3 font-black">Cargando tu pedido…</div></div>
+    <div x-show="!seguimientoCargando && seguimientoClienteData?.error" class="ps-track-error"><i class="fa-solid fa-circle-exclamation text-3xl"></i><div class="mt-3 font-black" x-text="seguimientoClienteData?.error"></div></div>
+    <div x-show="!seguimientoCargando && seguimientoClienteData && !seguimientoClienteData.error">
+      <div class="ps-track-card">
+        <div class="ps-track-card-head flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div><div class="ps-track-order">Pedido</div><div class="ps-track-number" x-text="'#'+(seguimientoClienteData?.pedidoNumero||'—')"></div><div class="ps-track-client-name" x-text="seguimientoClienteData?.clienteNombre||'Cliente'"></div></div>
+          <div class="ps-track-pill" x-text="seguimientoClienteData?.estado||'Solicitud Recibida'"></div>
+        </div>
+        <div class="ps-track-progress">
+          <div class="relative pt-1">
+            <div class="ps-track-line"></div>
+            <div class="ps-track-line-fill" :style="'width: '+(Math.max(0,Math.min(100,(seguimientoEstados.indexOf(seguimientoClienteData?.estado||'Solicitud Recibida')/4)*84)))+'%'" ></div>
+            <div class="ps-track-truck" :class="seguimientoAnimando?'moving':''" :style="'left: '+(8+(Math.max(0,Math.min(100,(seguimientoEstados.indexOf(seguimientoClienteData?.estado||'Solicitud Recibida')/4)*84))))+'%'" title="Estado actual"><i class="fa-solid fa-truck-fast"></i></div>
+            <div class="ps-track-stages">
+              <template x-for="(estado,index) in seguimientoEstados" :key="'v2-stage-'+estado">
+                <div class="ps-track-stage" :class="{'done':seguimientoEstados.indexOf(seguimientoClienteData?.estado||'Solicitud Recibida')>=index,'current':(seguimientoClienteData?.estado||'Solicitud Recibida')===estado}">
+                  <div class="ps-track-dot"><i :class="index===0?'fa-solid fa-inbox':index===1?'fa-solid fa-box-open':index===2?'fa-solid fa-truck-fast':index===3?'fa-solid fa-location-dot':'fa-solid fa-circle-check'"></i></div>
+                  <span x-text="estado"></span>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+        <div class="ps-track-meta ps-track-meta-three">
+          <div class="ps-track-meta-box"><div class="ps-track-meta-label">Distrito</div><div class="ps-track-meta-value" x-text="seguimientoClienteData?.distrito||'Por confirmar'"></div></div>
+          <div class="ps-track-meta-box"><div class="ps-track-meta-label">Dirección exacta</div><div class="ps-track-meta-value" x-text="seguimientoClienteData?.direccion||'Por confirmar'"></div></div>
+          <div class="ps-track-meta-box"><div class="ps-track-meta-label">Fecha de entrega</div><div class="ps-track-meta-value" x-text="seguimientoClienteData?.fechaEntrega||'Por confirmar'"></div></div>
+        </div>
+      </div>
+      <div x-show="seguimientoClienteData?.estado==='Entregado'" x-transition class="ps-track-thanks"><i class="fa-solid fa-heart"></i><span>¡Muchas gracias por tu compra!</span><i class="fa-solid fa-paw"></i></div><div class="text-center text-[11px] text-blue-100 mt-5">PetSmart · Te mantendremos informado del avance de tu pedido.</div>
+    </div>
+  </div>
+</div>
+
 <div class="acceso-bloqueo" x-show="!accesoAutorizado" x-cloak role="dialog" aria-modal="true" aria-label="Acceso al sistema">
   <div class="acceso-bloqueo-card">
     <div class="mx-auto w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-900/30 mb-5">
@@ -402,6 +487,7 @@ body.dark{background:#070d19!important}
                     Inventario unitario, ventas,
                     clientes, ganancias e inversión.
                 </p>
+<div class="mt-3 flex flex-wrap gap-2"><button @click="mostrarAlertasRecompra()" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-cyan-50 text-cyan-700 border border-cyan-200 font-black text-xs"><i class="fa-solid fa-bell"></i> Recompra <span class="px-2 py-0.5 rounded-full bg-cyan-600 text-white" x-text="alertasRecompra.length"></span></button></div>
 </div>
 <div class="flex items-center gap-3 flex-wrap">
 <button @click="activeTab='vales'; cargarValesPromocionales()" class="bg-amber-500 hover:bg-amber-400 text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-lg flex items-center gap-2 text-sm"><i class="fa-solid fa-ticket"></i> Vales</button>
@@ -1011,6 +1097,11 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 </div>
 </div>
 <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-amber-200 dark:border-amber-900/60 shadow-sm mb-6"><div class="flex items-center gap-3 mb-5"><div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center"><i class="fa-solid fa-ticket"></i></div><div><h4 class="text-lg font-black">Vales promocionales</h4><p class="text-xs text-slate-500">Códigos únicos, asociados al cliente y de un solo uso.</p></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label class="block text-xs font-bold mb-1">Vigencia del vale (días)</label><input type="number" min="1" max="365" x-model.number="configNegocio.valeVigenciaDias" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2.5 font-bold"></div><div><label class="block text-xs font-bold mb-1">Distritos promocionales</label><input type="text" x-model="configNegocio.distritosValesTexto" @input="configNegocio.distritosVales=String(configNegocio.distritosValesTexto||'').split(',').map(v=>v.trim()).filter(Boolean)" placeholder="Surco, San Borja, Miraflores" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2.5"></div></div><div class="mt-4 flex items-center justify-between gap-3 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/40"><div class="text-xs"><b>Recomendación:</b> usar el vale como <b>envío gratis</b> en la próxima compra, con vencimiento y asociado al teléfono del cliente.</div><button @click="guardarConfiguracionNegocio()" type="button" class="shrink-0 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-white font-black text-xs">Guardar</button></div></div>
+<div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-cyan-200 dark:border-cyan-900/60 shadow-sm mb-6 ps-rebuy-card">
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-5"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center"><i class="fa-solid fa-bell"></i></div><div><h4 class="text-lg font-black">Recompra inteligente</h4><p class="text-xs text-slate-500">Calcula automáticamente cuándo volver a contactar al cliente según producto, categoría y cantidad comprada.</p></div></div><button @click="guardarReglasRecompra()" class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-xs"><i class="fa-solid fa-floppy-disk mr-1"></i> Guardar reglas</button></div>
+<div class="space-y-3"><template x-for="(regla,index) in configNegocio.reglasRecompra" :key="'rebuy-rule-'+index"><div class="grid grid-cols-1 md:grid-cols-12 gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 items-end"><div class="md:col-span-3"><label class="block text-[10px] font-black mb-1">Categoría</label><input x-model="regla.categoria" class="w-full rounded-lg border px-3 py-2 text-xs font-bold bg-white dark:bg-slate-900"></div><div class="md:col-span-2"><label class="block text-[10px] font-black mb-1">Días / unidad</label><input x-model.number="regla.dias" type="number" min="1" class="w-full rounded-lg border px-3 py-2 text-xs font-bold bg-white dark:bg-slate-900"></div><div class="md:col-span-3"><label class="block text-[10px] font-black mb-1">Palabras especiales</label><input x-model="regla.palabras" placeholder="pate, paté" class="w-full rounded-lg border px-3 py-2 text-xs bg-white dark:bg-slate-900"></div><div class="md:col-span-2"><label class="block text-[10px] font-black mb-1">Días especiales</label><input x-model.number="regla.diasPalabra" type="number" min="1" class="w-full rounded-lg border px-3 py-2 text-xs font-bold bg-white dark:bg-slate-900"></div><label class="md:col-span-1 flex items-center gap-2 text-xs font-black pb-2"><input type="checkbox" x-model="regla.activo"> Activa</label><button @click="configNegocio.reglasRecompra.splice(index,1)" type="button" class="md:col-span-1 h-9 rounded-lg bg-rose-100 text-rose-700 font-black" title="Eliminar regla"><i class="fa-solid fa-trash"></i></button></div></template><button @click="configNegocio.reglasRecompra.push({categoria:'',dias:30,palabras:'',diasPalabra:30,activo:true})" type="button" class="px-3 py-2 rounded-lg bg-slate-900 text-white text-xs font-black">+ Agregar regla</button></div>
+<div class="mt-4 p-4 rounded-xl bg-cyan-50 dark:bg-cyan-950/20 border border-cyan-100 dark:border-cyan-900/40 text-xs text-cyan-900 dark:text-cyan-100"><b>Ejemplo:</b> Paté = 4 días por unidad. Si compra 5 unidades, el sistema calcula <b>20 días</b>. Cuando falten 7 días o menos, aparece la alerta en Inventario/Admin y puedes abrir WhatsApp con un mensaje preparado.</div>
+<div class="mt-5 border-t border-slate-200 dark:border-slate-700 pt-5"><div class="flex items-center justify-between mb-3"><div><div class="text-sm font-black">Clientes próximos a recomprar</div><div class="text-[11px] text-slate-500">Se muestran automáticamente las alertas de los próximos 7 días.</div></div><span class="px-3 py-1 rounded-full bg-cyan-100 text-cyan-700 text-xs font-black" x-text="alertasRecompra.length+' alerta(s)'"></span></div><div class="space-y-2 max-h-80 overflow-auto"><template x-for="(x,i) in alertasRecompra" :key="'rebuy-alert-'+i"><div class="ps-rebuy-row p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 flex flex-col lg:flex-row lg:items-center gap-3"><div class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-700 flex items-center justify-center shrink-0"><i class="fa-solid fa-rotate"></i></div><div class="min-w-0 flex-1"><div class="font-black text-sm truncate" x-text="x.clienteNombre"></div><div class="text-xs text-slate-500 truncate" x-text="x.producto+' · '+x.cantidad+' unidad(es)'" ></div></div><div class="text-xs font-black" :class="x.diasRestantes<=0?'text-rose-600':x.diasRestantes<=3?'text-orange-600':'text-cyan-700'" x-text="x.diasRestantes<=0?'Ya corresponde':('En '+x.diasRestantes+' día(s)')"></div><button @click="whatsappRecompra(x)" type="button" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black"><i class="fa-brands fa-whatsapp mr-1"></i> Contactar</button></div></template><div x-show="!alertasRecompra.length" class="p-6 text-center text-xs text-slate-400 border border-dashed border-slate-300 rounded-xl">No hay alertas de recompra en los próximos 7 días.</div></div></div></div>
 <!-- V28.8: vales trasladados a pestaña Vales -->
 <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <div class="flex items-center gap-3 mb-5">
@@ -1253,6 +1344,15 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 firebaseInicializado: false,
                 accesoAutorizado: false,
                 accesoIntentos: 0,
+                modoSeguimientoCliente: false,
+                seguimientoToken: '',
+                seguimientoClienteData: null,
+                seguimientoCargando: false,
+                seguimientoAnimando: false,
+                seguimientoListener: null,
+                seguimientoEstados: ['Solicitud Recibida','Preparando','Enviado','En destino','Entregado'],
+                modalSeguimientoPedido: false,
+                seguimientoAdmin: null,
                 loginPassword: '',
                 loginError: '',
                 mostrarLoginPassword: false,
@@ -1339,7 +1439,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     monto: 0,
                     concepto: '',
                     fecha: fechaPeruActual(),
-                    observacion: ''
+                    observacion: '',
+                    aplicado: false
                 },
                 reportePedido: {
                     pedidoNumero: '',
@@ -1441,7 +1542,12 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         '',
                     distritosVales: [],
                     distritosValesTexto: '',
-                    valeVigenciaDias: 30
+                    valeVigenciaDias: 30,
+                    reglasRecompra: [
+                        {categoria:'Alimentos',dias:30,palabras:'pate,paté',diasPalabra:4,activo:true},
+                        {categoria:'Antipulgas',dias:30,palabras:'3 meses,90 dias,90 días,trimestral',diasPalabra:90,activo:true},
+                        {categoria:'ProductoVet',dias:30,palabras:'',diasPalabra:30,activo:true}
+                    ]
                 },
                 // =================================================
                 // CLOUDINARY
@@ -1530,7 +1636,17 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     this.ventaForm.fechaVenta = this.ventaForm.fechaVenta || this.fechaPeru();
                     const params = new URLSearchParams(window.location.search);
                     const skuURL = params.get('sku');
+                    const seguimiento = params.get('seguimiento');
                     if (skuURL) this.busqueda = skuURL.trim();
+                    if (seguimiento) {
+                        this.modoSeguimientoCliente = true;
+                        this.seguimientoToken = String(seguimiento).trim();
+                        setTimeout(async () => {
+                            await this.inicializarFirebase();
+                            await this.cargarSeguimientoPublico(this.seguimientoToken);
+                        }, 80);
+                        return;
+                    }
                     // Primero bloqueamos completamente la interfaz y solicitamos la contraseña.
                     // Firebase no se inicializa hasta que el acceso sea autorizado.
                     setTimeout(() => this.solicitarAccesoInventario(), 50);
@@ -1841,10 +1957,50 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     this.modalEtiquetasSKU = true;
                 },
                 imprimirEtiquetasSKU() {
-                    this.$nextTick(() => {
-                        setTimeout(() => window.print(), 120);
-                    });
+                    const source = document.getElementById('printSkuArea');
+                    if (!source) return;
+                    const win = window.open('', '_blank', 'width=1100,height=850');
+                    if (!win) { Swal.fire('Atención', 'El navegador bloqueó la ventana de impresión. Permite ventanas emergentes para este sitio.', 'warning'); return; }
+                    const estilos = Array.from(document.querySelectorAll('link[rel="stylesheet"], style')).map(el => el.outerHTML).join('\n');
+                    const contenido = source.innerHTML;
+                    win.document.open();
+                    win.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Etiquetas UPC · PetSmart</title>${estilos}<style>@page{margin:8mm;size:auto}html,body{margin:0!important;padding:0!important;background:#fff!important}body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}#printSkuArea{display:block!important;width:100%!important;padding:0!important;margin:0!important;background:#fff!important}.sku-label-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5mm!important;width:100%!important;align-items:start!important}.sku-label{display:flex!important;width:auto!important;min-width:0!important;min-height:32mm!important;height:auto!important;box-sizing:border-box!important;break-inside:avoid!important;page-break-inside:avoid!important;overflow:hidden!important;align-items:center!important;justify-content:center!important}.sku-label>div{width:100%!important;min-width:0!important}.fake-barcode,.upc-barcode{max-width:100%!important;overflow:hidden!important}.fake-barcode span,.upc-barcode svg{max-width:100%!important}@media print{.sku-label-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.sku-label{break-inside:avoid!important;page-break-inside:avoid!important}}</style></head><body><div id="printSkuArea">${contenido}</div></body></html>`);
+                    win.document.close();
+                    setTimeout(() => { try { win.focus(); win.print(); } catch(e) { console.warn(e); } }, 800);
                 },
+                reglaRecompraParaProducto(p) {
+                    const reglas=Array.isArray(this.configNegocio.reglasRecompra)?this.configNegocio.reglasRecompra:[];
+                    const cat=this.normalizarTextoCliente(p?.categoria||'');
+                    const nombre=this.normalizarTextoCliente([p?.nombre,p?.detalle,p?.talla].filter(Boolean).join(' '));
+                    const regla=reglas.find(r=>r&&r.activo!==false&&this.normalizarTextoCliente(r.categoria)===cat);
+                    if(!regla)return null;
+                    const palabras=String(regla.palabras||'').split(',').map(x=>this.normalizarTextoCliente(x)).filter(Boolean);
+                    const especial=palabras.find(w=>w&&nombre.includes(w));
+                    return {dias:Math.max(1,Number(especial?regla.diasPalabra:regla.dias)||30),regla,especial};
+                },
+                get alertasRecompra(){
+                    const grupos=new Map();
+                    (this.productos||[]).filter(p=>p&&p.estado==='vendido'&&p.fechaVenta&&p.clienteNombre).forEach(p=>{
+                        const rr=this.reglaRecompraParaProducto(p); if(!rr)return;
+                        const clave=[p.ventaGrupoId||p.id,p.clienteId||this.normalizarTextoCliente(p.clienteNombre),p.nombre||'',p.detalle||'',p.talla||''].join('|');
+                        const g=grupos.get(clave)||{clienteNombre:p.clienteNombre,clienteTelefono:p.clienteTelefono||'',clienteId:p.clienteId||'',producto:p.nombre||'Producto',categoria:p.categoria||'',cantidad:0,fechaVenta:p.fechaVenta,ventaGrupoId:p.ventaGrupoId||'',diasPorUnidad:rr.dias,dias:0};
+                        g.cantidad+=1; g.dias=g.cantidad*rr.dias; if(String(p.fechaVenta)<String(g.fechaVenta))g.fechaVenta=p.fechaVenta; g.diasPorUnidad=rr.dias; grupos.set(clave,g);
+                    });
+                    const hoy=new Date(); hoy.setHours(0,0,0,0);
+                    return [...grupos.values()].map(g=>{ const fecha=new Date(String(g.fechaVenta)+'T00:00:00'); fecha.setDate(fecha.getDate()+g.dias); const diasRest=Math.ceil((fecha-hoy)/86400000); return {...g,fechaRecompra:fecha.toISOString().slice(0,10),diasRestantes:diasRest,prioridad:diasRest<=0?'vencida':diasRest<=3?'urgente':diasRest<=7?'próxima':'programada'}; }).filter(g=>g.diasRestantes<=7).sort((a,b)=>a.diasRestantes-b.diasRestantes);
+                },
+                mostrarAlertasRecompra(){
+                    const a=this.alertasRecompra; if(!a.length){Swal.fire('Recompra inteligente','Por ahora no hay clientes pendientes de recompra en los próximos 7 días.','success');return;}
+                    const html='<div class="text-left space-y-2">'+a.slice(0,20).map(x=>`<div class="p-3 rounded-xl bg-slate-50 border"><b>${this.escapeHtml(x.clienteNombre)}</b> · ${this.escapeHtml(x.producto)}<br><span class="text-xs text-slate-500">${x.cantidad} unidad(es) · recompra: ${this.formatearFecha(x.fechaRecompra)} · ${x.diasRestantes<=0?'ya corresponde':'faltan '+x.diasRestantes+' día(s)'}</span></div>`).join('')+'</div>';
+                    Swal.fire({title:'Alertas de recompra',html,confirmButtonText:'Entendido',width:720});
+                },
+                whatsappRecompra(x){
+                    const tel=this.limpiarCelular(x?.clienteTelefono||''); if(!tel){this.notificarToast('warning','Este cliente no tiene celular registrado.');return;}
+                    const dias=x?.diasRestantes<=0?'ya debería estar por renovar':`en aproximadamente ${x.diasRestantes} día(s)`;
+                    const msg=`Hola ${x.clienteNombre||''} 😊 Somos PetSmart. Queríamos avisarte que ${x.producto||'tu producto'} podría estar por agotarse. Por la compra anterior, estimamos que la reposición corresponde ${dias}. ¿Deseas que te ayudemos con tu próximo pedido? 🐾`;
+                    window.open('https://wa.me/51'+tel+'?text='+encodeURIComponent(msg),'_blank');
+                },
+                async guardarReglasRecompra(){ await this.guardarConfiguracionNegocio(); this.notificarToast('success','Reglas de recompra guardadas'); },
                 // =================================================
                 // VALES PROMOCIONALES
                 // =================================================
@@ -1864,7 +2020,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     const d = this.normalizarTextoCliente(distrito || '');
                     return lista.some(x => this.normalizarTextoCliente(x) === d);
                 },
-                async generarValePromocionalParaVenta({clienteId,clienteNombre,clienteTelefono,distrito,direccionEntrega,ventaGrupoId}){let codigo='';for(let i=0;i<8;i++){const candidato=this.generarCodigoValeUnico();const snap=await window.fb.get(window.fb.ref(window.db,`valesPromocionales/${candidato}`));if(!snap.exists()){codigo=candidato;break;}}if(!codigo)throw new Error('No se pudo generar un código único para el vale.');const dias=Math.max(1,Number(this.configNegocio.valeVigenciaDias||30));const venc=new Date();venc.setDate(venc.getDate()+dias);const fechaVencimiento=`${venc.getFullYear()}-${String(venc.getMonth()+1).padStart(2,'0')}-${String(venc.getDate()).padStart(2,'0')}`;const vale={codigo,estado:'disponible',beneficio:'Envío gratis en la próxima compra',clienteId:clienteId||'',clienteNombre:String(clienteNombre||'').trim(),clienteTelefono:this.limpiarCelular(clienteTelefono||''),distrito:String(distrito||'').trim(),direccionEntrega:String(direccionEntrega||'').trim(),ventaOrigen:ventaGrupoId||'',creadoEn:new Date().toISOString(),fechaVencimiento};await window.fb.set(window.fb.ref(window.db,`valesPromocionales/${codigo}`),vale);return vale;},
+                async generarValePromocionalParaVenta({clienteId,clienteNombre,clienteTelefono,distrito,ventaGrupoId}){let codigo='';for(let i=0;i<8;i++){const candidato=this.generarCodigoValeUnico();const snap=await window.fb.get(window.fb.ref(window.db,`valesPromocionales/${candidato}`));if(!snap.exists()){codigo=candidato;break;}}if(!codigo)throw new Error('No se pudo generar un código único para el vale.');const dias=Math.max(1,Number(this.configNegocio.valeVigenciaDias||30));const venc=new Date();venc.setDate(venc.getDate()+dias);const fechaVencimiento=`${venc.getFullYear()}-${String(venc.getMonth()+1).padStart(2,'0')}-${String(venc.getDate()).padStart(2,'0')}`;const vale={codigo,estado:'disponible',beneficio:'Envío gratis en la próxima compra',clienteId:clienteId||'',clienteNombre:String(clienteNombre||'').trim(),clienteTelefono:this.limpiarCelular(clienteTelefono||''),distrito:String(distrito||'').trim(),ventaOrigen:ventaGrupoId||'',creadoEn:new Date().toISOString(),fechaVencimiento};await window.fb.set(window.fb.ref(window.db,`valesPromocionales/${codigo}`),vale);return vale;},
                 async cargarValesPromocionales() {
                     try {
                         const snap = await window.fb.get(window.fb.ref(window.db, 'valesPromocionales'));
@@ -1914,26 +2070,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     try {
                         Swal.fire({title: ext === 'png' ? 'Generando PNG...' : 'Generando JPEG...',text:'Preparando el vale digital en alta resolución',allowOutsideClick:false,didOpen:()=>Swal.showLoading()});
                         await new Promise(resolve=>this.$nextTick(()=>setTimeout(resolve,220)));
-                        const EXPORT_W=1120, EXPORT_H=700;
-                        /* Esperamos a que el navegador termine de renderizar fuentes e imágenes. */
-                        if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch(e) {} }
-                        const imgs=[...source.querySelectorAll('img')];
-                        await Promise.all(imgs.map(img=>img.complete ? Promise.resolve() : new Promise(r=>{img.addEventListener('load',r,{once:true});img.addEventListener('error',r,{once:true});setTimeout(r,5000)})));
-                        /* Ajusta SOLO los campos potencialmente largos. El ajuste se aplica también a la vista, por lo que ambos quedan idénticos. */
-                        const fitFields=()=>{ source.querySelectorAll('.vale-data-value').forEach(el=>{ let size=13; el.style.fontSize=size+'px'; el.style.whiteSpace='normal'; el.style.overflow='visible'; el.style.textOverflow='clip'; while((el.scrollWidth>el.clientWidth || el.scrollHeight>32) && size>10){ size-=0.35; el.style.fontSize=size.toFixed(2)+'px'; } }); };
-                        fitFields();
-                        await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-                        /* html2canvas normal (sin foreignObject) es más estable con logos remotos.
-                           foreignObjectRendering puede activar el bloqueo de recursos externos del navegador. */
-                        const canvas=await window.html2canvas(source,{scale:4,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',imageTimeout:20000,logging:false,width:EXPORT_W,height:EXPORT_H,windowWidth:EXPORT_W,windowHeight:EXPORT_H,x:0,y:0,scrollX:0,scrollY:0,foreignObjectRendering:false,removeContainer:false,onclone:(doc)=>{
-                            const el=doc.getElementById('valeDigitalExport');
-                            if(el){
-                                el.style.width=EXPORT_W+'px';el.style.height=EXPORT_H+'px';el.style.maxWidth='none';el.style.minHeight=EXPORT_H+'px';el.style.maxHeight=EXPORT_H+'px';el.style.transform='none';el.style.overflow='hidden';el.style.margin='0';
-                                el.querySelectorAll('.vale-data-value').forEach(v=>{v.style.whiteSpace='normal';v.style.overflow='visible';v.style.textOverflow='clip';v.style.overflowWrap='anywhere';v.style.wordBreak='break-word';});
-                                /* Evita que una imagen remota fuerce al clon a recalcular tamaños distintos. */
-                                el.querySelectorAll('img').forEach(img=>{ img.setAttribute('crossorigin','anonymous'); img.style.maxWidth='100%'; img.style.maxHeight='100%'; });
-                            }
-                        }});
+                        const canvas=await window.html2canvas(source,{scale:3,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',imageTimeout:15000,logging:false,width:source.scrollWidth,height:source.scrollHeight,windowWidth:source.scrollWidth,windowHeight:source.scrollHeight});
                         const safeCode=String(vale.codigo||'vale').replace(/[^a-zA-Z0-9_-]/g,'_');
                         const mime=ext==='png'?'image/png':'image/jpeg';
                         const dataUrl=canvas.toDataURL(mime,ext==='png'?undefined:0.96);
@@ -1941,10 +2078,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         Swal.close();this.notificarToast('success',`Vale ${ext.toUpperCase()} generado correctamente`);
                     } catch(error) {
                         console.error('ERROR EXPORTANDO VALE DIGITAL:',error);Swal.close();
-                        const msg=String(error?.message||'');
-                        Swal.fire('No se pudo generar la imagen',msg.includes('Security')||msg.includes('taint')||msg.includes('cross-origin')
-                            ? 'El navegador rechazó un recurso externo del vale (normalmente el logo). He preparado la exportación para evitar el modo que provoca este bloqueo. Recarga la página y vuelve a intentarlo.'
-                            : 'Ocurrió un error al convertir el vale en imagen. Recarga la página y vuelve a intentarlo.', 'warning');
+                        Swal.fire('No se pudo generar la imagen','El diseño está correcto, pero el navegador bloqueó algún recurso gráfico externo. Intenta nuevamente o usa Imprimir / PDF.','warning');
                     }
                 },
                 imprimirValePromocional() {
@@ -1958,7 +2092,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     *{box-sizing:border-box}body{margin:0;background:#edf3f8;font-family:Inter,Arial,sans-serif;color:#16324f;padding:30px}.ticket{width:1100px;max-width:96vw;margin:auto;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(8,47,95,.18);display:grid;grid-template-columns:34% 66%;min-height:560px}
                     .left{background:linear-gradient(145deg,#07366d,#0b5aa6);color:#fff;padding:42px 38px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}.left:after{content:"";position:absolute;right:-1px;top:0;width:30px;height:100%;background:#fff;clip-path:polygon(0 0,100% 2%,0 4%,100% 6%,0 8%,100% 10%,0 12%,100% 14%,0 16%,100% 18%,0 20%,100% 22%,0 24%,100% 26%,0 28%,100% 30%,0 32%,100% 34%,0 36%,100% 38%,0 40%,100% 42%,0 44%,100% 46%,0 48%,100% 50%,0 52%,100% 54%,0 56%,100% 58%,0 60%,100% 62%,0 64%,100% 66%,0 68%,100% 70%,0 72%,100% 74%,0 76%,100% 78%,0 80%,100% 82%,0 84%,100% 86%,0 88%,100% 90%,0 92%,100% 94%,0 96%,100% 98%,0 100%)}.logo{max-width:160px;max-height:65px;object-fit:contain}.brand{font-size:25px;font-weight:900}.kicker{font-size:14px;font-weight:900;letter-spacing:.18em;margin-top:38px}.title{font-size:62px;line-height:.9;font-weight:950;letter-spacing:-.05em;margin-top:14px}.copy{font-size:14px;line-height:1.5;max-width:270px;margin-top:20px;opacity:.88}.code-label{font-size:10px;font-weight:900;letter-spacing:.2em;opacity:.7}.sidecode{margin-top:9px;background:#f28b28;color:#082f5f;border-radius:11px;padding:12px 14px;display:inline-block;font:900 18px monospace;letter-spacing:.08em}
                     .right{padding:32px 40px 26px;position:relative}.right:before{content:"🐾";position:absolute;right:25px;top:25px;font-size:85px;opacity:.08;transform:rotate(20deg)}.pill{display:inline-block;background:#eef5fb;color:#0a4d91;border-radius:99px;padding:8px 14px;font-size:10px;font-weight:900;letter-spacing:.15em}.mini{float:right;font-size:25px}.card{margin-top:25px;border:2px solid #0a4d91;border-radius:24px;padding:30px 32px;box-shadow:10px 12px 0 #f28b28}.bk{font-size:11px;color:#f28b28;font-weight:900;letter-spacing:.2em}.benefit{font-size:48px;line-height:1.03;color:#0a4d91;font-weight:950;text-transform:uppercase;margin-top:8px;letter-spacing:-.04em}.line{height:3px;width:90px;background:#f28b28;margin:22px 0 18px;border-radius:99px}.label{font-size:10px;color:#7d8b9b;font-weight:900;letter-spacing:.2em}.code{font:950 45px monospace;letter-spacing:.1em;margin-top:5px;color:#123a63;overflow-wrap:anywhere}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;margin-top:25px}.box{border-top:1px solid #dbe4ee;padding-top:9px}.v{font-size:14px;font-weight:900;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.foot{margin-top:22px;color:#647589;font-size:11px;display:flex;justify-content:space-between}.paws{color:#f28b28;font-size:21px;letter-spacing:5px}@media print{body{padding:0;background:#fff}.ticket{width:100%;max-width:none;box-shadow:none;border-radius:0}}@media(max-width:900px){.ticket{grid-template-columns:1fr}.left{min-height:320px}.left:after{display:none}.title{font-size:48px}.right{padding:25px}.benefit{font-size:36px}}
-                    </style></head><body><div class="ticket"><div class="left"><div>${logo}</div><div><div class="kicker">VALE PROMOCIONAL</div><div class="title">UN REGALO<br>PARA TI</div><div class="copy">Disfruta un beneficio especial en tu próxima compra.</div></div><div><div class="code-label">CÓDIGO DEL VALE</div><div class="sidecode">${esc(vale.codigo)}</div></div></div><div class="right"><div><span class="pill">${esc(nombre)} · PROMOCIÓN</span></div><div class="card"><div class="bk">TU BENEFICIO</div><div class="benefit">${esc(vale.beneficio||'Envío gratis en tu próxima compra')}</div><div class="line"></div><div class="label">CÓDIGO</div><div class="code">${esc(vale.codigo)}</div><div class="grid"><div class="box client"><div class="label">CLIENTE</div><div class="v">${esc(vale.clienteNombre||'Cliente')}</div></div><div class="box"><div class="label">VÁLIDO HASTA</div><div class="v">${esc(vale.fechaVencimiento||'—')}</div></div><div class="box"><div class="label">DISTRITO</div><div class="v">${esc(vale.distrito||'—')}</div></div><div class="box"><div class="label">USO</div><div class="v">POR ÚNICA VEZ</div></div><div class="box address"><div class="label">DIRECCIÓN</div><div class="v">${esc(vale.direccionEntrega||'—')}</div></div></div></div><div class="foot"><span>Presenta este código en tu próxima compra.</span><span class="paws">🐾 🐾 🐾</span></div></div></div><script>window.onload=function(){setTimeout(function(){window.print()},450)}<\/script></body></html>`);
+                    </style></head><body><div class="ticket"><div class="left"><div>${logo}</div><div><div class="kicker">VALE PROMOCIONAL</div><div class="title">UN REGALO<br>PARA TI</div><div class="copy">Disfruta un beneficio especial en tu próxima compra.</div></div><div><div class="code-label">CÓDIGO DEL VALE</div><div class="sidecode">${esc(vale.codigo)}</div></div></div><div class="right"><div><span class="pill">${esc(nombre)} · PROMOCIÓN</span><span class="mini">🐶 🐱</span></div><div class="card"><div class="bk">TU BENEFICIO</div><div class="benefit">${esc(vale.beneficio||'Envío gratis en tu próxima compra')}</div><div class="line"></div><div class="label">CÓDIGO</div><div class="code">${esc(vale.codigo)}</div><div class="grid"><div class="box"><div class="label">CLIENTE</div><div class="v">${esc(vale.clienteNombre||'Cliente')}</div></div><div class="box"><div class="label">VÁLIDO HASTA</div><div class="v">${esc(vale.fechaVencimiento||'—')}</div></div><div class="box"><div class="label">DISTRITO</div><div class="v">${esc(vale.distrito||'—')}</div></div><div class="box"><div class="label">USO</div><div class="v">UNA SOLA VEZ</div></div></div></div><div class="foot"><span>Presenta este código en tu próxima compra.</span><span class="paws">🐾 🐾 🐾</span></div></div></div><script>window.onload=function(){setTimeout(function(){window.print()},450)}<\/script></body></html>`);
                     w.document.close();
                 },
                 // =================================================
@@ -1977,7 +2111,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         ['clientes', 'clientes'],
                         ['finanzas/movimientos', 'finanzas/movimientos'],
                         ['configuracion', 'configuracion'],
-                        ['valesPromocionales', 'valesPromocionales']
+                        ['valesPromocionales', 'valesPromocionales'],
+                        ['seguimientoPublico', 'ventas/_seguimientoPublico']
                     ];
 
                     const resultados = await Promise.all(
@@ -2176,6 +2311,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                                     ...data.negocio
                                 };
                                 this.configNegocio.distritosVales = Array.isArray(this.configNegocio.distritosVales) ? this.configNegocio.distritosVales : [];
+                                this.configNegocio.reglasRecompra = Array.isArray(this.configNegocio.reglasRecompra) && this.configNegocio.reglasRecompra.length ? this.configNegocio.reglasRecompra : [{categoria:'Alimentos',dias:30,palabras:'pate,paté',diasPalabra:4,activo:true},{categoria:'Antipulgas',dias:30,palabras:'3 meses,90 dias,90 días,trimestral',diasPalabra:90,activo:true},{categoria:'ProductoVet',dias:30,palabras:'',diasPalabra:30,activo:true}];
                                 this.configNegocio.distritosValesTexto = this.configNegocio.distritosVales.join(', ');
                             }
                         },
@@ -2498,6 +2634,102 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 get reportePedidoTotal() {
                     return (Number(this.reportePedido?.precioProductos) || 0) + (Number(this.reportePedido?.costoEnvio) || 0);
                 },
+                generarTokenSeguimiento() {
+                    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                    let token='';
+                    for(let i=0;i<12;i++) token += chars[Math.floor(Math.random()*chars.length)];
+                    return token;
+                },
+                codificarSeguimiento(data) {
+                    try { const json=JSON.stringify(data||{}); const bytes=new TextEncoder().encode(json); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); } catch(e){ return ''; }
+                },
+                decodificarSeguimiento(value) {
+                    try { let b64=String(value||'').replace(/-/g,'+').replace(/_/g,'/'); while(b64.length%4)b64+='='; const bin=atob(b64); const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0)); return JSON.parse(new TextDecoder().decode(bytes)); } catch(e){ return null; }
+                },
+                urlSeguimientoCliente(token,data={}) {
+                    const base=window.location.origin && window.location.origin!=='null' ? window.location.origin+window.location.pathname : window.location.href.split('?')[0];
+                    return `${base}?seguimiento=${encodeURIComponent(token)}`;
+                },
+                async cargarSeguimientoPublico(token) {
+                    this.seguimientoCargando=true; this.seguimientoClienteData=null;
+                    try {
+                        if(!window.fb || !window.db) throw new Error('No se pudo conectar con el servicio de seguimiento.');
+                        const ref=window.fb.ref(window.db,`ventas/_seguimientoPublico/${token}`);
+                        if(this.seguimientoListener){ try{this.seguimientoListener();}catch(_){} this.seguimientoListener=null; }
+                        let primerCarga=true;
+                        this.seguimientoListener=window.fb.onValue(ref,(snap)=>{
+                            const data=snap.exists()?snap.val():null;
+                            if(!data) { this.seguimientoClienteData={error:'No encontramos este pedido o el enlace no es válido.'}; this.seguimientoCargando=false; return; }
+                            const anterior=this.seguimientoClienteData?.estado;
+                            const estadoNormalizado=String(data.estado||'Solicitud Recibida').replace(/^Recibido$/,'Solicitud Recibida');
+                            this.seguimientoClienteData={token,...data,estado:estadoNormalizado};
+                            this.seguimientoCargando=false;
+                            if(anterior && anterior!==data.estado){ this.seguimientoAnimando=true; setTimeout(()=>this.seguimientoAnimando=false,1000); }
+                        },(err)=>{
+                            this.seguimientoCargando=false;
+                            const params=new URLSearchParams(window.location.search); const fallback=this.decodificarSeguimiento(params.get('tracking'));
+                            this.seguimientoClienteData=fallback?{token,...fallback}:{error:'No se pudo cargar el seguimiento. Verifica el enlace del pedido.'};
+                        });
+                    } catch(e){
+                        const params=new URLSearchParams(window.location.search); const fallback=this.decodificarSeguimiento(params.get('tracking'));
+                        this.seguimientoClienteData=fallback?{token,...fallback}:{error:e?.message||'No se pudo cargar el seguimiento.'};
+                        this.seguimientoCargando=false;
+                    }
+                },
+                crearSnapshotSeguimientoDesdeItem(item,grupo,token) {
+                    const grupoItems=this.productos.filter(p=>p.estado==='vendido'&&String(p.ventaGrupoId||'')===String(grupo));
+                    const primero=grupoItems[0]||item||{};
+                    return {token,ventaGrupoId:String(grupo||''),pedidoNumero:String(primero.comprobanteNumero||''),clienteNombre:String(primero.clienteNombre||''),clienteTelefono:String(primero.clienteTelefono||''),direccion:String(primero.direccionEntrega||''),distrito:String(primero.distrito||''),fechaEntrega:String(primero.fechaEntrega||''),estado:String(primero.estadoEnvio||'Solicitud Recibida').replace(/^Recibido$/,'Solicitud Recibida'),creadoEn:primero.fechaVenta||new Date().toISOString(),actualizadoEn:new Date().toISOString(),historial:[{estado:String(primero.estadoEnvio||'Recibido'),fecha:primero.fechaVenta||new Date().toISOString()}],items:grupoItems.map(p=>({nombre:p.nombre||'',cantidad:1,imagenUrl:p.imagenUrl||''}))};
+                },
+                async crearSeguimientoPedido({ventaGrupoId,pedidoNumero,clienteNombre,clienteTelefono,direccion,distrito,fechaEntrega,items}) {
+                    if(!ventaGrupoId) return null;
+                    const token=this.generarTokenSeguimiento();
+                    const ahora=new Date().toISOString();
+                    const data={token,ventaGrupoId,pedidoNumero:String(pedidoNumero||''),clienteNombre:String(clienteNombre||'').trim(),clienteTelefono:String(clienteTelefono||''),direccion:String(direccion||''),distrito:String(distrito||''),fechaEntrega:String(fechaEntrega||''),estado:'Solicitud Recibida',creadoEn:ahora,actualizadoEn:ahora,historial:[{estado:'Solicitud Recibida',fecha:ahora}],items:(items||[]).map(p=>({nombre:p.nombre||'',cantidad:Number(p.cantidad)||1,imagenUrl:p.imagenUrl||''}))};
+                    try { await window.fb.set(window.fb.ref(window.db,`ventas/_seguimientoPublico/${token}`),data); return data; } catch(e){ console.warn('No se pudo guardar seguimientoPublico:',e); return null; }
+                },
+                async abrirSeguimientoCliente(item) {
+                    if(!item) return;
+                    const clienteWin=window.open('about:blank','_blank','width=980,height=1050');
+                    if(clienteWin){ clienteWin.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Seguimiento de pedido · PetSmart</title></head><body style="margin:0;font-family:system-ui;background:#06366f;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh"><div style="text-align:center"><div style="font-size:26px;font-weight:900">PetSmart</div><div style="margin-top:8px;opacity:.8">Preparando seguimiento…</div></div></body></html>'); clienteWin.document.close(); }
+                    const grupo=String(item.ventaGrupoId||'');
+                    if(!grupo){ if(clienteWin)clienteWin.close(); Swal.fire('Seguimiento','Esta venta antigua no tiene un grupo de pedido. Registra una nueva venta para habilitar el seguimiento.','info'); return; }
+                    try {
+                        let token=String(item.seguimientoToken||'').trim();
+                        let snapshot=null;
+                        if(token){
+                            try { const snap=await window.fb.get(window.fb.ref(window.db,`ventas/_seguimientoPublico/${token}`)); if(snap.exists()) snapshot=snap.val(); } catch(_){}
+                        }
+                        if(!token || !snapshot){
+                            const grupoItems=this.productos.filter(p=>p.estado==='vendido'&&String(p.ventaGrupoId||'')===grupo);
+                            const primero=grupoItems[0]||item;
+                            snapshot=await this.crearSeguimientoPedido({ventaGrupoId:grupo,pedidoNumero:primero.comprobanteNumero,clienteNombre:primero.clienteNombre,clienteTelefono:primero.clienteTelefono,direccion:primero.direccionEntrega,distrito:primero.distrito,fechaEntrega:primero.fechaEntrega,items:grupoItems.map(p=>({nombre:p.nombre,cantidad:1,imagenUrl:p.imagenUrl||''}))});
+                            token=snapshot?.token||'';
+                            if(token){ const updates={}; grupoItems.forEach(p=>{updates[`productos/${p.id}/seguimientoToken`]=token;updates[`productos/${p.id}/estadoEnvio`]=snapshot.estado||'Recibido';}); if(Object.keys(updates).length) await window.fb.update(window.fb.ref(window.db),updates); }
+                        }
+                        if(!token) throw new Error('No se pudo generar el enlace corto. Firebase no permitió guardar el seguimiento.');
+                        const url=this.urlSeguimientoCliente(token,snapshot);
+                        this.seguimientoAdmin={token,url,item,snapshot};
+                        this.modalSeguimientoPedido=true;
+                        if(clienteWin) clienteWin.location.href=url;
+                    } catch(e){ if(clienteWin)clienteWin.close(); Swal.fire('Seguimiento','No se pudo preparar el seguimiento: '+(e?.message||e),'error'); }
+                },
+                async actualizarEstadoSeguimiento(estado) {
+                    const s=this.seguimientoAdmin; if(!s?.token||!this.seguimientoEstados.includes(estado)) return;
+                    try {
+                        const grupo=String(s.item?.ventaGrupoId||''); const ahora=new Date().toISOString();
+                        if(grupo){ const updates={}; this.productos.filter(p=>p.estado==='vendido'&&String(p.ventaGrupoId||'')===grupo).forEach(p=>{updates[`productos/${p.id}/estadoEnvio`]=estado;updates[`productos/${p.id}/seguimientoToken`]=s.token;}); if(Object.keys(updates).length) await window.fb.update(window.fb.ref(window.db),updates); }
+                        let base=this.seguimientoAdmin?.snapshot||this.crearSnapshotSeguimientoDesdeItem(s.item,grupo,s.token);
+                        const historial=Array.isArray(base.historial)?base.historial.slice():[]; if(base.estado!==estado) historial.push({estado,fecha:ahora});
+                        const snapshot={...base,token:s.token,estado,actualizadoEn:ahora,historial};
+                        await window.fb.set(window.fb.ref(window.db,`ventas/_seguimientoPublico/${s.token}`),snapshot);
+                        this.seguimientoAdmin={...s,estado,snapshot,url:this.urlSeguimientoCliente(s.token,snapshot)};
+                        this.notificarToast('success','Estado actualizado: '+estado);
+                    } catch(e){ Swal.fire('Seguimiento','No se pudo actualizar el estado: '+(e?.message||e),'error'); }
+                },
+                async copiarEnlaceSeguimiento(){ const url=this.seguimientoAdmin?.url; if(!url)return; try{await navigator.clipboard.writeText(url);this.notificarToast('success','Enlace corto copiado');}catch(e){Swal.fire({title:'Enlace para el cliente',html:`<input class="swal2-input" value="${this.escapeHtml(url)}" readonly>`,confirmButtonText:'Cerrar'});} },
+                abrirSeguimientoEnNuevaVentana(){ const url=this.seguimientoAdmin?.url; if(url) window.open(url,'_blank','width=980,height=1050'); },
+                cerrarSeguimientoAdmin(){this.modalSeguimientoPedido=false;this.seguimientoAdmin=null;},
                 abrirReportePedido(item) {
                     if (!item) return;
                     const grupoId = item.ventaGrupoId || '';
@@ -2566,7 +2798,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         .pedido-greeting{font-size:19px;line-height:1.5;margin:28px 0 20px}.pedido-section-title,.pedido-delivery-title{font-size:22px;font-weight:800;padding-bottom:10px;border-bottom:1px solid #cfd4dc;margin-bottom:14px}
                         .pedido-table{width:100%;border-collapse:collapse}.pedido-table th{background:#f3f6fa;font-size:16px;text-align:left;padding:13px 12px;border:1px solid #dce1e8;font-weight:800}.pedido-table th:nth-child(2),.pedido-table th:nth-child(3){text-align:right}
                         .pedido-table td{padding:15px 12px;border-bottom:1px solid #d7dce3;vertical-align:middle;font-size:16px}.pedido-table td:nth-child(2),.pedido-table td:nth-child(3){text-align:right;white-space:nowrap}
-                        .pedido-product{display:flex;align-items:center;gap:14px}.pedido-product-img{width:110px;height:110px;border-radius:10px;object-fit:contain;border:0;background:transparent;display:block}.pedido-product-name{font-weight:800;line-height:1.25}.pedido-product-detail{font-size:12px;color:#6b7280;margin-top:4px}
+                        .pedido-product{display:flex;align-items:center;gap:14px}.pedido-product-img{width:auto;height:auto;max-width:110px;max-height:110px;border-radius:10px;object-fit:contain;border:0;background:transparent;display:block}.pedido-product-img:not(img){width:110px;height:110px;display:flex;align-items:center;justify-content:center}.pedido-product-name{font-weight:800;line-height:1.25}.pedido-product-detail{font-size:12px;color:#6b7280;margin-top:4px}
                         .pedido-totals{margin:20px 0 30px auto;max-width:500px}.pedido-total-row{display:flex;justify-content:space-between;gap:20px;padding:6px 0;font-size:16px}.pedido-total-row.grand{border-top:1px solid #aeb5c0;margin-top:5px;padding-top:10px;font-size:18px;font-weight:900}
                         .pedido-delivery{font-size:16px;line-height:1.8}.pedido-delivery strong{font-weight:800}.pedido-next{margin-top:22px;background:#eaf6ff;border-left:5px solid #3b82c4;border-radius:6px;padding:14px 18px;color:#1f5688;font-size:15px;line-height:1.55}.pedido-footer{margin-top:34px;padding-top:22px;border-top:1px solid #cfd4dc;text-align:center;color:#4b5563;font-size:15px;line-height:1.8}.pedido-muted{color:#6b7280}
                         @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}.pedido-paper{max-width:none}.pedido-paper-inner{padding:12mm 12mm 9mm}.pedido-table tr{page-break-inside:avoid}}
@@ -2593,7 +2825,23 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                             allowTaint: false,
                             backgroundColor: '#ffffff',
                             imageTimeout: 15000,
-                            logging: false
+                            logging: false,
+                            onclone: (doc) => {
+                                const root = doc.getElementById('reportePedidoPreview');
+                                if (!root) return;
+                                root.style.width = getComputedStyle(source).width;
+                                root.style.maxWidth = 'none';
+                                root.querySelectorAll('.pedido-product-img').forEach(img => {
+                                    img.style.width = 'auto';
+                                    img.style.height = 'auto';
+                                    img.style.maxWidth = '110px';
+                                    img.style.maxHeight = '110px';
+                                    img.style.objectFit = 'contain';
+                                    img.style.objectPosition = 'center';
+                                    img.style.display = 'block';
+                                    img.style.flex = '0 0 auto';
+                                });
+                            }
                         });
                         const enlace = document.createElement('a');
                         const pedido = String(this.reportePedido.pedidoNumero || 'pedido').replace(/[^a-zA-Z0-9_-]/g, '_');
@@ -2642,7 +2890,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 seleccionarTodosCatalogo(){ this.catalogoSeleccionados=this.productosCatalogoDisponibles.map(p=>p.id); },
                 limpiarSeleccionCatalogo(){ this.catalogoSeleccionados=[]; },
                 get productosSeleccionadosCatalogo(){ const set=new Set(this.catalogoSeleccionados); return this.productos.filter(p=>set.has(p.id)); },
-                async exportarCatalogoJPEG(){ const source=document.getElementById('catalogoExportable'); if(!source||!this.productosSeleccionadosCatalogo.length){Swal.fire('Selecciona productos','Elige al menos un producto para el catálogo.','warning');return;} if(!window.html2canvas)return; try{Swal.fire({title:'Generando catálogo...',text:'Preparando imagen JPEG',allowOutsideClick:false,didOpen:()=>Swal.showLoading()}); await new Promise(r=>this.$nextTick(()=>setTimeout(r,150))); const canvas=await html2canvas(source,{scale:3,useCORS:true,allowTaint:false,backgroundColor:'#fff',logging:false,imageTimeout:15000}); const a=document.createElement('a');a.download='PetSmart_Catalogo.jpeg';a.href=canvas.toDataURL('image/jpeg',0.96);a.click();Swal.close();this.notificarToast('success','Catálogo JPEG generado');}catch(e){Swal.close();Swal.fire('No se pudo generar',e.message||'Verifica que las imágenes permitan CORS.','warning');}},
+                async exportarCatalogoJPEG(){ const source=document.getElementById('catalogoExportable'); if(!source||!this.productosSeleccionadosCatalogo.length){Swal.fire('Selecciona productos','Elige al menos un producto para el catálogo.','warning');return;} if(!window.html2canvas)return; try{Swal.fire({title:'Generando catálogo...',text:'Preparando imagen JPEG',allowOutsideClick:false,didOpen:()=>Swal.showLoading()}); await new Promise(r=>this.$nextTick(()=>setTimeout(r,150))); const canvas=await html2canvas(source,{scale:3,useCORS:true,allowTaint:false,backgroundColor:'#fff',logging:false,imageTimeout:15000,onclone:(doc)=>{const exportable=doc.getElementById('catalogoExportable');if(exportable){exportable.querySelectorAll('.cat-chip').forEach(chip=>{chip.style.position='relative';chip.style.zIndex='20';chip.style.marginTop='12px';chip.style.alignSelf='flex-start';chip.style.clear='both';});exportable.querySelectorAll('.cat-name,.cat-detail').forEach(el=>{el.style.position='relative';el.style.zIndex='21';});}}}); const a=document.createElement('a');a.download='PetSmart_Catalogo.jpeg';a.href=canvas.toDataURL('image/jpeg',0.96);a.click();Swal.close();this.notificarToast('success','Catálogo JPEG generado');}catch(e){Swal.close();Swal.fire('No se pudo generar',e.message||'Verifica que las imágenes permitan CORS.','warning');}},
                 async exportarCatalogoPDF(){ const source=document.getElementById('catalogoExportable'); if(!source||!this.productosSeleccionadosCatalogo.length){Swal.fire('Selecciona productos','Elige al menos un producto para el catálogo.','warning');return;} if(!window.html2canvas||!window.jspdf){Swal.fire('No disponible','No se pudo cargar el generador PDF.','warning');return;} try{Swal.fire({title:'Generando PDF...',text:'Preparando catálogo',allowOutsideClick:false,didOpen:()=>Swal.showLoading()});await new Promise(r=>this.$nextTick(()=>setTimeout(r,150)));const canvas=await html2canvas(source,{scale:2.5,useCORS:true,allowTaint:false,backgroundColor:'#fff',logging:false,imageTimeout:15000});const img=canvas.toDataURL('image/jpeg',0.96);const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});const pw=210,ph=297;const ratio=canvas.height/canvas.width;let ih=pw*ratio;let y=0;let remaining=ih;while(remaining>0){pdf.addImage(img,'JPEG',0,y,pw,ih);remaining-=ph;if(remaining>0){pdf.addPage();y-=ph;}}pdf.save('PetSmart_Catalogo.pdf');Swal.close();this.notificarToast('success','Catálogo PDF generado');}catch(e){Swal.close();Swal.fire('No se pudo generar PDF',e.message||'Error inesperado.','warning');}},
                 // =================================================
                 // GESTIÓN FINANCIERA · DOS POZOS AUTÓNOMOS
@@ -2667,7 +2915,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 },
                 sumarMovimientos(pozo, tipo) {
                     return this.movimientosFinancieros
-                        .filter(m => m.pozo === pozo && m.tipo === tipo)
+                        .filter(m => m.pozo === pozo && m.tipo === tipo && (m.aplicado === true || m.estado === 'aplicado'))
                         .reduce((sum, m) => sum + (Number(m.monto) || 0), 0);
                 },
                 get ingresosCapitalManuales() { return this.sumarMovimientos('capital','ingreso'); },
@@ -2694,7 +2942,31 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     });
                 },
                 limpiarFinanzaForm() {
-                    this.finanzaForm = { pozo: 'capital', tipo: 'salida', monto: 0, concepto: '', fecha: this.fechaPeru(), observacion: '' };
+                    this.finanzaForm = { pozo: 'capital', tipo: 'salida', monto: 0, concepto: '', fecha: this.fechaPeru(), observacion: '', aplicado: false };
+                },
+                async cambiarEstadoMovimientoFinanciero(mov) {
+                    if (!mov?.key) return;
+                    const nuevoEstado = !(mov.aplicado === true || mov.estado === 'aplicado');
+                    if (nuevoEstado && mov.tipo === 'salida') {
+                        const saldoDisponible = mov.pozo === 'capital' ? Number(this.saldoPozoCapital) || 0 : Number(this.saldoPozoMancomunado) || 0;
+                        const monto = Number(mov.monto) || 0;
+                        if (monto > saldoDisponible + 0.000001) {
+                            const nombrePozo = mov.pozo === 'capital' ? 'Capital' : 'Mancomunado';
+                            Swal.fire({ icon:'warning', title:'Saldo insuficiente', html:`No puedes aplicar una salida de <b>S/ ${this.formatMonto(monto)}</b> porque el pozo <b>${nombrePozo}</b> solo tiene disponible <b>S/ ${this.formatMonto(saldoDisponible)}</b>.` });
+                            return;
+                        }
+                    }
+                    try {
+                        await window.fb.update(window.fb.ref(window.db, `finanzas/movimientos/${mov.key}`), {
+                            aplicado: nuevoEstado,
+                            estado: nuevoEstado ? 'aplicado' : 'pendiente',
+                            aplicadoEn: nuevoEstado ? new Date().toISOString() : ''
+                        });
+                        this.notificarToast('success', nuevoEstado ? 'Movimiento aplicado al pozo' : 'Movimiento dejado como pendiente');
+                    } catch (error) {
+                        console.error(error);
+                        Swal.fire('Error','No se pudo cambiar el estado del movimiento. Revisa las reglas de Firebase.','error');
+                    }
                 },
                 async registrarMovimientoFinanciero() {
                     const f = this.finanzaForm || {};
@@ -2703,7 +2975,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     if (!String(f.concepto || '').trim()) { Swal.fire('Atención', 'Indica el concepto del movimiento.', 'warning'); return; }
                     if (!['capital','mancomunado'].includes(f.pozo)) { Swal.fire('Atención', 'Selecciona un pozo válido.', 'warning'); return; }
                     if (!['ingreso','salida'].includes(f.tipo)) { Swal.fire('Atención', 'Selecciona ingreso o salida.', 'warning'); return; }
-                    if (f.tipo === 'salida') {
+                    if (f.tipo === 'salida' && f.aplicado) {
                         const saldoDisponible = f.pozo === 'capital' ? Number(this.saldoPozoCapital) || 0 : Number(this.saldoPozoMancomunado) || 0;
                         if (monto > saldoDisponible + 0.000001) {
                             const nombrePozo = f.pozo === 'capital' ? 'Capital' : 'Mancomunado';
@@ -2722,6 +2994,9 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                             fecha: f.fecha || this.fechaPeru(),
                             observacion: String(f.observacion || '').trim(),
                             origen: 'manual',
+                            aplicado: f.aplicado === true,
+                            estado: f.aplicado === true ? 'aplicado' : 'pendiente',
+                            aplicadoEn: f.aplicado === true ? new Date().toISOString() : '',
                             creadoEn: new Date().toISOString()
                         });
                         Swal.close();
@@ -3312,7 +3587,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     this.formProducto.clienteNombre = ''; this.formProducto.clienteTelefono = ''; this.formProducto.distrito = '';
                     this.formProducto.observacion = ''; this.formProducto.medioPago = 'Yape'; this.formProducto.canalVenta = '';
                     this.formProducto.perfilFacebook = ''; this.formProducto.comprobanteNumero = ''; this.formProducto.comprobanteId = '';
-                    this.formProducto.nombre = `${item.nombre} (Copia)`; this.formProducto.sku = '';
+                    this.formProducto.nombre = `${item.nombre || ''}`.trim(); this.formProducto.sku = '';
                     this.modalProducto = true;
                 },
                 // =================================================
@@ -3569,6 +3844,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                                 clienteTelefono,
                                 clienteId,
                                 distrito,
+                                direccionEntrega: String(this.ventaForm.direccionEntrega || '').trim(),
                                 canalVenta,
                                 perfilFacebook,
                                 medioPago: 'Yape',
@@ -3605,6 +3881,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                                     clienteId,
                                     canalVenta,
                                     distrito,
+                                    direccionEntrega: String(this.ventaForm.direccionEntrega || '').trim(),
                                     montoTotal: precio,
                                     totalVenta: this.totalVentaSeleccionada,
                                     cantidadProductos: seleccionados.length,
@@ -3616,7 +3893,10 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                                     ruc,
                                     razonSocial,
                                     comprobanteNumero,
-                                    ventaGrupoId
+                                    ventaGrupoId,
+                                    seguimientoEstado: 'Solicitud Recibida',
+                                    estadoEnvio: 'Solicitud Recibida',
+                                    seguimientoToken: ''
                                 }
                             });
                         });
@@ -3657,7 +3937,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                             this.notificarToast('success', `${seleccionados.length} producto(s) vendidos correctamente`);
                             if (this.ventaForm.generarVale) {
                                 try {
-                                    const vale = await this.generarValePromocionalParaVenta({clienteId, clienteNombre, clienteTelefono, distrito, direccionEntrega: this.ventaForm.direccionEntrega, ventaGrupoId});
+                                    const vale = await this.generarValePromocionalParaVenta({clienteId, clienteNombre, clienteTelefono, distrito, ventaGrupoId});
                                     this.valeGeneradoUltimaVenta = vale;
                                     Swal.fire({icon:'success',title:'Venta registrada + vale generado',html:`<div class=\"text-sm\">Código: <b style=\"font-family:monospace;letter-spacing:.08em\">${vale.codigo}</b><br><span class=\"text-xs\">${vale.beneficio} · Válido hasta ${vale.fechaVencimiento}</span></div>`,confirmButtonColor:'#059669'});
                                 } catch(e) { console.warn('No se pudo generar el vale:',e); Swal.fire({icon:'warning',title:'Venta registrada',text:'La venta se guardó, pero no se pudo generar el vale promocional. Verifica los permisos de Firebase para valesPromocionales.',confirmButtonColor:'#d97706'}); }
@@ -3711,7 +3991,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         const comision = venta.canalVenta === 'Falabella' ? Number(venta.comision) || 0 : 0;
                         const confLogistico = venta.canalVenta === 'Falabella' ? Number(venta.confLogistico) || 0 : 0;
                         const perfilFacebook = venta.canalVenta === 'Facebook' ? String(venta.perfilFacebook || '') : '';
-                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, fechaEntrega: String(venta.fechaEntrega || ''), envio: String(venta.envio || '').trim(), clienteNombre: String(venta.clienteNombre || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), clienteTelefono: this.limpiarCelular(venta.clienteTelefono || ''), distrito: String(venta.distrito || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), latitud: String(venta.latitud || '').trim(), longitud: String(venta.longitud || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim(), tipoComprobante: venta.tipoComprobante || 'Boleta', tipoDocumento: venta.tipoComprobante === 'Boleta' ? (venta.tipoDocumento || 'DNI') : '', numeroDocumento: venta.tipoComprobante === 'Boleta' ? String(venta.numeroDocumento || '').replace(/\D/g, '') : '', ruc: venta.tipoComprobante === 'Factura' ? String(venta.ruc || '').replace(/\D/g, '') : '', razonSocial: venta.tipoComprobante === 'Factura' ? String(venta.razonSocial || '').trim() : '' };
+                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, fechaEntrega: String(venta.fechaEntrega || ''), envio: String(venta.envio || '').trim(), clienteNombre: String(venta.clienteNombre || '').trim(), clienteTelefono: this.limpiarCelular(venta.clienteTelefono || ''), distrito: String(venta.distrito || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), latitud: String(venta.latitud || '').trim(), longitud: String(venta.longitud || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim(), tipoComprobante: venta.tipoComprobante || 'Boleta', tipoDocumento: venta.tipoComprobante === 'Boleta' ? (venta.tipoDocumento || 'DNI') : '', numeroDocumento: venta.tipoComprobante === 'Boleta' ? String(venta.numeroDocumento || '').replace(/\D/g, '') : '', ruc: venta.tipoComprobante === 'Factura' ? String(venta.ruc || '').replace(/\D/g, '') : '', razonSocial: venta.tipoComprobante === 'Factura' ? String(venta.razonSocial || '').trim() : '' };
                         await window.fb.update(window.fb.ref(window.db, `productos/${venta.id}`), datos);
                         await this.guardarRegistroVentaAdicional(venta, datos);
                         Swal.close();
@@ -4890,6 +5170,9 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 <button @click="abrirReportePedido(item)" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-violet-500/10 text-violet-700 dark:text-violet-300 hover:bg-violet-500 hover:text-white text-xs font-black transition-colors" title="Generar reporte de pedido">
 <i class="fa-solid fa-file-invoice"></i><span>Pedido</span>
 </button>
+<button @click="abrirSeguimientoCliente(item)" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-xs font-black transition-colors shadow-sm" title="Abrir seguimiento del cliente">
+<i class="fa-solid fa-truck-fast"></i><span>Seguimiento</span>
+</button>
 </div>
 </td>
 <td class="py-4 px-4 text-center">
@@ -4955,11 +5238,29 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 </div>
 </div><div style="display:none;" x-show="activeTab === 'catalogo'" x-transition>
 <div class="space-y-5">
-<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden">
-<div class="p-5 border-b border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3"><div><div class="text-[10px] uppercase tracking-[0.2em] font-black text-violet-600">PetSmart Catalog</div><h2 class="text-2xl font-black">Constructor de catálogo</h2><p class="text-xs text-slate-400 mt-1">Elige los productos que quieres mostrar. El catálogo no incluye precio ni UPC.</p></div><div class="flex flex-wrap gap-2"><button @click="seleccionarTodosCatalogo()" class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-900 text-xs font-black">Seleccionar todos</button><button @click="limpiarSeleccionCatalogo()" class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-900 text-xs font-black">Limpiar</button><button @click="exportarCatalogoJPEG()" class="px-3 py-2 rounded-lg bg-violet-600 text-white text-xs font-black"><i class="fa-solid fa-image mr-1"></i>JPEG</button><button @click="exportarCatalogoPDF()" class="px-3 py-2 rounded-lg bg-rose-600 text-white text-xs font-black"><i class="fa-solid fa-file-pdf mr-1"></i>PDF</button></div></div>
-<div class="p-5 grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-5">
-<div><input x-model="catalogoFiltro" placeholder="Buscar producto..." class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border px-4 py-3 text-sm mb-3"><div class="max-h-[600px] overflow-auto space-y-2"><template x-for="p in productosCatalogoDisponibles" :key="'cat-select-'+p.id"><label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-violet-50 dark:hover:bg-slate-900"><input type="checkbox" :checked="catalogoSeleccionados.includes(p.id)" @change="toggleCatalogoProducto(p.id)" class="w-4 h-4"><img :src="p.imagenUrl || ''" class="w-12 h-12 object-contain rounded-lg"><span class="min-w-0"><span class="block font-black text-xs truncate" x-text="p.nombre"></span><span class="block text-[10px] text-slate-400" x-text="p.talla || 'Única'"></span></span></label></template></div></div>
-<div><div id="catalogoExportable" class="bg-white text-slate-900 p-8 min-h-[900px]"><div class="text-center pb-5 border-b-2 border-slate-200"><template x-if="configNegocio.logoUrl"><img :src="configNegocio.logoUrl" class="max-h-24 max-w-[220px] mx-auto object-contain"></template><div class="text-3xl font-black mt-3" x-text="catalogoTitulo"></div><div class="text-xs text-slate-500 mt-1">Productos seleccionados</div></div><div class="grid grid-cols-2 md:grid-cols-3 gap-6 mt-7"><template x-for="p in productosSeleccionadosCatalogo" :key="'cat-preview-'+p.id"><div class="rounded-2xl border border-slate-200 p-4 bg-white text-center shadow-sm"><div class="h-48 flex items-center justify-center"><img :src="p.imagenUrl || ''" class="max-h-48 max-w-full object-contain"></div><div class="font-black text-base mt-3" x-text="p.nombre"></div><div class="text-xs text-slate-500 mt-1" x-text="[p.detalle,p.talla && 'Talla '+p.talla].filter(Boolean).join(' · ')"></div></div></template></div></div></div>
+<div class="catalogo-premium-shell">
+<div class="catalogo-premium-head p-6 md:p-8">
+<div class="relative z-10 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
+<div><div class="catalogo-premium-kicker">PetSmart · Catálogo profesional</div><h2 class="catalogo-premium-title text-3xl md:text-4xl mt-2">Constructor de catálogo</h2><p class="text-sm text-blue-100 mt-2 max-w-2xl">Selecciona tus productos y genera una presentación con el mismo lenguaje visual elegante de tu página de seguimiento.</p></div>
+<div class="flex flex-wrap gap-2"><button @click="seleccionarTodosCatalogo()" class="px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-black border border-white/10">Seleccionar todos</button><button @click="limpiarSeleccionCatalogo()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-black border border-white/10">Limpiar</button><button @click="exportarCatalogoJPEG()" class="px-4 py-2.5 rounded-xl bg-white text-blue-800 text-xs font-black shadow-lg"><i class="fa-solid fa-image mr-1"></i>JPEG</button><button @click="exportarCatalogoPDF()" class="px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-black shadow-lg"><i class="fa-solid fa-file-pdf mr-1"></i>PDF</button></div>
+</div></div>
+<div class="p-5 md:p-7 grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-5">
+<div class="catalogo-premium-card p-4 md:p-5">
+<div class="flex items-center justify-between gap-3 mb-3"><div><div class="text-[10px] uppercase tracking-[0.18em] font-black text-blue-700">Productos</div><div class="font-black text-lg">Seleccionar artículos</div></div><span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-black" x-text="productosSeleccionadosCatalogo.length + ' seleccionados'"></span></div>
+<div class="relative mb-3"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="catalogoFiltro" placeholder="Buscar producto..." class="w-full pl-9 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-bold outline-none focus:ring-2 focus:ring-blue-200"></div>
+<div class="max-h-[600px] overflow-auto space-y-2 pr-1"><template x-for="p in productosCatalogoDisponibles" :key="'cat-select-'+p.id"><label class="catalogo-premium-item flex items-center gap-3 p-3 rounded-xl border border-slate-200 cursor-pointer bg-white"><input type="checkbox" :checked="catalogoSeleccionados.includes(p.id)" @change="toggleCatalogoProducto(p.id)" class="w-4 h-4 accent-blue-700"><img :src="p.imagenUrl || ''" class="w-14 h-14 object-contain rounded-xl bg-slate-50 border border-slate-100"><span class="min-w-0"><span class="block font-black text-xs truncate" x-text="p.nombre"></span><span class="block text-[10px] text-slate-400 mt-1" x-text="[p.talla && 'Talla '+p.talla,p.sku && 'SKU '+p.sku].filter(Boolean).join(' · ')"></span></span></label></template></div>
+</div>
+<div class="catalogo-premium-card p-3 md:p-4 overflow-auto">
+<div id="catalogoExportable" class="catalogo-export-premium p-4 md:p-7 min-h-[900px]">
+<div class="cat-export-top">
+<div class="relative z-10 flex flex-col items-start">
+<template x-if="configNegocio.logoUrl"><img :src="configNegocio.logoUrl" class="cat-export-logo"></template>
+<div class="cat-export-title" x-text="catalogoTitulo"></div><div class="cat-export-sub">Selección de productos · Presentación PetSmart</div>
+</div><div class="cat-paw">🐾</div></div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5 mt-6"><template x-for="p in productosSeleccionadosCatalogo" :key="'cat-preview-'+p.id"><div class="cat-product"><div class="cat-photo"><img :src="p.imagenUrl || ''" :alt="p.nombre || ''"></div><div class="cat-name" x-text="p.nombre"></div><div class="cat-detail" x-text="[p.detalle,p.talla && 'Talla '+p.talla].filter(Boolean).join(' · ')"></div><div class="cat-chip"><i class="fa-solid fa-paw"></i> PetSmart</div></div></template></div>
+<div x-show="!productosSeleccionadosCatalogo.length" class="py-20 text-center text-slate-400"><div class="text-5xl opacity-50">🐾</div><div class="font-black text-lg mt-3">Selecciona productos para comenzar</div><div class="text-xs mt-1">La vista previa se actualizará automáticamente.</div></div>
+<div class="cat-footer">PetSmart · Catálogo profesional · Productos seleccionados</div>
+</div></div>
 </div></div></div>
 </div>
 <div style="display:none;" x-show="activeTab === 'finanzas'" x-transition>
@@ -5015,6 +5316,10 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
         <div><label class="block text-[11px] font-black mb-1.5">Concepto</label><input x-model="finanzaForm.concepto" type="text" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm" placeholder="Ej: Compra de mercadería"></div>
         <div><label class="block text-[11px] font-black mb-1.5">Fecha</label><input x-model="finanzaForm.fecha" type="date" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm"></div>
         <div><label class="block text-[11px] font-black mb-1.5">Observación</label><textarea x-model="finanzaForm.observacion" rows="3" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm resize-none" placeholder="Proveedor, motivo, referencia, etc."></textarea></div>
+        <label class="fin-apply-switch flex items-center justify-between gap-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/70 px-4 py-3 cursor-pointer">
+          <span><span class="block text-xs font-black">Sumar este movimiento al pozo ahora</span><span class="block text-[10px] text-slate-500 mt-0.5">Apagado = queda pendiente y no modifica el saldo.</span></span>
+          <span class="relative inline-flex items-center"><input type="checkbox" x-model="finanzaForm.aplicado" class="sr-only peer"><span class="w-12 h-7 rounded-full bg-slate-300 dark:bg-slate-700 peer-checked:bg-emerald-500 transition"></span><span class="absolute left-1 top-1 w-5 h-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"></span></span>
+        </label>
         <button @click="registrarMovimientoFinanciero()" class="w-full px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-slate-950 text-white font-black flex items-center justify-center gap-2"><i class="fa-solid fa-floppy-disk"></i> Guardar movimiento</button>
         <div x-show="finanzasErrorPermisos" class="text-[11px] text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-xl p-3"><b>Atención:</b> Firebase todavía no tiene permisos para <code>finanzas/movimientos</code>. La pestaña puede calcular automáticamente las ventas, pero los movimientos manuales no se podrán guardar hasta agregar esa ruta a las reglas.</div>
       </div>
@@ -5024,7 +5329,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
       <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex flex-col md:flex-row md:items-center md:justify-between gap-3"><div><h3 class="font-black text-lg">Historial de movimientos manuales</h3><p class="text-[11px] text-slate-400">Las ventas automáticas se reflejan arriba y no se duplican aquí.</p></div><span class="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 text-xs font-black"><span x-text="movimientosFinancieros.length"></span> movimientos</span></div>
       <div class="overflow-x-auto">
         <table class="w-full min-w-[820px] text-left">
-          <thead class="bg-slate-50 dark:bg-slate-900/70"><tr class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-black"><th class="py-3 px-4">Fecha</th><th class="py-3 px-4">Pozo</th><th class="py-3 px-4">Tipo</th><th class="py-3 px-4">Concepto</th><th class="py-3 px-4 text-right">Monto</th><th class="py-3 px-4 text-center">Acción</th></tr></thead>
+          <thead class="bg-slate-50 dark:bg-slate-900/70"><tr class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-black"><th class="py-3 px-4">Fecha</th><th class="py-3 px-4">Pozo</th><th class="py-3 px-4">Tipo</th><th class="py-3 px-4">Concepto</th><th class="py-3 px-4 text-right">Monto</th><th class="py-3 px-4 text-center">Estado</th><th class="py-3 px-4 text-center">Acción</th></tr></thead>
           <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
             <template x-for="mov in movimientosFinancierosOrdenados" :key="mov.key">
               <tr class="fin-movement-row">
@@ -5033,10 +5338,11 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 <td class="py-3 px-4"><span class="font-black text-xs" :class="mov.tipo === 'salida' ? 'text-rose-600' : 'text-emerald-600'" x-text="mov.tipo === 'salida' ? 'Salida' : 'Ingreso'"></span></td>
                 <td class="py-3 px-4"><div class="font-bold text-sm" x-text="mov.concepto || '—'"></div><div class="text-[10px] text-slate-400 mt-1" x-text="mov.observacion || ''"></div></td>
                 <td class="py-3 px-4 text-right font-black" :class="mov.tipo === 'salida' ? 'text-rose-600' : 'text-emerald-600'">S/ <span x-text="formatMonto(mov.monto)"></span></td>
+                <td class="py-3 px-4 text-center"><button @click="cambiarEstadoMovimientoFinanciero(mov)" class="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-full text-[10px] font-black transition" :class="(mov.aplicado === true || mov.estado === 'aplicado') ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300' : 'bg-amber-500/10 text-amber-700 dark:text-amber-300'" :title="(mov.aplicado === true || mov.estado === 'aplicado') ? 'Cambiar a pendiente' : 'Aplicar al pozo'"><i :class="(mov.aplicado === true || mov.estado === 'aplicado') ? 'fa-solid fa-circle-check' : 'fa-solid fa-clock'"></i><span x-text="(mov.aplicado === true || mov.estado === 'aplicado') ? 'Aplicado' : 'Pendiente'"></span></button></td>
                 <td class="py-3 px-4 text-center"><button @click="eliminarMovimientoFinanciero(mov)" class="p-2 rounded-lg bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white" title="Eliminar movimiento"><i class="fa-solid fa-trash"></i></button></td>
               </tr>
             </template>
-            <tr x-show="movimientosFinancieros.length === 0"><td colspan="6" class="py-12 text-center text-slate-400">Todavía no hay movimientos manuales.</td></tr>
+            <tr x-show="movimientosFinancieros.length === 0"><td colspan="7" class="py-12 text-center text-slate-400">Todavía no hay movimientos manuales.</td></tr>
           </tbody>
         </table>
       </div>
@@ -5052,7 +5358,24 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 </div>
 </div><div x-show="activeTab === 'vales'" x-transition class="inventory-section"><div class="rounded-3xl overflow-hidden border border-blue-200 dark:border-blue-900/50 bg-white dark:bg-slate-900 shadow-xl"><div class="p-6 md:p-7 bg-gradient-to-br from-blue-800 to-blue-600 text-white relative overflow-hidden"><div class="absolute -right-8 -top-8 text-[130px] opacity-10">🐾</div><div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5"><div><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-black uppercase tracking-widest"><i class="fa-solid fa-ticket"></i> Centro de vales</div><h2 class="text-3xl font-black mt-3">Vales promocionales</h2><p class="text-sm text-blue-100 mt-1 max-w-2xl">Administra aquí todos los vales emitidos. Admin ya no contiene el historial de vales.</p></div><div class="flex flex-wrap gap-2"><button @click="cargarValesPromocionales()" class="px-4 py-3 rounded-xl bg-white/15 font-black text-xs"><i class="fa-solid fa-rotate"></i> Actualizar</button><button @click="exportarValesCSV()" class="px-4 py-3 rounded-xl bg-white text-blue-800 font-black text-xs"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button></div></div></div><div class="p-5 md:p-7"><div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6"><div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800"><div class="text-[10px] uppercase font-black text-slate-400">Total</div><div class="text-2xl font-black" x-text="valesPromocionalesData.length"></div></div><div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20"><div class="text-[10px] uppercase font-black text-emerald-600">Disponibles</div><div class="text-2xl font-black text-emerald-600" x-text="contarValesEstado('Disponible')"></div></div><div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/20"><div class="text-[10px] uppercase font-black text-blue-600">Usados</div><div class="text-2xl font-black text-blue-600" x-text="contarValesEstado('Usado')"></div></div><div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/20"><div class="text-[10px] uppercase font-black text-rose-600">Vencidos</div><div class="text-2xl font-black text-rose-600" x-text="contarValesEstado('Vencido')"></div></div><div class="p-4 rounded-2xl bg-violet-50 dark:bg-violet-950/20"><div class="text-[10px] uppercase font-black text-violet-600">Encontrados</div><div class="text-2xl font-black text-violet-600" x-text="valesFiltrados().length"></div></div></div><div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 mb-6"><div class="flex items-center gap-2 mb-4 font-black"><i class="fa-solid fa-magnifying-glass text-orange-500"></i> Buscador profesional</div><div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3"><div class="relative xl:col-span-2"><i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroValesTexto" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm" placeholder="Buscar por código, cliente, teléfono o distrito..."></div><select x-model="filtroValesEstado" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los estados</option><option value="disponible">Disponibles</option><option value="usado">Usados</option><option value="vencido">Vencidos</option><option value="reservado">Reservados</option></select><select x-model="filtroValesDistrito" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los distritos</option><template x-for="d in distritosValesDisponibles()" :key="d"><option :value="d" x-text="d"></option></template></select></div><div class="flex flex-wrap gap-2 mt-3"><select x-model="filtroValesFecha" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-bold"><option value="todos">Cualquier vencimiento</option><option value="7">Vencen en 7 días</option><option value="30">Vencen en 30 días</option><option value="vencidos">Ya vencidos</option></select><button @click="filtroValesTexto='';filtroValesEstado='todos';filtroValesDistrito='todos';filtroValesFecha='todos'" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-black"><i class="fa-solid fa-eraser"></i> Limpiar filtros</button></div></div><div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700"><table class="w-full text-left text-xs"><thead class="bg-slate-900 text-white"><tr><th class="px-4 py-4">Vale</th><th class="px-4 py-4">Cliente</th><th class="px-4 py-4">Contacto</th><th class="px-4 py-4">Distrito</th><th class="px-4 py-4">Vence</th><th class="px-4 py-4">Estado</th><th class="px-4 py-4 text-right">Acciones</th></tr></thead><tbody><template x-for="vale in valesFiltrados()" :key="vale.codigo"><tr class="border-t border-slate-100 dark:border-slate-800"><td class="px-4 py-4"><div class="font-mono font-black text-yellow-600" x-text="vale.codigo"></div><div class="text-[9px] text-slate-400" x-text="vale.creadoEn ? new Date(vale.creadoEn).toLocaleString('es-PE') : '—'"></div></td><td class="px-4 py-4 font-black" x-text="vale.clienteNombre || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.clienteTelefono || '—'"></td><td class="px-4 py-4" x-text="vale.distrito || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.fechaVencimiento || '—'"></td><td class="px-4 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-black" :class="estadoValeVisual(vale)==='Disponible'?'bg-emerald-100 text-emerald-700':estadoValeVisual(vale)==='Usado'?'bg-blue-100 text-blue-700':estadoValeVisual(vale)==='Reservado'?'bg-violet-100 text-violet-700':'bg-rose-100 text-rose-700'" x-text="estadoValeVisual(vale)"></span></td><td class="px-4 py-4"><div class="flex justify-end gap-2"><button @click="copiarCodigoValeDesdeRegistro(vale.codigo)" class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-700" title="Copiar código"><i class="fa-solid fa-copy"></i></button><button @click="verValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-blue-700 text-white" title="Ver y descargar vale"><i class="fa-solid fa-image"></i></button><button @click="imprimirValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-orange-500 text-white" title="Imprimir vale"><i class="fa-solid fa-print"></i></button></div></td></tr></template><tr x-show="!valesFiltrados().length"><td colspan="7" class="px-6 py-14 text-center"><div class="text-4xl">🐾</div><div class="font-black text-lg mt-2">No encontramos vales</div></td></tr></tbody></table></div><div class="mt-6 p-4 rounded-2xl border border-orange-200 bg-orange-50 dark:bg-orange-950/20 text-xs"><b>Almacenamiento:</b> los vales se guardan en <code>valesPromocionales</code> de Firebase y se gestionan desde esta pestaña, no desde Admin.</div></div></div></div>
 </main></div></div>
+<div class="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 z-[96]" style="display:none;" x-cloak x-show="modalSeguimientoPedido" x-transition.opacity>
+  <div class="w-full max-w-3xl ps-admin-track">
+    <div class="ps-admin-track-head flex items-start justify-between gap-4">
+      <div><div class="ps-admin-track-status"><i class="fa-solid fa-route mr-1"></i> Centro logístico</div><div class="ps-admin-track-title">Seguimiento del pedido</div><div class="ps-admin-track-order" x-text="seguimientoAdmin ? ('Pedido #'+(seguimientoAdmin.item?.comprobanteNumero||'—')+' · '+(seguimientoAdmin.item?.clienteNombre||'Cliente')) : ''"></div></div>
+      <button @click="cerrarSeguimientoAdmin()" class="w-11 h-11 rounded-xl bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center border border-white/10"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="p-5 sm:p-7 space-y-5">
+      <div class="rounded-2xl bg-white/10 border border-white/10 p-5">
+        <div class="flex items-center justify-between gap-3 mb-4"><div><div class="text-[10px] uppercase tracking-[.2em] text-blue-100 font-black">Estado actual</div><div class="text-xl font-black mt-1" x-text="seguimientoAdmin?.estado||'Recibido'"></div></div><div class="w-14 h-14 rounded-2xl bg-white text-blue-700 flex items-center justify-center shadow-xl"><i class="fa-solid fa-truck-fast text-2xl"></i></div></div>
+        <div class="ps-admin-status-grid"><template x-for="estado in seguimientoEstados" :key="'admin-v2-'+estado"><button @click="actualizarEstadoSeguimiento(estado)" type="button" class="ps-admin-status" :class="{'active':(seguimientoAdmin?.estado||'Recibido')===estado}"><i class="mr-1" :class="estado==='Solicitud Recibida'?'fa-solid fa-inbox':estado==='Preparando'?'fa-solid fa-box-open':estado==='Enviado'?'fa-solid fa-truck-fast':estado==='En destino'?'fa-solid fa-location-dot':'fa-solid fa-circle-check'"></i><span x-text="estado"></span></button></template></div>
+        <div class="mt-4 text-[11px] text-blue-100"><i class="fa-solid fa-bolt mr-1"></i> Un clic cambia el estado y actualiza el seguimiento del cliente.</div>
+      </div>
+      <div class="ps-admin-link"><div class="flex items-center justify-between gap-3"><div class="text-[10px] uppercase tracking-[.18em] text-blue-100 font-black">Enlace corto para el cliente</div><span class="px-2.5 py-1 rounded-full bg-emerald-400/15 border border-emerald-300/20 text-emerald-100 text-[9px] font-black"><i class="fa-solid fa-satellite-dish mr-1"></i> ACTUALIZACIÓN EN VIVO</span></div><code x-text="seguimientoAdmin?.url||'Generando…'"></code><div class="flex flex-wrap gap-2 mt-4"><button @click="copiarEnlaceSeguimiento()" type="button" class="ps-admin-action bg-white text-blue-800"><i class="fa-solid fa-copy mr-1"></i> Copiar enlace</button><button @click="abrirSeguimientoEnNuevaVentana()" type="button" class="ps-admin-action bg-cyan-500 text-white"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Abrir seguimiento</button></div></div>
+    </div>
+  </div>
+</div>
 <!-- =====================================================
+     <!-- =====================================================
      MODAL REPORTE PROFESIONAL DE PEDIDO
      ====================================================== -->
 <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 z-[95]" style="display:none;" x-cloak x-show="modalReportePedido" x-transition.opacity>
