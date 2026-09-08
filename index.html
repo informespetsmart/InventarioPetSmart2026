@@ -158,7 +158,12 @@
         @media (max-width: 700px) {
             .sku-label-grid { grid-template-columns: 1fr; }
         }
-    </style>
+    
+/* Seguimiento público: mostrar únicamente la ventana de seguimiento, sin inventario debajo. */
+body.tracking-only > :not(.ps-track-v2){display:none!important;}
+body.tracking-only{padding:0!important;margin:0!important;background:#06366f!important;}
+.ps-track-v2{position:relative;z-index:9999;}
+</style>
 <style>
 :root{--ps-amber:#f59e0b;--ps-amber2:#fbbf24;--ps-dark:#0f172a;--ps-panel:#ffffff;--ps-line:#e2e8f0;--ps-muted:#64748b;--ps-green:#10b981;--ps-blue:#4f46e5;--ps-red:#f43f5e}
 html{scroll-behavior:smooth}
@@ -317,8 +322,8 @@ body.dark{background:#070d19!important}
 
 <style>
 /* V10 · UPC + CÓDIGO DE BARRAS FALSO + FINANZAS */
-.fake-barcode{height:42px;display:flex;align-items:stretch;justify-content:center;gap:1px;overflow:hidden;background:#fff;padding:4px 8px;border-radius:6px;border:1px solid #e2e8f0}
-.fake-barcode span{display:block;background:#111827;min-width:1px}
+.fake-barcode{height:48px;display:flex;align-items:stretch;justify-content:center;gap:0;overflow:hidden;background:#fff;padding:4px 8px;border-radius:6px;border:1px solid #e2e8f0}
+.fake-barcode span{display:block;background:#111827;flex:0 0 auto;min-width:0;height:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}
 .fin-pool{position:relative;overflow:hidden}
 .fin-pool:after{content:"";position:absolute;width:150px;height:150px;border-radius:999px;right:-55px;top:-70px;background:rgba(255,255,255,.16);pointer-events:none}
 .fin-number{font-variant-numeric:tabular-nums}
@@ -372,7 +377,7 @@ body.dark{background:#070d19!important}
 .catalogo-export-premium{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:linear-gradient(135deg,#f5f8fc,#eef4fa);color:#10243b;position:relative;overflow:hidden}
 .catalogo-export-premium .cat-export-top{background:linear-gradient(135deg,#073b78,#0a5aab);color:#fff;border-radius:26px;padding:30px 34px;position:relative;overflow:hidden;box-shadow:0 18px 45px rgba(7,59,120,.18)}
 .catalogo-export-premium .cat-export-top:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-110px;top:-150px;border:38px solid rgba(255,255,255,.08)}
-.catalogo-export-premium .cat-export-logo{max-height:76px;max-width:230px;object-fit:contain;background:#fff;border-radius:14px;padding:8px}
+.catalogo-export-premium .cat-export-logo{max-height:76px;max-width:230px;object-fit:contain;background:transparent;border-radius:0;padding:0}
 .catalogo-export-premium .cat-export-title{font-size:32px;line-height:1.05;font-weight:950;letter-spacing:-.045em;margin-top:14px}
 .catalogo-export-premium .cat-export-sub{font-size:11px;color:#dcecff;font-weight:750;margin-top:7px}
 .catalogo-export-premium .cat-paw{position:absolute;font-size:125px;right:30px;bottom:-42px;opacity:.07;transform:rotate(-12deg)}
@@ -386,7 +391,7 @@ body.dark{background:#070d19!important}
 </style>
 <style id="petsmart-tracking-professional">.ps-tracking-page{background:linear-gradient(145deg,#073b78 0%,#0a5aab 48%,#0d6fc5 100%);min-height:100vh;position:relative;overflow:hidden}.ps-tracking-page:before{content:"";position:fixed;width:420px;height:420px;border-radius:50%;right:-180px;top:-190px;border:55px solid rgba(255,255,255,.07);pointer-events:none}.ps-tracking-page:after{content:"";position:fixed;width:320px;height:320px;border-radius:50%;left:-190px;bottom:-180px;border:45px solid rgba(255,255,255,.055);pointer-events:none}.ps-tracking-brand{position:relative;z-index:1}.ps-tracking-logo-wrap{display:inline-flex;align-items:center;justify-content:center;min-height:88px;min-width:210px;padding:6px 10px;background:transparent;border-radius:20px;filter:drop-shadow(0 14px 28px rgba(3,32,76,.22))}.ps-tracking-page .bg-white\/5{background:rgba(255,255,255,.10)!important;border-color:rgba(255,255,255,.18)!important;box-shadow:0 18px 45px rgba(3,32,76,.15)}.ps-tracking-page .border-white\/10{border-color:rgba(255,255,255,.18)!important}.ps-tracking-page .bg-white\/10{background:rgba(255,255,255,.12)!important}.ps-tracking-page .text-cyan-300{color:#dbeafe!important}.ps-tracking-page .text-emerald-300{color:#bbf7d0!important}</style>
 <style id="petsmart-tracking-v2">
-.ps-track-v2{min-height:100vh;background:linear-gradient(145deg,#06366f 0%,#0758a5 48%,#0b72cf 100%);color:#fff;position:relative;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.ps-track-v2:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-240px;top:-260px;border:70px solid rgba(255,255,255,.06)}.ps-track-v2:after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;left:-230px;bottom:-220px;border:55px solid rgba(255,255,255,.045)}.ps-track-wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:34px 18px 50px}.ps-track-logo{display:inline-flex;align-items:center;justify-content:center;min-width:190px;min-height:72px;padding:6px 10px;background:transparent;border-radius:18px;filter:drop-shadow(0 14px 28px rgba(1,26,63,.22))}.ps-track-logo img{max-width:230px;max-height:78px;object-fit:contain}.ps-track-logo img{max-width:190px;max-height:62px;object-fit:contain}.ps-track-eyebrow{margin-top:22px;font-size:11px;font-weight:900;letter-spacing:.28em;text-transform:uppercase;color:#dbeafe}.ps-track-title{margin-top:6px;font-size:clamp(30px,5vw,46px);font-weight:950;letter-spacing:-.035em;line-height:1.05}.ps-track-sub{margin-top:10px;color:#dbeafe;font-size:14px}.ps-track-card{background:#fff;color:#10243c;border-radius:30px;box-shadow:0 28px 80px rgba(1,27,65,.28);overflow:hidden}.ps-track-card-head{padding:26px 28px;background:linear-gradient(180deg,#fff,#f7fbff);border-bottom:1px solid #e5edf6}.ps-track-order{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.16em;color:#7890aa}.ps-track-number{font-size:30px;font-weight:950;margin-top:3px}.ps-track-pill{padding:9px 14px;border-radius:999px;background:#e9f7ff;color:#0566ad;font-weight:950;font-size:13px}.ps-track-progress{padding:30px 28px 28px}.ps-track-line{position:absolute;left:8%;right:8%;top:28px;height:6px;background:#dbe7f3;border-radius:999px}.ps-track-line-fill{position:absolute;left:8%;top:28px;height:6px;background:linear-gradient(90deg,#14b8a6,#06b6d4,#2563eb);border-radius:999px;transition:width .8s cubic-bezier(.22,.61,.36,1)}.ps-track-stages{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.ps-track-stage{text-align:center;position:relative;z-index:2}.ps-track-dot{width:54px;height:54px;margin:0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;background:#e8eef5;color:#9aaabd;border:4px solid #fff;box-shadow:0 5px 16px rgba(24,55,89,.10);transition:all .45s ease}.ps-track-stage.done .ps-track-dot{background:#0b75c9;color:#fff;box-shadow:0 8px 22px rgba(11,117,201,.28);transform:scale(1.02)}.ps-track-stage.current .ps-track-dot{background:#10b981;color:#fff;box-shadow:0 0 0 7px rgba(16,185,129,.12),0 12px 26px rgba(16,185,129,.30);transform:scale(1.12)}.ps-track-stage span{display:block;margin-top:10px;font-size:11px;font-weight:900;color:#8092a7}.ps-track-stage.done span,.ps-track-stage.current span{color:#0b5e9f}.ps-track-truck{position:absolute;top:2px;left:0;z-index:5;width:58px;height:58px;border-radius:18px;background:transparent;color:#0b63a9;display:flex;align-items:center;justify-content:center;box-shadow:none;transition:left .9s cubic-bezier(.22,.61,.36,1);transform:translateX(-50%);font-size:23px}.ps-track-truck i{transition:transform .35s ease}.ps-track-truck.moving i{transform:translateX(3px)}.ps-track-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 28px 28px}.ps-track-meta-box{padding:16px;border:1px solid #e1eaf3;background:#f8fbfe;border-radius:18px}.ps-track-meta-label{font-size:9px;text-transform:uppercase;letter-spacing:.16em;font-weight:950;color:#8ba0b5}.ps-track-meta-value{font-size:14px;font-weight:850;margin-top:5px}.ps-track-history{margin-top:18px;padding:22px 28px 28px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:26px}.ps-track-history-title{font-size:16px;font-weight:950}.ps-track-history-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.10)}.ps-track-history-item:last-child{border-bottom:0}.ps-track-history-dot{width:10px;height:10px;margin-top:5px;border-radius:50%;background:#5eead4;box-shadow:0 0 0 5px rgba(94,234,212,.10);flex:0 0 auto}.ps-track-history-main{font-weight:850}.ps-track-history-date{font-size:11px;color:#bfdbfe;margin-top:3px}.ps-track-error{background:#fff;color:#991b1b;border-radius:26px;padding:28px;text-align:center;box-shadow:0 20px 60px rgba(1,27,65,.2)}.ps-admin-track{background:linear-gradient(145deg,#06366f,#0a64b9);color:#fff;border-radius:30px;overflow:hidden;box-shadow:0 30px 90px rgba(2,30,72,.35)}.ps-admin-track-head{padding:26px 28px;background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border-bottom:1px solid rgba(255,255,255,.14)}.ps-admin-track-status{font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:#bfdbfe;font-weight:950}.ps-admin-track-title{font-size:28px;font-weight:950;margin-top:4px}.ps-admin-track-order{font-size:12px;color:#dbeafe;margin-top:5px}.ps-admin-status-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.ps-admin-status{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#eaf5ff;border-radius:16px;padding:14px 8px;font-size:11px;font-weight:950;transition:all .2s ease}.ps-admin-status:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.ps-admin-status.active{background:#10b981;border-color:#10b981;color:#fff;box-shadow:0 10px 24px rgba(16,185,129,.24)}.ps-admin-link{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:15px}.ps-admin-link code{display:block;margin-top:6px;color:#fff;font-size:12px;word-break:break-all}.ps-admin-action{border-radius:14px;padding:11px 15px;font-size:12px;font-weight:950}.ps-rebuy-card{border-radius:24px}.ps-rebuy-row{transition:transform .18s ease,box-shadow .18s ease}.ps-rebuy-row:hover{transform:translateY(-1px);box-shadow:0 10px 25px rgba(15,23,42,.06)}
+.ps-track-v2{min-height:100vh;background:linear-gradient(145deg,#06366f 0%,#0758a5 48%,#0b72cf 100%);color:#fff;position:relative;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.ps-track-v2:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-240px;top:-260px;border:70px solid rgba(255,255,255,.06)}.ps-track-v2:after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;left:-230px;bottom:-220px;border:55px solid rgba(255,255,255,.045)}.ps-track-wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:34px 18px 50px}.ps-track-logo{display:inline-flex;align-items:center;justify-content:center;min-width:190px;min-height:72px;padding:6px 10px;background:transparent;border-radius:18px;filter:drop-shadow(0 14px 28px rgba(1,26,63,.22))}.ps-track-logo img{max-width:230px;max-height:78px;object-fit:contain}.ps-track-logo img{max-width:190px;max-height:62px;object-fit:contain}.ps-track-eyebrow{margin-top:22px;font-size:11px;font-weight:900;letter-spacing:.28em;text-transform:uppercase;color:#dbeafe}.ps-track-title{margin-top:6px;font-size:clamp(30px,5vw,46px);font-weight:950;letter-spacing:-.035em;line-height:1.05}.ps-track-sub{margin-top:10px;color:#dbeafe;font-size:14px}.ps-track-card{background:#fff;color:#10243c;border-radius:30px;box-shadow:0 28px 80px rgba(1,27,65,.28);overflow:hidden}.ps-track-card-head{padding:26px 28px;background:linear-gradient(180deg,#fff,#f7fbff);border-bottom:1px solid #e5edf6}.ps-track-order{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.16em;color:#7890aa}.ps-track-number{font-size:30px;font-weight:950;margin-top:3px}.ps-track-pill{padding:9px 14px;border-radius:999px;background:#e9f7ff;color:#0566ad;font-weight:950;font-size:13px}.ps-track-progress{padding:30px 28px 28px}.ps-track-line{position:absolute;left:8%;right:8%;top:28px;height:6px;background:#dbe7f3;border-radius:999px}.ps-track-line-fill{position:absolute;left:8%;top:28px;height:6px;background:linear-gradient(90deg,#14b8a6,#06b6d4,#2563eb);border-radius:999px;transition:width .8s cubic-bezier(.22,.61,.36,1)}.ps-track-stages{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.ps-track-stage{text-align:center;position:relative;z-index:2}.ps-track-dot{width:54px;height:54px;margin:0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;background:#e8eef5;color:#9aaabd;border:4px solid #fff;box-shadow:0 5px 16px rgba(24,55,89,.10);transition:all .45s ease}.ps-track-stage.done .ps-track-dot{background:#0b75c9;color:#fff;box-shadow:0 8px 22px rgba(11,117,201,.28);transform:scale(1.02)}.ps-track-stage.current .ps-track-dot{background:#10b981;color:#fff;box-shadow:0 0 0 7px rgba(16,185,129,.12),0 12px 26px rgba(16,185,129,.30);transform:scale(1.12)}.ps-track-stage span{display:block;margin-top:10px;font-size:11px;font-weight:900;color:#8092a7}.ps-track-stage.done span,.ps-track-stage.current span{color:#0b5e9f}.ps-track-truck{position:absolute;top:2px;left:0;z-index:5;width:58px;height:58px;border-radius:18px;background:transparent;color:#0b63a9;display:flex;align-items:center;justify-content:center;box-shadow:none;transition:left .9s cubic-bezier(.22,.61,.36,1);transform:translateX(-50%);font-size:23px}.ps-track-truck i{transition:transform .35s ease}.ps-track-truck.moving{animation:psTruckBounce .75s ease-in-out,psTruckWiggle .75s ease-in-out}.ps-track-truck.moving i{transform:translateX(4px) rotate(-1deg)}.ps-track-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding:0 28px 28px}.ps-track-meta-box{padding:16px;border:1px solid #e1eaf3;background:#f8fbfe;border-radius:18px}.ps-track-meta-label{font-size:9px;text-transform:uppercase;letter-spacing:.16em;font-weight:950;color:#8ba0b5}.ps-track-meta-value{font-size:14px;font-weight:850;margin-top:5px}.ps-track-history{margin-top:18px;padding:22px 28px 28px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:26px}.ps-track-history-title{font-size:16px;font-weight:950}.ps-track-history-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.10)}.ps-track-history-item:last-child{border-bottom:0}.ps-track-history-dot{width:10px;height:10px;margin-top:5px;border-radius:50%;background:#5eead4;box-shadow:0 0 0 5px rgba(94,234,212,.10);flex:0 0 auto}.ps-track-history-main{font-weight:850}.ps-track-history-date{font-size:11px;color:#bfdbfe;margin-top:3px}.ps-track-error{background:#fff;color:#991b1b;border-radius:26px;padding:28px;text-align:center;box-shadow:0 20px 60px rgba(1,27,65,.2)}.ps-admin-track{background:linear-gradient(145deg,#06366f,#0a64b9);color:#fff;border-radius:30px;overflow:hidden;box-shadow:0 30px 90px rgba(2,30,72,.35)}.ps-admin-track-head{padding:26px 28px;background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border-bottom:1px solid rgba(255,255,255,.14)}.ps-admin-track-status{font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:#bfdbfe;font-weight:950}.ps-admin-track-title{font-size:28px;font-weight:950;margin-top:4px}.ps-admin-track-order{font-size:12px;color:#dbeafe;margin-top:5px}.ps-admin-status-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.ps-admin-status{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#eaf5ff;border-radius:16px;padding:14px 8px;font-size:11px;font-weight:950;transition:all .2s ease}.ps-admin-status:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.ps-admin-status.active{background:#10b981;border-color:#10b981;color:#fff;box-shadow:0 10px 24px rgba(16,185,129,.24)}.ps-admin-link{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:15px}.ps-admin-link code{display:block;margin-top:6px;color:#fff;font-size:12px;word-break:break-all}.ps-admin-action{border-radius:14px;padding:11px 15px;font-size:12px;font-weight:950}.ps-rebuy-card{border-radius:24px}.ps-rebuy-row{transition:transform .18s ease,box-shadow .18s ease}.ps-rebuy-row:hover{transform:translateY(-1px);box-shadow:0 10px 25px rgba(15,23,42,.06)}
 @media(max-width:720px){.ps-track-meta{grid-template-columns:1fr}.ps-admin-status-grid{grid-template-columns:1fr 1fr}.ps-track-stages{gap:0}.ps-track-dot{width:44px;height:44px;font-size:15px}.ps-track-line,.ps-track-line-fill{top:23px}.ps-track-truck{top:0;width:48px;height:48px;font-size:19px}.ps-track-stage span{font-size:9px}.ps-track-card-head,.ps-track-progress,.ps-track-meta{padding-left:18px;padding-right:18px}}
 </style>
 <style id="petsmart-tracking-effects">
@@ -404,12 +409,9 @@ body.dark{background:#070d19!important}
 @keyframes psSpark{0%,100%{opacity:.25;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.35) rotate(25deg)}}
 @media(max-width:720px){.ps-track-meta-three{grid-template-columns:1fr}.ps-track-client-name{font-size:22px}}
 </style>
+<style id="petsmart-puntual-mobile-ajustes">@media(max-width:700px){.pedido-modal-scroll{overflow-x:hidden!important}.pedido-preview-wrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}.pedido-preview-wrap #reportePedidoPreview{width:100%;max-width:794px;margin-left:auto;margin-right:auto}}</style>
 </head>
-<body :class="
-        darkMode
-        ? 'dark bg-slate-900 text-slate-100'
-        : 'bg-slate-100 text-slate-800'
-    " class="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 font-sans transition-colors duration-300" x-data="inventarioApp()"><div x-show="modoSeguimientoCliente" x-cloak class="ps-track-v2" :class="{'is-destination': seguimientoClienteData?.estado==='En destino'}">
+<body :class="[darkMode ? 'dark bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-800', modoSeguimientoCliente ? 'tracking-only' : '']" class="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 font-sans transition-colors duration-300" x-data="inventarioApp()"><div x-show="modoSeguimientoCliente" x-cloak class="ps-track-v2" :class="{'is-destination': seguimientoClienteData?.estado==='En destino'}">
   <div class="ps-track-wrap">
     <div class="text-center mb-8">
       <template x-if="configNegocio.logoUrl"><div class="ps-track-logo"><img :src="configNegocio.logoUrl" alt="PetSmart"></div></template>
@@ -443,7 +445,7 @@ body.dark{background:#070d19!important}
         <div class="ps-track-meta ps-track-meta-three">
           <div class="ps-track-meta-box"><div class="ps-track-meta-label">Distrito</div><div class="ps-track-meta-value" x-text="seguimientoClienteData?.distrito||'Por confirmar'"></div></div>
           <div class="ps-track-meta-box"><div class="ps-track-meta-label">Dirección exacta</div><div class="ps-track-meta-value" x-text="seguimientoClienteData?.direccion||'Por confirmar'"></div></div>
-          <div class="ps-track-meta-box"><div class="ps-track-meta-label">Fecha de entrega</div><div class="ps-track-meta-value" x-text="seguimientoClienteData?.fechaEntrega||'Por confirmar'"></div></div>
+          <div class="ps-track-meta-box"><div class="ps-track-meta-label">Fecha de entrega</div><div class="ps-track-meta-value" x-text="seguimientoClienteData?.fechaEntrega||'Por confirmar'"></div></div><div class="ps-track-meta-box"><div class="ps-track-meta-label">Horario de entrega</div><div class="ps-track-meta-value" x-text="seguimientoClienteData?.horarioEntrega||'Por confirmar'"></div></div>
         </div>
       </div>
       <div x-show="seguimientoClienteData?.estado==='Entregado'" x-transition class="ps-track-thanks"><i class="fa-solid fa-heart"></i><span>¡Muchas gracias por tu compra!</span><i class="fa-solid fa-paw"></i></div><div class="text-center text-[11px] text-blue-100 mt-5">PetSmart · Te mantendremos informado del avance de tu pedido.</div>
@@ -852,6 +854,7 @@ body.dark{background:#070d19!important}
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Fecha de venta *</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-3 text-sm" required type="date" x-model="ventaForm.fechaVenta"/></div>
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-calendar-check text-emerald-500 mr-1"></i>Fecha de entrega</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-3 text-sm" type="date" x-model="ventaForm.fechaEntrega"/></div>
+<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5"><i class="fa-solid fa-clock text-blue-500 mr-1"></i>Horario de entrega</label><input class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-3 text-sm" type="text" placeholder="11:30 am - 1:30 pm" x-model="ventaForm.horarioEntrega"/></div>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1381,6 +1384,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     false,
                 modalValeGenerado:
                     false,
+                mostrarVistaClienteSeguimiento:
+                    false,
                 finanzasCargando:
                     false,
                 movimientosFinancieros:
@@ -1388,6 +1393,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 finanzasErrorPermisos:
                     false,
                 valesPromocionalesData: [],
+                valeReponerCodigo: '',
+                valeReponerVentaGrupoId: '',
                 filtroValesTexto: '',
                 filtroValesEstado: 'todos',
                 filtroValesDistrito: 'todos',
@@ -1624,7 +1631,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 // =================================================
                 ventaForm: {
                     clienteNombre: '', clienteTelefono: '', distrito: '', canalVenta: 'WhatsApp', perfilFacebook: '',
-                    medioPago: 'Yape', precioVenta: 0, fechaVenta: fechaPeruActual(), fechaEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '',
+                    medioPago: 'Yape', precioVenta: 0, fechaVenta: fechaPeruActual(), fechaEntrega: '', horarioEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '',
                     comision: 0, confLogistico: 0, observacion: '', direccionEntrega: '', latitud: '', longitud: '', valeCodigo: '', generarVale: false
                 },
                 productos: [],
@@ -2020,7 +2027,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     const d = this.normalizarTextoCliente(distrito || '');
                     return lista.some(x => this.normalizarTextoCliente(x) === d);
                 },
-                async generarValePromocionalParaVenta({clienteId,clienteNombre,clienteTelefono,distrito,ventaGrupoId}){let codigo='';for(let i=0;i<8;i++){const candidato=this.generarCodigoValeUnico();const snap=await window.fb.get(window.fb.ref(window.db,`valesPromocionales/${candidato}`));if(!snap.exists()){codigo=candidato;break;}}if(!codigo)throw new Error('No se pudo generar un código único para el vale.');const dias=Math.max(1,Number(this.configNegocio.valeVigenciaDias||30));const venc=new Date();venc.setDate(venc.getDate()+dias);const fechaVencimiento=`${venc.getFullYear()}-${String(venc.getMonth()+1).padStart(2,'0')}-${String(venc.getDate()).padStart(2,'0')}`;const vale={codigo,estado:'disponible',beneficio:'Envío gratis en la próxima compra',clienteId:clienteId||'',clienteNombre:String(clienteNombre||'').trim(),clienteTelefono:this.limpiarCelular(clienteTelefono||''),distrito:String(distrito||'').trim(),ventaOrigen:ventaGrupoId||'',creadoEn:new Date().toISOString(),fechaVencimiento};await window.fb.set(window.fb.ref(window.db,`valesPromocionales/${codigo}`),vale);return vale;},
+                async generarValePromocionalParaVenta({clienteId,clienteNombre,clienteTelefono,distrito,direccionEntrega,ventaGrupoId}){let codigo='';for(let i=0;i<8;i++){const candidato=this.generarCodigoValeUnico();const snap=await window.fb.get(window.fb.ref(window.db,`valesPromocionales/${candidato}`));if(!snap.exists()){codigo=candidato;break;}}if(!codigo)throw new Error('No se pudo generar un código único para el vale.');const dias=Math.max(1,Number(this.configNegocio.valeVigenciaDias||30));const venc=new Date();venc.setDate(venc.getDate()+dias);const fechaVencimiento=`${venc.getFullYear()}-${String(venc.getMonth()+1).padStart(2,'0')}-${String(venc.getDate()).padStart(2,'0')}`;const vale={codigo,estado:'disponible',beneficio:'Envío gratis en la próxima compra',clienteId:clienteId||'',clienteNombre:String(clienteNombre||'').trim(),clienteTelefono:this.limpiarCelular(clienteTelefono||''),distrito:String(distrito||'').trim(),direccionEntrega:String(direccionEntrega||'').trim(),ventaOrigen:ventaGrupoId||'',creadoEn:new Date().toISOString(),fechaVencimiento};await window.fb.set(window.fb.ref(window.db,`valesPromocionales/${codigo}`),vale);return vale;},
                 async cargarValesPromocionales() {
                     try {
                         const snap = await window.fb.get(window.fb.ref(window.db, 'valesPromocionales'));
@@ -2082,17 +2089,15 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     }
                 },
                 imprimirValePromocional() {
-                    const vale=this.valeGeneradoUltimaVenta;if(!vale)return;
-                    const nombre=this.configNegocio.nombre||'PetSmart';
-                    const logo=this.configNegocio.logoUrl?`<img src="${this.configNegocio.logoUrl}" class="logo">`:`<div class="brand">${nombre}</div>`;
+                    const source=document.getElementById('valeDigitalExport');
+                    const vale=this.valeGeneradoUltimaVenta;if(!source||!vale)return;
                     const w=window.open('','_blank','width=1180,height=900');
                     if(!w){this.notificarToast('warning','Permite ventanas emergentes para imprimir el vale.');return;}
+                    const estilos=Array.from(document.querySelectorAll('link[rel="stylesheet"],style')).map(el=>el.outerHTML).join('\n');
+                    const contenido=source.outerHTML;
                     const esc=(v)=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-                    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Vale ${esc(vale.codigo)}</title><style>
-                    *{box-sizing:border-box}body{margin:0;background:#edf3f8;font-family:Inter,Arial,sans-serif;color:#16324f;padding:30px}.ticket{width:1100px;max-width:96vw;margin:auto;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(8,47,95,.18);display:grid;grid-template-columns:34% 66%;min-height:560px}
-                    .left{background:linear-gradient(145deg,#07366d,#0b5aa6);color:#fff;padding:42px 38px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}.left:after{content:"";position:absolute;right:-1px;top:0;width:30px;height:100%;background:#fff;clip-path:polygon(0 0,100% 2%,0 4%,100% 6%,0 8%,100% 10%,0 12%,100% 14%,0 16%,100% 18%,0 20%,100% 22%,0 24%,100% 26%,0 28%,100% 30%,0 32%,100% 34%,0 36%,100% 38%,0 40%,100% 42%,0 44%,100% 46%,0 48%,100% 50%,0 52%,100% 54%,0 56%,100% 58%,0 60%,100% 62%,0 64%,100% 66%,0 68%,100% 70%,0 72%,100% 74%,0 76%,100% 78%,0 80%,100% 82%,0 84%,100% 86%,0 88%,100% 90%,0 92%,100% 94%,0 96%,100% 98%,0 100%)}.logo{max-width:160px;max-height:65px;object-fit:contain}.brand{font-size:25px;font-weight:900}.kicker{font-size:14px;font-weight:900;letter-spacing:.18em;margin-top:38px}.title{font-size:62px;line-height:.9;font-weight:950;letter-spacing:-.05em;margin-top:14px}.copy{font-size:14px;line-height:1.5;max-width:270px;margin-top:20px;opacity:.88}.code-label{font-size:10px;font-weight:900;letter-spacing:.2em;opacity:.7}.sidecode{margin-top:9px;background:#f28b28;color:#082f5f;border-radius:11px;padding:12px 14px;display:inline-block;font:900 18px monospace;letter-spacing:.08em}
-                    .right{padding:32px 40px 26px;position:relative}.right:before{content:"🐾";position:absolute;right:25px;top:25px;font-size:85px;opacity:.08;transform:rotate(20deg)}.pill{display:inline-block;background:#eef5fb;color:#0a4d91;border-radius:99px;padding:8px 14px;font-size:10px;font-weight:900;letter-spacing:.15em}.mini{float:right;font-size:25px}.card{margin-top:25px;border:2px solid #0a4d91;border-radius:24px;padding:30px 32px;box-shadow:10px 12px 0 #f28b28}.bk{font-size:11px;color:#f28b28;font-weight:900;letter-spacing:.2em}.benefit{font-size:48px;line-height:1.03;color:#0a4d91;font-weight:950;text-transform:uppercase;margin-top:8px;letter-spacing:-.04em}.line{height:3px;width:90px;background:#f28b28;margin:22px 0 18px;border-radius:99px}.label{font-size:10px;color:#7d8b9b;font-weight:900;letter-spacing:.2em}.code{font:950 45px monospace;letter-spacing:.1em;margin-top:5px;color:#123a63;overflow-wrap:anywhere}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;margin-top:25px}.box{border-top:1px solid #dbe4ee;padding-top:9px}.v{font-size:14px;font-weight:900;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.foot{margin-top:22px;color:#647589;font-size:11px;display:flex;justify-content:space-between}.paws{color:#f28b28;font-size:21px;letter-spacing:5px}@media print{body{padding:0;background:#fff}.ticket{width:100%;max-width:none;box-shadow:none;border-radius:0}}@media(max-width:900px){.ticket{grid-template-columns:1fr}.left{min-height:320px}.left:after{display:none}.title{font-size:48px}.right{padding:25px}.benefit{font-size:36px}}
-                    </style></head><body><div class="ticket"><div class="left"><div>${logo}</div><div><div class="kicker">VALE PROMOCIONAL</div><div class="title">UN REGALO<br>PARA TI</div><div class="copy">Disfruta un beneficio especial en tu próxima compra.</div></div><div><div class="code-label">CÓDIGO DEL VALE</div><div class="sidecode">${esc(vale.codigo)}</div></div></div><div class="right"><div><span class="pill">${esc(nombre)} · PROMOCIÓN</span><span class="mini">🐶 🐱</span></div><div class="card"><div class="bk">TU BENEFICIO</div><div class="benefit">${esc(vale.beneficio||'Envío gratis en tu próxima compra')}</div><div class="line"></div><div class="label">CÓDIGO</div><div class="code">${esc(vale.codigo)}</div><div class="grid"><div class="box"><div class="label">CLIENTE</div><div class="v">${esc(vale.clienteNombre||'Cliente')}</div></div><div class="box"><div class="label">VÁLIDO HASTA</div><div class="v">${esc(vale.fechaVencimiento||'—')}</div></div><div class="box"><div class="label">DISTRITO</div><div class="v">${esc(vale.distrito||'—')}</div></div><div class="box"><div class="label">USO</div><div class="v">UNA SOLA VEZ</div></div></div></div><div class="foot"><span>Presenta este código en tu próxima compra.</span><span class="paws">🐾 🐾 🐾</span></div></div></div><script>window.onload=function(){setTimeout(function(){window.print()},450)}<\/script></body></html>`);
+                    w.document.open();
+                    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Vale ${esc(vale.codigo)}</title>${estilos}<style>html,body{margin:0!important;padding:0!important;background:#fff!important}body{print-color-adjust:exact;-webkit-print-color-adjust:exact}#valeDigitalExport{width:1120px!important;height:700px!important;min-height:700px!important;max-width:none!important;margin:0 auto!important;transform:none!important;box-shadow:none!important}#valeDigitalExport .vale-left,#valeDigitalExport .vale-right{height:700px!important;min-height:700px!important}@media print{html,body{width:100%;background:#fff!important}#valeDigitalExport{margin:0!important;box-shadow:none!important}}</style></head><body>${contenido}<script>window.onload=function(){setTimeout(function(){window.focus();window.print()},500)}<\/script></body></html>`);
                     w.document.close();
                 },
                 // =================================================
@@ -2679,21 +2684,19 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 crearSnapshotSeguimientoDesdeItem(item,grupo,token) {
                     const grupoItems=this.productos.filter(p=>p.estado==='vendido'&&String(p.ventaGrupoId||'')===String(grupo));
                     const primero=grupoItems[0]||item||{};
-                    return {token,ventaGrupoId:String(grupo||''),pedidoNumero:String(primero.comprobanteNumero||''),clienteNombre:String(primero.clienteNombre||''),clienteTelefono:String(primero.clienteTelefono||''),direccion:String(primero.direccionEntrega||''),distrito:String(primero.distrito||''),fechaEntrega:String(primero.fechaEntrega||''),estado:String(primero.estadoEnvio||'Solicitud Recibida').replace(/^Recibido$/,'Solicitud Recibida'),creadoEn:primero.fechaVenta||new Date().toISOString(),actualizadoEn:new Date().toISOString(),historial:[{estado:String(primero.estadoEnvio||'Recibido'),fecha:primero.fechaVenta||new Date().toISOString()}],items:grupoItems.map(p=>({nombre:p.nombre||'',cantidad:1,imagenUrl:p.imagenUrl||''}))};
+                    return {token,ventaGrupoId:String(grupo||''),pedidoNumero:String(primero.comprobanteNumero||''),clienteNombre:String(primero.clienteNombre||''),clienteTelefono:String(primero.clienteTelefono||''),direccion:String(primero.direccionEntrega||''),distrito:String(primero.distrito||''),fechaEntrega:String(primero.fechaEntrega||''),horarioEntrega:String(primero.horarioEntrega||''),estado:String(primero.estadoEnvio||'Solicitud Recibida').replace(/^Recibido$/,'Solicitud Recibida'),creadoEn:primero.fechaVenta||new Date().toISOString(),actualizadoEn:new Date().toISOString(),historial:[{estado:String(primero.estadoEnvio||'Recibido'),fecha:primero.fechaVenta||new Date().toISOString()}],items:grupoItems.map(p=>({nombre:p.nombre||'',cantidad:1,imagenUrl:p.imagenUrl||''}))};
                 },
-                async crearSeguimientoPedido({ventaGrupoId,pedidoNumero,clienteNombre,clienteTelefono,direccion,distrito,fechaEntrega,items}) {
+                async crearSeguimientoPedido({ventaGrupoId,pedidoNumero,clienteNombre,clienteTelefono,direccion,distrito,fechaEntrega,horarioEntrega,items}) {
                     if(!ventaGrupoId) return null;
                     const token=this.generarTokenSeguimiento();
                     const ahora=new Date().toISOString();
-                    const data={token,ventaGrupoId,pedidoNumero:String(pedidoNumero||''),clienteNombre:String(clienteNombre||'').trim(),clienteTelefono:String(clienteTelefono||''),direccion:String(direccion||''),distrito:String(distrito||''),fechaEntrega:String(fechaEntrega||''),estado:'Solicitud Recibida',creadoEn:ahora,actualizadoEn:ahora,historial:[{estado:'Solicitud Recibida',fecha:ahora}],items:(items||[]).map(p=>({nombre:p.nombre||'',cantidad:Number(p.cantidad)||1,imagenUrl:p.imagenUrl||''}))};
+                    const data={token,ventaGrupoId,pedidoNumero:String(pedidoNumero||''),clienteNombre:String(clienteNombre||'').trim(),clienteTelefono:String(clienteTelefono||''),direccion:String(direccion||''),distrito:String(distrito||''),fechaEntrega:String(fechaEntrega||''),horarioEntrega:String(horarioEntrega||''),estado:'Solicitud Recibida',creadoEn:ahora,actualizadoEn:ahora,historial:[{estado:'Solicitud Recibida',fecha:ahora}],items:(items||[]).map(p=>({nombre:p.nombre||'',cantidad:Number(p.cantidad)||1,imagenUrl:p.imagenUrl||''}))};
                     try { await window.fb.set(window.fb.ref(window.db,`ventas/_seguimientoPublico/${token}`),data); return data; } catch(e){ console.warn('No se pudo guardar seguimientoPublico:',e); return null; }
                 },
                 async abrirSeguimientoCliente(item) {
                     if(!item) return;
-                    const clienteWin=window.open('about:blank','_blank','width=980,height=1050');
-                    if(clienteWin){ clienteWin.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Seguimiento de pedido · PetSmart</title></head><body style="margin:0;font-family:system-ui;background:#06366f;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh"><div style="text-align:center"><div style="font-size:26px;font-weight:900">PetSmart</div><div style="margin-top:8px;opacity:.8">Preparando seguimiento…</div></div></body></html>'); clienteWin.document.close(); }
                     const grupo=String(item.ventaGrupoId||'');
-                    if(!grupo){ if(clienteWin)clienteWin.close(); Swal.fire('Seguimiento','Esta venta antigua no tiene un grupo de pedido. Registra una nueva venta para habilitar el seguimiento.','info'); return; }
+                    if(!grupo){ Swal.fire('Seguimiento','Esta venta antigua no tiene un grupo de pedido. Registra una nueva venta para habilitar el seguimiento.','info'); return; }
                     try {
                         let token=String(item.seguimientoToken||'').trim();
                         let snapshot=null;
@@ -2703,16 +2706,16 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         if(!token || !snapshot){
                             const grupoItems=this.productos.filter(p=>p.estado==='vendido'&&String(p.ventaGrupoId||'')===grupo);
                             const primero=grupoItems[0]||item;
-                            snapshot=await this.crearSeguimientoPedido({ventaGrupoId:grupo,pedidoNumero:primero.comprobanteNumero,clienteNombre:primero.clienteNombre,clienteTelefono:primero.clienteTelefono,direccion:primero.direccionEntrega,distrito:primero.distrito,fechaEntrega:primero.fechaEntrega,items:grupoItems.map(p=>({nombre:p.nombre,cantidad:1,imagenUrl:p.imagenUrl||''}))});
+                            snapshot=await this.crearSeguimientoPedido({ventaGrupoId:grupo,pedidoNumero:primero.comprobanteNumero,clienteNombre:primero.clienteNombre,clienteTelefono:primero.clienteTelefono,direccion:primero.direccionEntrega,distrito:primero.distrito,fechaEntrega:primero.fechaEntrega,horarioEntrega:primero.horarioEntrega||'',items:grupoItems.map(p=>({nombre:p.nombre,cantidad:1,imagenUrl:p.imagenUrl||''}))});
                             token=snapshot?.token||'';
                             if(token){ const updates={}; grupoItems.forEach(p=>{updates[`productos/${p.id}/seguimientoToken`]=token;updates[`productos/${p.id}/estadoEnvio`]=snapshot.estado||'Recibido';}); if(Object.keys(updates).length) await window.fb.update(window.fb.ref(window.db),updates); }
                         }
                         if(!token) throw new Error('No se pudo generar el enlace corto. Firebase no permitió guardar el seguimiento.');
                         const url=this.urlSeguimientoCliente(token,snapshot);
                         this.seguimientoAdmin={token,url,item,snapshot};
+                        this.mostrarVistaClienteSeguimiento=false;
                         this.modalSeguimientoPedido=true;
-                        if(clienteWin) clienteWin.location.href=url;
-                    } catch(e){ if(clienteWin)clienteWin.close(); Swal.fire('Seguimiento','No se pudo preparar el seguimiento: '+(e?.message||e),'error'); }
+                    } catch(e){ Swal.fire('Seguimiento','No se pudo preparar el seguimiento: '+(e?.message||e),'error'); }
                 },
                 async actualizarEstadoSeguimiento(estado) {
                     const s=this.seguimientoAdmin; if(!s?.token||!this.seguimientoEstados.includes(estado)) return;
@@ -2729,7 +2732,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 },
                 async copiarEnlaceSeguimiento(){ const url=this.seguimientoAdmin?.url; if(!url)return; try{await navigator.clipboard.writeText(url);this.notificarToast('success','Enlace corto copiado');}catch(e){Swal.fire({title:'Enlace para el cliente',html:`<input class="swal2-input" value="${this.escapeHtml(url)}" readonly>`,confirmButtonText:'Cerrar'});} },
                 abrirSeguimientoEnNuevaVentana(){ const url=this.seguimientoAdmin?.url; if(url) window.open(url,'_blank','width=980,height=1050'); },
-                cerrarSeguimientoAdmin(){this.modalSeguimientoPedido=false;this.seguimientoAdmin=null;},
+                alternarVistaClienteSeguimiento(){ this.mostrarVistaClienteSeguimiento=!this.mostrarVistaClienteSeguimiento; },
+                cerrarSeguimientoAdmin(){this.modalSeguimientoPedido=false;this.mostrarVistaClienteSeguimiento=false;this.seguimientoAdmin=null;},
                 abrirReportePedido(item) {
                     if (!item) return;
                     const grupoId = item.ventaGrupoId || '';
@@ -2763,6 +2767,9 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     const fechaVenta = item.fechaVenta || this.fechaPeru();
                     this.reportePedido = {
                         pedidoNumero: item.comprobanteNumero || '',
+                        ventaGrupoId: item.ventaGrupoId || '',
+                        itemId: item.id || '',
+                        seguimientoToken: item.seguimientoToken || '',
                         clienteNombre: item.clienteNombre || '',
                         clienteTelefono: item.clienteTelefono || '',
                         dni: this.obtenerDniItem(item) || '',
@@ -2770,13 +2777,44 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         metodoPago: item.medioPago || 'Yape',
                         fechaPedido: fechaVenta,
                         fechaEntrega: item.fechaEntrega || '',
-                        horarioEntrega: '',
+                        horarioEntrega: item.horarioEntrega || '',
                         precioProductos: Number(grupo.reduce((sum, p) => sum + (Number(p.precioVenta) || 0), 0).toFixed(2)),
                         costoEnvio: this.extraerMontoEnvio(item.envio),
                         observacion: item.observacion || '',
                         items: Array.from(agrupados.values())
                     };
                     this.modalReportePedido = true;
+                },
+                async guardarHorarioReportePedido() {
+                    const pedido = this.reportePedido;
+                    const grupoId = String(pedido?.ventaGrupoId || '').trim();
+                    const horario = String(pedido?.horarioEntrega || '').trim();
+                    if (!pedido?.pedidoNumero && !grupoId) { Swal.fire('Horario de entrega','No se encontró el pedido para guardar el horario.','warning'); return; }
+                    try {
+                        const relacionados = grupoId
+                            ? this.productos.filter(p => p.estado === 'vendido' && String(p.ventaGrupoId || '') === grupoId)
+                            : (pedido?.itemId ? this.productos.filter(p => p.id === pedido.itemId) : []);
+                        const updates = {};
+                        relacionados.forEach(p => {
+                            updates[`productos/${p.id}/horarioEntrega`] = horario;
+                            updates[`ventas/${p.id}/horarioEntrega`] = horario;
+                        });
+                        if (!Object.keys(updates).length && pedido?.itemId) {
+                            updates[`productos/${pedido.itemId}/horarioEntrega`] = horario;
+                            updates[`ventas/${pedido.itemId}/horarioEntrega`] = horario;
+                        }
+                        if (!Object.keys(updates).length) throw new Error('No se encontraron productos vendidos asociados a este pedido.');
+                        await window.fb.update(window.fb.ref(window.db), updates);
+                        const token = relacionados[0]?.seguimientoToken || this.reportePedido?.seguimientoToken || '';
+                        if (token) {
+                            try { await window.fb.update(window.fb.ref(window.db, `ventas/_seguimientoPublico/${token}`), { horarioEntrega: horario, fechaEntrega: relacionados[0]?.fechaEntrega || this.reportePedido.fechaEntrega || '' }); } catch (e) { console.warn('No se pudo actualizar el horario en seguimiento público:', e); }
+                        }
+                        this.reportePedido.horarioEntrega = horario;
+                        this.notificarToast('success', horario ? 'Horario de entrega guardado' : 'Horario de entrega eliminado');
+                    } catch (e) {
+                        console.error('ERROR GUARDANDO HORARIO:', e);
+                        Swal.fire('No se pudo guardar el horario', e?.message || 'Error desconocido', 'error');
+                    }
                 },
                 cerrarReportePedido() {
                     this.modalReportePedido = false;
@@ -2829,8 +2867,9 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                             onclone: (doc) => {
                                 const root = doc.getElementById('reportePedidoPreview');
                                 if (!root) return;
-                                root.style.width = getComputedStyle(source).width;
-                                root.style.maxWidth = 'none';
+                                root.style.width = '794px';
+                                root.style.minWidth = '794px';
+                                root.style.maxWidth = '794px';
                                 root.querySelectorAll('.pedido-product-img').forEach(img => {
                                     img.style.width = 'auto';
                                     img.style.height = 'auto';
@@ -3133,16 +3172,16 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     return this.formProducto.sku;
                 },
                 generarBarrasFalsas(codigo) {
-                    const digits = String(codigo || '00000000000').replace(/\D/g, '').padStart(11, '0').slice(-11);
-                    const barras = [];
-                    barras.push({w:2},{w:1},{w:2});
-                    digits.split('').forEach((d, i) => {
-                        const n = Number(d) || 0;
-                        const patrones = [1,2,1,3,1,2,3,1,2,3];
-                        const base = patrones[(n + i) % patrones.length];
-                        barras.push({w:base},{w:1},{w:(n % 3) + 1},{w:1});
-                    });
-                    barras.push({w:2},{w:1},{w:2});
+                    const digits=String(codigo||'00000000000').replace(/\D/g,'').padStart(11,'0').slice(-11);
+                    const suma=digits.split('').reduce((acc,d,i)=>acc+Number(d)*(i%2===0?3:1),0);
+                    const check=String((10-(suma%10))%10);
+                    const full=digits+check;
+                    const L=['0001101','0011001','0010011','0111101','0100011','0110001','0101111','0111011','0110111','0001011'];
+                    const R=['1110010','1100110','1101100','1000010','1011100','1001110','1010000','1000100','1001000','1110100'];
+                    const bits='101'+full.slice(0,6).split('').map(d=>L[Number(d)]).join('')+'01010'+full.slice(6).split('').map(d=>R[Number(d)]).join('')+'101';
+                    const barras=[]; let actual=bits[0],run=0; const modulo=2;
+                    for(const bit of bits){ if(bit===actual) run++; else { barras.push({w:run*modulo,black:actual==='1'}); actual=bit; run=1; } }
+                    barras.push({w:run*modulo,black:actual==='1'});
                     return barras;
                 },
                 // =================================================
@@ -3643,7 +3682,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 registrarVenta(item = null) {
                     this.productoVenta = item || null;
                     this.ventaItems = [{ sku: '', producto: null, error: '' }];
-                    this.ventaForm = { clienteNombre: '', clienteTelefono: '', distrito: '', direccionEntrega: '', latitud: '', longitud: '', canalVenta: 'WhatsApp', perfilFacebook: '', medioPago: 'Yape', fechaVenta: this.fechaPeru(), fechaEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '', comision: 0, confLogistico: 0, observacion: '' , valeCodigo: '', generarVale: false, usarVale: false };
+                    this.ventaForm = { clienteNombre: '', clienteTelefono: '', distrito: '', direccionEntrega: '', latitud: '', longitud: '', canalVenta: 'WhatsApp', perfilFacebook: '', medioPago: 'Yape', fechaVenta: this.fechaPeru(), fechaEntrega: '', horarioEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '', comision: 0, confLogistico: 0, observacion: '' , valeCodigo: '', generarVale: false, usarVale: false };
                     this.valeValidado = null;
                     this.valeReservado = false;
                     this.valeGeneradoUltimaVenta = null;
@@ -3839,6 +3878,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                                 estado: 'vendido',
                                 fechaVenta,
                                 fechaEntrega: String(this.ventaForm.fechaEntrega || ''),
+                                horarioEntrega: String(this.ventaForm.horarioEntrega || '').trim(),
                                 envio: String(this.ventaForm.envio || '').trim(),
                                 clienteNombre,
                                 clienteTelefono,
@@ -3886,6 +3926,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                                     totalVenta: this.totalVentaSeleccionada,
                                     cantidadProductos: seleccionados.length,
                                     fechaEntrega: String(this.ventaForm.fechaEntrega || ''),
+                                    horarioEntrega: String(this.ventaForm.horarioEntrega || '').trim(),
                                     envio: String(this.ventaForm.envio || '').trim(),
                                     tipoComprobante,
                                     tipoDocumento,
@@ -3937,7 +3978,10 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                             this.notificarToast('success', `${seleccionados.length} producto(s) vendidos correctamente`);
                             if (this.ventaForm.generarVale) {
                                 try {
-                                    const vale = await this.generarValePromocionalParaVenta({clienteId, clienteNombre, clienteTelefono, distrito, ventaGrupoId});
+                                    const vale = await this.generarValePromocionalParaVenta({clienteId, clienteNombre, clienteTelefono, distrito, direccionEntrega: this.ventaForm.direccionEntrega, ventaGrupoId});
+                                    const valeUpdates = {};
+                                    seleccionados.forEach(p => { valeUpdates[`productos/${p.id}/valeCodigo`] = vale.codigo; valeUpdates[`ventas/${p.id}/valeCodigo`] = vale.codigo; });
+                                    if (Object.keys(valeUpdates).length) await window.fb.update(window.fb.ref(window.db), valeUpdates);
                                     this.valeGeneradoUltimaVenta = vale;
                                     Swal.fire({icon:'success',title:'Venta registrada + vale generado',html:`<div class=\"text-sm\">Código: <b style=\"font-family:monospace;letter-spacing:.08em\">${vale.codigo}</b><br><span class=\"text-xs\">${vale.beneficio} · Válido hasta ${vale.fechaVencimiento}</span></div>`,confirmButtonColor:'#059669'});
                                 } catch(e) { console.warn('No se pudo generar el vale:',e); Swal.fire({icon:'warning',title:'Venta registrada',text:'La venta se guardó, pero no se pudo generar el vale promocional. Verifica los permisos de Firebase para valesPromocionales.',confirmButtonColor:'#d97706'}); }
@@ -3991,7 +4035,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         const comision = venta.canalVenta === 'Falabella' ? Number(venta.comision) || 0 : 0;
                         const confLogistico = venta.canalVenta === 'Falabella' ? Number(venta.confLogistico) || 0 : 0;
                         const perfilFacebook = venta.canalVenta === 'Facebook' ? String(venta.perfilFacebook || '') : '';
-                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, fechaEntrega: String(venta.fechaEntrega || ''), envio: String(venta.envio || '').trim(), clienteNombre: String(venta.clienteNombre || '').trim(), clienteTelefono: this.limpiarCelular(venta.clienteTelefono || ''), distrito: String(venta.distrito || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), latitud: String(venta.latitud || '').trim(), longitud: String(venta.longitud || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim(), tipoComprobante: venta.tipoComprobante || 'Boleta', tipoDocumento: venta.tipoComprobante === 'Boleta' ? (venta.tipoDocumento || 'DNI') : '', numeroDocumento: venta.tipoComprobante === 'Boleta' ? String(venta.numeroDocumento || '').replace(/\D/g, '') : '', ruc: venta.tipoComprobante === 'Factura' ? String(venta.ruc || '').replace(/\D/g, '') : '', razonSocial: venta.tipoComprobante === 'Factura' ? String(venta.razonSocial || '').trim() : '' };
+                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, fechaEntrega: String(venta.fechaEntrega || ''), horarioEntrega: String(venta.horarioEntrega || '').trim(), envio: String(venta.envio || '').trim(), clienteNombre: String(venta.clienteNombre || '').trim(), clienteTelefono: this.limpiarCelular(venta.clienteTelefono || ''), distrito: String(venta.distrito || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), latitud: String(venta.latitud || '').trim(), longitud: String(venta.longitud || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim(), tipoComprobante: venta.tipoComprobante || 'Boleta', tipoDocumento: venta.tipoComprobante === 'Boleta' ? (venta.tipoDocumento || 'DNI') : '', numeroDocumento: venta.tipoComprobante === 'Boleta' ? String(venta.numeroDocumento || '').replace(/\D/g, '') : '', ruc: venta.tipoComprobante === 'Factura' ? String(venta.ruc || '').replace(/\D/g, '') : '', razonSocial: venta.tipoComprobante === 'Factura' ? String(venta.razonSocial || '').trim() : '' };
                         await window.fb.update(window.fb.ref(window.db, `productos/${venta.id}`), datos);
                         await this.guardarRegistroVentaAdicional(venta, datos);
                         Swal.close();
@@ -4063,6 +4107,72 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 // =================================================
                 // ELIMINAR VENTA + LIMPIAR CLIENTE SI YA NO TIENE VENTAS
                 // =================================================
+                async eliminarValesDeVentaGrupo(ventaGrupoId) {
+                    const grupo = String(ventaGrupoId || '').trim();
+                    if (!grupo) return 0;
+                    try {
+                        const snap = await window.fb.get(window.fb.ref(window.db, 'valesPromocionales'));
+                        if (!snap.exists()) return 0;
+                        const data = snap.val() || {};
+                        const updates = {};
+                        Object.entries(data).forEach(([codigo, vale]) => {
+                            if (String(vale?.ventaOrigen || '').trim() === grupo || String(vale?.reservadoVentaGrupoId || '').trim() === grupo || String(vale?.usadoVentaGrupoId || '').trim() === grupo) {
+                                updates[`valesPromocionales/${codigo}`] = null;
+                            }
+                        });
+                        if (Object.keys(updates).length) await window.fb.update(window.fb.ref(window.db), updates);
+                        this.valesPromocionalesData = (this.valesPromocionalesData || []).filter(v => !updates[`valesPromocionales/${v.codigo}`]);
+                        return Object.keys(updates).length;
+                    } catch (e) {
+                        console.warn('No se pudieron depurar los vales asociados:', e);
+                        throw e;
+                    }
+                },
+                async eliminarValePromocional(codigo) {
+                    const code = this.normalizarCodigoVale(codigo || '');
+                    if (!code) return;
+                    const vale = (this.valesPromocionalesData || []).find(v => String(v.codigo || '').toUpperCase() === code);
+                    const confirmacion = await Swal.fire({
+                        title: '¿Eliminar este vale?',
+                        html: `<div class="text-sm">Se eliminará definitivamente el vale <b style="font-family:monospace">${this.escapeHtml(code)}</b>. Si está asociado a una venta, podrás volver a vincular el mismo código manualmente.</div>`,
+                        icon: 'warning', showCancelButton: true, confirmButtonColor: '#e11d48', cancelButtonColor: '#64748b', confirmButtonText: 'Sí, eliminar vale', cancelButtonText: 'Cancelar'
+                    });
+                    if (!confirmacion.isConfirmed) return;
+                    try {
+                        await window.fb.set(window.fb.ref(window.db, `valesPromocionales/${code}`), null);
+                        this.valesPromocionalesData = (this.valesPromocionalesData || []).filter(v => String(v.codigo || '').toUpperCase() !== code);
+                        this.notificarToast('success', 'Vale eliminado');
+                    } catch (e) {
+                        Swal.fire('No se pudo eliminar el vale', e?.message || 'Error desconocido', 'error');
+                    }
+                },
+                async vincularValeExistente() {
+                    const code = this.normalizarCodigoVale(this.valeReponerCodigo || '');
+                    const grupo = String(this.valeReponerVentaGrupoId || '').trim();
+                    if (!code || !grupo) { Swal.fire('Completa los datos','Ingresa el código del vale y selecciona la venta.','warning'); return; }
+                    try {
+                        const snap = await window.fb.get(window.fb.ref(window.db, `valesPromocionales/${code}`));
+                        if (snap.exists()) { Swal.fire('Código ya existente','Ese código ya está registrado en Firebase. Usa otro código o revisa el vale existente.','warning'); return; }
+                        const relacionados = this.productos.filter(p => p.estado === 'vendido' && String(p.ventaGrupoId || '') === grupo);
+                        if (!relacionados.length) { Swal.fire('Venta no encontrada','La venta seleccionada ya no tiene productos vendidos asociados.','warning'); return; }
+                        const primero = relacionados[0];
+                        const dias = Math.max(1, Number(this.configNegocio.valeVigenciaDias || 30));
+                        const venc = new Date(); venc.setDate(venc.getDate() + dias);
+                        const fechaVencimiento = `${venc.getFullYear()}-${String(venc.getMonth()+1).padStart(2,'0')}-${String(venc.getDate()).padStart(2,'0')}`;
+                        const vale = { codigo: code, estado: 'disponible', beneficio: 'Envío gratis en la próxima compra', clienteId: primero.clienteId || '', clienteNombre: String(primero.clienteNombre || '').trim(), clienteTelefono: this.limpiarCelular(primero.clienteTelefono || ''), distrito: String(primero.distrito || '').trim(), direccionEntrega: String(primero.direccionEntrega || '').trim(), ventaOrigen: grupo, creadoEn: new Date().toISOString(), fechaVencimiento };
+                        await window.fb.set(window.fb.ref(window.db, `valesPromocionales/${code}`), vale);
+                        const updates = {};
+                        relacionados.forEach(p => { updates[`productos/${p.id}/valeCodigo`] = code; updates[`ventas/${p.id}/valeCodigo`] = code; });
+                        if (Object.keys(updates).length) await window.fb.update(window.fb.ref(window.db), updates);
+                        this.valeReponerCodigo = '';
+                        this.valeReponerVentaGrupoId = '';
+                        await this.cargarValesPromocionales();
+                        Swal.fire({icon:'success',title:'Vale vinculado correctamente',html:`<div class="text-sm">El código <b style="font-family:monospace">${this.escapeHtml(code)}</b> quedó asociado al pedido <b>#${this.escapeHtml(primero.comprobanteNumero || '—')}</b> sin cambiar el código.</div>`,confirmButtonColor:'#059669'});
+                    } catch (e) {
+                        console.error('ERROR VINCULANDO VALE:', e);
+                        Swal.fire('No se pudo vincular el vale', e?.message || 'Error desconocido', 'error');
+                    }
+                },
                 async eliminarVenta(item) {
                     if (!item?.id) return;
                     const grupo = String(item.ventaGrupoId || '').trim();
@@ -4086,9 +4196,10 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                             updates[`ventas/${p.id}`] = null;
                         });
                         await window.fb.update(window.fb.ref(window.db), updates);
+                        if (grupo) await this.eliminarValesDeVentaGrupo(grupo);
                         await this.limpiarClientesHuerfanos();
                         Swal.close();
-                        this.notificarToast('success', 'Venta eliminada. Inventario y clientes sin ventas quedaron depurados.');
+                        this.notificarToast('success', 'Venta eliminada. Inventario, vale(s) asociados y clientes sin ventas quedaron depurados.');
                     } catch (error) {
                         console.error('ERROR ELIMINANDO VENTA:', error);
                         Swal.close();
@@ -4445,14 +4556,19 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     });
                     if (!result.isConfirmed) return;
                     try {
-                        Swal.fire({ title:'Eliminando...', text:'Actualizando inventario, ventas y clientes.', allowOutsideClick:false, didOpen:()=>Swal.showLoading() });
+                        Swal.fire({ title:'Eliminando...', text:'Actualizando inventario, ventas, vales y clientes.', allowOutsideClick:false, didOpen:()=>Swal.showLoading() });
+                        const grupoVale = String(item.ventaGrupoId || '').trim();
                         const updates = {};
                         updates[`productos/${id}`] = null;
                         if (item.estado === 'vendido') updates[`ventas/${id}`] = null;
                         await window.fb.update(window.fb.ref(window.db), updates);
+                        if (item.estado === 'vendido' && grupoVale) {
+                            const quedan = this.productos.some(p => p.id !== item.id && p.estado === 'vendido' && String(p.ventaGrupoId || '') === grupoVale);
+                            if (!quedan) await this.eliminarValesDeVentaGrupo(grupoVale);
+                        }
                         await this.limpiarClientesHuerfanos();
                         Swal.close();
-                        Swal.fire('Eliminado', item.estado === 'vendido' ? 'La unidad, su venta y cualquier cliente que haya quedado sin ventas fueron depurados.' : 'La unidad fue eliminada y se limpiaron clientes sin ventas.', 'success');
+                        Swal.fire('Eliminado', item.estado === 'vendido' ? 'La unidad, su venta, sus vales asociados y cualquier cliente que haya quedado sin ventas fueron depurados.' : 'La unidad fue eliminada y se limpiaron clientes sin ventas.', 'success');
                     } catch (error) {
                         console.error('ERROR ELIMINANDO PRODUCTO:', error);
                         Swal.close();
@@ -5356,7 +5472,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
     <div>• Las compras de mercadería y otros pagos se registran como <b>salidas manuales</b> del pozo que tú elijas. No cambian el inventario ni modifican las ventas.</div>
   </div>
 </div>
-</div><div x-show="activeTab === 'vales'" x-transition class="inventory-section"><div class="rounded-3xl overflow-hidden border border-blue-200 dark:border-blue-900/50 bg-white dark:bg-slate-900 shadow-xl"><div class="p-6 md:p-7 bg-gradient-to-br from-blue-800 to-blue-600 text-white relative overflow-hidden"><div class="absolute -right-8 -top-8 text-[130px] opacity-10">🐾</div><div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5"><div><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-black uppercase tracking-widest"><i class="fa-solid fa-ticket"></i> Centro de vales</div><h2 class="text-3xl font-black mt-3">Vales promocionales</h2><p class="text-sm text-blue-100 mt-1 max-w-2xl">Administra aquí todos los vales emitidos. Admin ya no contiene el historial de vales.</p></div><div class="flex flex-wrap gap-2"><button @click="cargarValesPromocionales()" class="px-4 py-3 rounded-xl bg-white/15 font-black text-xs"><i class="fa-solid fa-rotate"></i> Actualizar</button><button @click="exportarValesCSV()" class="px-4 py-3 rounded-xl bg-white text-blue-800 font-black text-xs"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button></div></div></div><div class="p-5 md:p-7"><div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6"><div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800"><div class="text-[10px] uppercase font-black text-slate-400">Total</div><div class="text-2xl font-black" x-text="valesPromocionalesData.length"></div></div><div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20"><div class="text-[10px] uppercase font-black text-emerald-600">Disponibles</div><div class="text-2xl font-black text-emerald-600" x-text="contarValesEstado('Disponible')"></div></div><div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/20"><div class="text-[10px] uppercase font-black text-blue-600">Usados</div><div class="text-2xl font-black text-blue-600" x-text="contarValesEstado('Usado')"></div></div><div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/20"><div class="text-[10px] uppercase font-black text-rose-600">Vencidos</div><div class="text-2xl font-black text-rose-600" x-text="contarValesEstado('Vencido')"></div></div><div class="p-4 rounded-2xl bg-violet-50 dark:bg-violet-950/20"><div class="text-[10px] uppercase font-black text-violet-600">Encontrados</div><div class="text-2xl font-black text-violet-600" x-text="valesFiltrados().length"></div></div></div><div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 mb-6"><div class="flex items-center gap-2 mb-4 font-black"><i class="fa-solid fa-magnifying-glass text-orange-500"></i> Buscador profesional</div><div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3"><div class="relative xl:col-span-2"><i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroValesTexto" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm" placeholder="Buscar por código, cliente, teléfono o distrito..."></div><select x-model="filtroValesEstado" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los estados</option><option value="disponible">Disponibles</option><option value="usado">Usados</option><option value="vencido">Vencidos</option><option value="reservado">Reservados</option></select><select x-model="filtroValesDistrito" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los distritos</option><template x-for="d in distritosValesDisponibles()" :key="d"><option :value="d" x-text="d"></option></template></select></div><div class="flex flex-wrap gap-2 mt-3"><select x-model="filtroValesFecha" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-bold"><option value="todos">Cualquier vencimiento</option><option value="7">Vencen en 7 días</option><option value="30">Vencen en 30 días</option><option value="vencidos">Ya vencidos</option></select><button @click="filtroValesTexto='';filtroValesEstado='todos';filtroValesDistrito='todos';filtroValesFecha='todos'" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-black"><i class="fa-solid fa-eraser"></i> Limpiar filtros</button></div></div><div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700"><table class="w-full text-left text-xs"><thead class="bg-slate-900 text-white"><tr><th class="px-4 py-4">Vale</th><th class="px-4 py-4">Cliente</th><th class="px-4 py-4">Contacto</th><th class="px-4 py-4">Distrito</th><th class="px-4 py-4">Vence</th><th class="px-4 py-4">Estado</th><th class="px-4 py-4 text-right">Acciones</th></tr></thead><tbody><template x-for="vale in valesFiltrados()" :key="vale.codigo"><tr class="border-t border-slate-100 dark:border-slate-800"><td class="px-4 py-4"><div class="font-mono font-black text-yellow-600" x-text="vale.codigo"></div><div class="text-[9px] text-slate-400" x-text="vale.creadoEn ? new Date(vale.creadoEn).toLocaleString('es-PE') : '—'"></div></td><td class="px-4 py-4 font-black" x-text="vale.clienteNombre || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.clienteTelefono || '—'"></td><td class="px-4 py-4" x-text="vale.distrito || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.fechaVencimiento || '—'"></td><td class="px-4 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-black" :class="estadoValeVisual(vale)==='Disponible'?'bg-emerald-100 text-emerald-700':estadoValeVisual(vale)==='Usado'?'bg-blue-100 text-blue-700':estadoValeVisual(vale)==='Reservado'?'bg-violet-100 text-violet-700':'bg-rose-100 text-rose-700'" x-text="estadoValeVisual(vale)"></span></td><td class="px-4 py-4"><div class="flex justify-end gap-2"><button @click="copiarCodigoValeDesdeRegistro(vale.codigo)" class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-700" title="Copiar código"><i class="fa-solid fa-copy"></i></button><button @click="verValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-blue-700 text-white" title="Ver y descargar vale"><i class="fa-solid fa-image"></i></button><button @click="imprimirValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-orange-500 text-white" title="Imprimir vale"><i class="fa-solid fa-print"></i></button></div></td></tr></template><tr x-show="!valesFiltrados().length"><td colspan="7" class="px-6 py-14 text-center"><div class="text-4xl">🐾</div><div class="font-black text-lg mt-2">No encontramos vales</div></td></tr></tbody></table></div><div class="mt-6 p-4 rounded-2xl border border-orange-200 bg-orange-50 dark:bg-orange-950/20 text-xs"><b>Almacenamiento:</b> los vales se guardan en <code>valesPromocionales</code> de Firebase y se gestionan desde esta pestaña, no desde Admin.</div></div></div></div>
+</div><div x-show="activeTab === 'vales'" x-transition class="inventory-section"><div class="rounded-3xl overflow-hidden border border-blue-200 dark:border-blue-900/50 bg-white dark:bg-slate-900 shadow-xl"><div class="p-6 md:p-7 bg-gradient-to-br from-blue-800 to-blue-600 text-white relative overflow-hidden"><div class="absolute -right-8 -top-8 text-[130px] opacity-10">🐾</div><div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5"><div><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-black uppercase tracking-widest"><i class="fa-solid fa-ticket"></i> Centro de vales</div><h2 class="text-3xl font-black mt-3">Vales promocionales</h2><p class="text-sm text-blue-100 mt-1 max-w-2xl">Administra aquí todos los vales emitidos. Admin ya no contiene el historial de vales.</p></div><div class="flex flex-wrap gap-2"><button @click="cargarValesPromocionales()" class="px-4 py-3 rounded-xl bg-white/15 font-black text-xs"><i class="fa-solid fa-rotate"></i> Actualizar</button><button @click="exportarValesCSV()" class="px-4 py-3 rounded-xl bg-white text-blue-800 font-black text-xs"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button></div></div></div><div class="p-5 md:p-7"><div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6"><div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800"><div class="text-[10px] uppercase font-black text-slate-400">Total</div><div class="text-2xl font-black" x-text="valesPromocionalesData.length"></div></div><div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20"><div class="text-[10px] uppercase font-black text-emerald-600">Disponibles</div><div class="text-2xl font-black text-emerald-600" x-text="contarValesEstado('Disponible')"></div></div><div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/20"><div class="text-[10px] uppercase font-black text-blue-600">Usados</div><div class="text-2xl font-black text-blue-600" x-text="contarValesEstado('Usado')"></div></div><div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/20"><div class="text-[10px] uppercase font-black text-rose-600">Vencidos</div><div class="text-2xl font-black text-rose-600" x-text="contarValesEstado('Vencido')"></div></div><div class="p-4 rounded-2xl bg-violet-50 dark:bg-violet-950/20"><div class="text-[10px] uppercase font-black text-violet-600">Encontrados</div><div class="text-2xl font-black text-violet-600" x-text="valesFiltrados().length"></div></div></div><div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 mb-6"><div class="flex items-center gap-2 mb-4 font-black"><i class="fa-solid fa-magnifying-glass text-orange-500"></i> Buscador profesional</div><div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3"><div class="relative xl:col-span-2"><i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroValesTexto" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm" placeholder="Buscar por código, cliente, teléfono o distrito..."></div><select x-model="filtroValesEstado" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los estados</option><option value="disponible">Disponibles</option><option value="usado">Usados</option><option value="vencido">Vencidos</option><option value="reservado">Reservados</option></select><select x-model="filtroValesDistrito" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los distritos</option><template x-for="d in distritosValesDisponibles()" :key="d"><option :value="d" x-text="d"></option></template></select></div><div class="flex flex-wrap gap-2 mt-3"><select x-model="filtroValesFecha" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-bold"><option value="todos">Cualquier vencimiento</option><option value="7">Vencen en 7 días</option><option value="30">Vencen en 30 días</option><option value="vencidos">Ya vencidos</option></select><button @click="filtroValesTexto='';filtroValesEstado='todos';filtroValesDistrito='todos';filtroValesFecha='todos'" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-black"><i class="fa-solid fa-eraser"></i> Limpiar filtros</button></div></div><div class="mb-6 p-5 rounded-2xl border border-violet-200 dark:border-violet-900/60 bg-violet-50/70 dark:bg-violet-950/20"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-xl bg-violet-600 text-white flex items-center justify-center shrink-0"><i class="fa-solid fa-link"></i></div><div class="min-w-0"><div class="font-black text-sm">Vincular un vale existente a una venta</div><div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Si eliminaste por error el registro de un vale, puedes volver a crearlo usando exactamente el mismo código y asociarlo al pedido original.</div></div></div><div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr_auto] gap-3 mt-4 items-end"><div><label class="block text-[10px] uppercase tracking-wider font-black mb-1">Código original</label><input x-model="valeReponerCodigo" @input="valeReponerCodigo=normalizarCodigoVale(valeReponerCodigo)" maxlength="20" placeholder="PS-26-XXXXXXX" class="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800 font-mono font-black uppercase"></div><div><label class="block text-[10px] uppercase tracking-wider font-black mb-1">Venta / pedido</label><select x-model="valeReponerVentaGrupoId" class="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800 font-bold"><option value="">Selecciona la venta</option><template x-for="v in ventasRegistradas.filter(x => x.ventaGrupoId && x.clienteNombre).filter((v,i,a)=>a.findIndex(z=>String(z.ventaGrupoId)===String(v.ventaGrupoId))===i)" :key="'vale-link-'+v.ventaGrupoId"><option :value="v.ventaGrupoId" x-text="'#'+(v.comprobanteNumero||'—')+' · '+(v.clienteNombre||'Cliente')+' · '+(v.distrito||'')"></option></template></select></div><button @click="vincularValeExistente()" type="button" class="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-black text-xs"><i class="fa-solid fa-link mr-1"></i>Vincular vale</button></div></div><div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700"><table class="w-full text-left text-xs"><thead class="bg-slate-900 text-white"><tr><th class="px-4 py-4">Vale</th><th class="px-4 py-4">Cliente</th><th class="px-4 py-4">Contacto</th><th class="px-4 py-4">Distrito</th><th class="px-4 py-4">Vence</th><th class="px-4 py-4">Estado</th><th class="px-4 py-4 text-right">Acciones</th></tr></thead><tbody><template x-for="vale in valesFiltrados()" :key="vale.codigo"><tr class="border-t border-slate-100 dark:border-slate-800"><td class="px-4 py-4"><div class="font-mono font-black text-yellow-600" x-text="vale.codigo"></div><div class="text-[9px] text-slate-400" x-text="vale.creadoEn ? new Date(vale.creadoEn).toLocaleString('es-PE') : '—'"></div></td><td class="px-4 py-4 font-black" x-text="vale.clienteNombre || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.clienteTelefono || '—'"></td><td class="px-4 py-4" x-text="vale.distrito || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.fechaVencimiento || '—'"></td><td class="px-4 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-black" :class="estadoValeVisual(vale)==='Disponible'?'bg-emerald-100 text-emerald-700':estadoValeVisual(vale)==='Usado'?'bg-blue-100 text-blue-700':estadoValeVisual(vale)==='Reservado'?'bg-violet-100 text-violet-700':'bg-rose-100 text-rose-700'" x-text="estadoValeVisual(vale)"></span></td><td class="px-4 py-4"><div class="flex justify-end gap-2"><button @click="copiarCodigoValeDesdeRegistro(vale.codigo)" class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-700" title="Copiar código"><i class="fa-solid fa-copy"></i></button><button @click="verValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-blue-700 text-white" title="Ver y descargar vale"><i class="fa-solid fa-image"></i></button><button @click="imprimirValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-orange-500 text-white" title="Imprimir vale"><i class="fa-solid fa-print"></i></button><button @click="eliminarValePromocional(vale.codigo)" class="w-9 h-9 rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-500 hover:text-white" title="Eliminar vale"><i class="fa-solid fa-trash"></i></button></div></td></tr></template><tr x-show="!valesFiltrados().length"><td colspan="7" class="px-6 py-14 text-center"><div class="text-4xl">🐾</div><div class="font-black text-lg mt-2">No encontramos vales</div></td></tr></tbody></table></div><div class="mt-6 p-4 rounded-2xl border border-orange-200 bg-orange-50 dark:bg-orange-950/20 text-xs"><b>Almacenamiento:</b> los vales se guardan en <code>valesPromocionales</code> de Firebase y se gestionan desde esta pestaña, no desde Admin.</div></div></div></div>
 </main></div></div>
 <div class="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 z-[96]" style="display:none;" x-cloak x-show="modalSeguimientoPedido" x-transition.opacity>
   <div class="w-full max-w-3xl ps-admin-track">
@@ -5365,6 +5481,14 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
       <button @click="cerrarSeguimientoAdmin()" class="w-11 h-11 rounded-xl bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center border border-white/10"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="p-5 sm:p-7 space-y-5">
+      <div class="flex flex-wrap gap-2">
+        <button @click="alternarVistaClienteSeguimiento()" type="button" class="ps-admin-action bg-white text-blue-800 hover:bg-blue-50"><i class="fa-solid fa-display mr-1"></i><span x-text="mostrarVistaClienteSeguimiento ? 'Ocultar vista del cliente' : 'Ver vista del cliente'"></span></button>
+        <button @click="abrirSeguimientoEnNuevaVentana()" type="button" class="ps-admin-action bg-white/10 text-white border border-white/15 hover:bg-white/15"><i class="fa-solid fa-up-right-from-square mr-1"></i>Abrir enlace</button>
+      </div>
+      <div x-show="mostrarVistaClienteSeguimiento" x-transition class="rounded-2xl bg-white/10 border border-white/10 p-3">
+        <div class="flex items-center justify-between gap-3 mb-2"><div class="text-[10px] uppercase tracking-[.18em] text-blue-100 font-black"><i class="fa-solid fa-eye mr-1"></i>Vista exacta del cliente</div><button @click="mostrarVistaClienteSeguimiento=false" type="button" class="px-3 py-1.5 rounded-lg bg-white/15 hover:bg-rose-500 text-white text-xs font-black border border-white/15"><i class="fa-solid fa-xmark mr-1"></i>Cerrar vista del cliente</button></div>
+        <div class="rounded-xl overflow-hidden bg-white" style="height:min(720px,72vh)"><iframe :src="mostrarVistaClienteSeguimiento ? seguimientoAdmin?.url : 'about:blank'" title="Vista del seguimiento del cliente" style="width:100%;height:100%;border:0;display:block"></iframe></div>
+      </div>
       <div class="rounded-2xl bg-white/10 border border-white/10 p-5">
         <div class="flex items-center justify-between gap-3 mb-4"><div><div class="text-[10px] uppercase tracking-[.2em] text-blue-100 font-black">Estado actual</div><div class="text-xl font-black mt-1" x-text="seguimientoAdmin?.estado||'Recibido'"></div></div><div class="w-14 h-14 rounded-2xl bg-white text-blue-700 flex items-center justify-center shadow-xl"><i class="fa-solid fa-truck-fast text-2xl"></i></div></div>
         <div class="ps-admin-status-grid"><template x-for="estado in seguimientoEstados" :key="'admin-v2-'+estado"><button @click="actualizarEstadoSeguimiento(estado)" type="button" class="ps-admin-status" :class="{'active':(seguimientoAdmin?.estado||'Recibido')===estado}"><i class="mr-1" :class="estado==='Solicitud Recibida'?'fa-solid fa-inbox':estado==='Preparando'?'fa-solid fa-box-open':estado==='Enviado'?'fa-solid fa-truck-fast':estado==='En destino'?'fa-solid fa-location-dot':'fa-solid fa-circle-check'"></i><span x-text="estado"></span></button></template></div>
@@ -5414,7 +5538,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
         <div><label class="block text-[11px] font-black mb-1.5">Método de pago</label><input x-model="reportePedido.metodoPago" type="text" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm" placeholder="Yape"></div>
         <div class="grid grid-cols-2 gap-3">
           <div><label class="block text-[11px] font-black mb-1.5">Fecha estimada de entrega</label><input x-model="reportePedido.fechaEntrega" type="date" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm"></div>
-          <div><label class="block text-[11px] font-black mb-1.5">Horario estimado</label><input x-model="reportePedido.horarioEntrega" type="text" class="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm" placeholder="11:30 am - 1:30 pm"></div>
+          <div><label class="block text-[11px] font-black mb-1.5">Horario estimado</label><div class="flex gap-2"><input x-model="reportePedido.horarioEntrega" type="text" class="flex-1 min-w-0 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-2.5 text-sm" placeholder="11:30 am - 1:30 pm"><button @click="guardarHorarioReportePedido()" type="button" class="shrink-0 px-3 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black" title="Guardar horario"><i class="fa-solid fa-floppy-disk mr-1"></i>Guardar</button></div></div>
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div><label class="block text-[11px] font-black mb-1.5">Precio de productos (S/)</label><input x-model.number="reportePedido.precioProductos" min="0" step="0.01" type="number" class="w-full rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-300 dark:border-emerald-800 px-3 py-2.5 text-sm font-black text-emerald-700 dark:text-emerald-300"></div>
