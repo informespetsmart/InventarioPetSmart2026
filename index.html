@@ -322,8 +322,8 @@ body.dark{background:#070d19!important}
 
 <style>
 /* V10 · UPC + CÓDIGO DE BARRAS FALSO + FINANZAS */
-.fake-barcode{height:48px;display:flex;align-items:stretch;justify-content:center;gap:0;overflow:hidden;background:#fff;padding:4px 8px;border-radius:6px;border:1px solid #e2e8f0}
-.fake-barcode span{display:block;background:#111827;flex:0 0 auto;min-width:0;height:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+.fake-barcode{height:42px;display:flex;align-items:stretch;justify-content:center;gap:1px;overflow:hidden;background:#fff;padding:4px 8px;border-radius:6px;border:1px solid #e2e8f0}
+.fake-barcode span{display:block;background:#111827;min-width:1px}
 .fin-pool{position:relative;overflow:hidden}
 .fin-pool:after{content:"";position:absolute;width:150px;height:150px;border-radius:999px;right:-55px;top:-70px;background:rgba(255,255,255,.16);pointer-events:none}
 .fin-number{font-variant-numeric:tabular-nums}
@@ -377,7 +377,7 @@ body.dark{background:#070d19!important}
 .catalogo-export-premium{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:linear-gradient(135deg,#f5f8fc,#eef4fa);color:#10243b;position:relative;overflow:hidden}
 .catalogo-export-premium .cat-export-top{background:linear-gradient(135deg,#073b78,#0a5aab);color:#fff;border-radius:26px;padding:30px 34px;position:relative;overflow:hidden;box-shadow:0 18px 45px rgba(7,59,120,.18)}
 .catalogo-export-premium .cat-export-top:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-110px;top:-150px;border:38px solid rgba(255,255,255,.08)}
-.catalogo-export-premium .cat-export-logo{max-height:76px;max-width:230px;object-fit:contain;background:transparent;border-radius:0;padding:0}
+.catalogo-export-premium .cat-export-logo{max-height:76px;max-width:230px;object-fit:contain;background:transparent!important;border-radius:0!important;padding:0!important}
 .catalogo-export-premium .cat-export-title{font-size:32px;line-height:1.05;font-weight:950;letter-spacing:-.045em;margin-top:14px}
 .catalogo-export-premium .cat-export-sub{font-size:11px;color:#dcecff;font-weight:750;margin-top:7px}
 .catalogo-export-premium .cat-paw{position:absolute;font-size:125px;right:30px;bottom:-42px;opacity:.07;transform:rotate(-12deg)}
@@ -409,7 +409,6 @@ body.dark{background:#070d19!important}
 @keyframes psSpark{0%,100%{opacity:.25;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.35) rotate(25deg)}}
 @media(max-width:720px){.ps-track-meta-three{grid-template-columns:1fr}.ps-track-client-name{font-size:22px}}
 </style>
-<style id="petsmart-puntual-mobile-ajustes">@media(max-width:700px){.pedido-modal-scroll{overflow-x:hidden!important}.pedido-preview-wrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}.pedido-preview-wrap #reportePedidoPreview{width:100%;max-width:794px;margin-left:auto;margin-right:auto}}</style>
 </head>
 <body :class="[darkMode ? 'dark bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-800', modoSeguimientoCliente ? 'tracking-only' : '']" class="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 font-sans transition-colors duration-300" x-data="inventarioApp()"><div x-show="modoSeguimientoCliente" x-cloak class="ps-track-v2" :class="{'is-destination': seguimientoClienteData?.estado==='En destino'}">
   <div class="ps-track-wrap">
@@ -847,6 +846,7 @@ body.dark{background:#070d19!important}
 <!-- VENTA -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Canal de Venta *</label><select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold" required x-model="ventaForm.canalVenta"><option value="WhatsApp">WhatsApp</option><option value="Facebook">Facebook</option><option value="Rappi">Rappi</option><option value="Falabella">Seller Falabella</option></select></div>
+<div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Tipo de mascota *</label><select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold" required x-model="ventaForm.tipoMascota"><option value="">Seleccionar tipo</option><option value="Perro">Perro</option><option value="Gato">Gato</option><option value="Conejo">Conejo</option><option value="Otro">Otro</option></select></div>
 <div x-show="ventaForm.canalVenta === 'Facebook'" x-transition><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Perfil que realizó la venta *</label><select :required="ventaForm.canalVenta === 'Facebook'" class="w-full bg-blue-50 dark:bg-slate-900 border border-blue-300 dark:border-blue-700 rounded-xl px-4 py-3 text-sm font-bold" x-model="ventaForm.perfilFacebook"><option value="">Seleccionar perfil</option><option value="Rouss Huamani">Rouss Huamani</option><option value="Katy Avril">Katy Avril</option><option value="Simon Sebastian">Simon Sebastian</option><option value="Jennifer Medina">Jennifer Medina</option><option value="Rouss Mery">Rouss Mery</option></select></div>
 <div><label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">Medio de pago</label><div class="w-full bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800 rounded-xl px-4 py-3 text-sm font-black text-violet-700 dark:text-violet-300 flex items-center gap-2"><i class="fa-solid fa-mobile-screen-button"></i> Yape</div></div>
 </div>
@@ -1396,6 +1396,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 valeReponerCodigo: '',
                 valeReponerVentaGrupoId: '',
                 filtroValesTexto: '',
+                filtroValesDni: '',
                 filtroValesEstado: 'todos',
                 filtroValesDistrito: 'todos',
                 filtroValesFecha: 'todos',
@@ -1630,7 +1631,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 // FORM VENTA
                 // =================================================
                 ventaForm: {
-                    clienteNombre: '', clienteTelefono: '', distrito: '', canalVenta: 'WhatsApp', perfilFacebook: '',
+                    clienteNombre: '', clienteTelefono: '', distrito: '', canalVenta: 'WhatsApp', perfilFacebook: '', tipoMascota: '',
                     medioPago: 'Yape', precioVenta: 0, fechaVenta: fechaPeruActual(), fechaEntrega: '', horarioEntrega: '', envio: '', tipoComprobante: 'Boleta', tipoDocumento: 'DNI', numeroDocumento: '', ruc: '', razonSocial: '',
                     comision: 0, confLogistico: 0, observacion: '', direccionEntrega: '', latitud: '', longitud: '', valeCodigo: '', generarVale: false
                 },
@@ -2012,13 +2013,61 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 // VALES PROMOCIONALES
                 // =================================================
                 normalizarCodigoVale(valor) { return String(valor || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0,20); },
+                normalizarTextoVale(valor) { return String(valor || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9\s]/g,' ').replace(/\s+/g,' ').trim(); },
+                normalizarNombreVale(valor) { return this.normalizarTextoVale(valor); },
+                normalizarDireccionVale(valor) { return this.normalizarTextoVale(valor).replace(/\b(NUMERO|NRO|NUM|N)\b/g,' ').replace(/\s+/g,' ').trim(); },
+                normalizarDniVale(valor) { return String(valor || '').replace(/\D/g,''); },
                 generarCodigoValeUnico() { const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let codigo='PS-26-'; for(let i=0;i<7;i++) codigo+=chars[Math.floor(Math.random()*chars.length)]; return codigo; },
                 async validarValePromocional() {
                     const codigo=this.normalizarCodigoVale(this.ventaForm.valeCodigo); this.ventaForm.valeCodigo=codigo; this.valeValidado=null;
                     if(!codigo){Swal.fire('Vale promocional','Ingresa el código del vale.','warning');return false;}
-                    try{const snap=await window.fb.get(window.fb.ref(window.db,`valesPromocionales/${codigo}`)); if(!snap.exists()){Swal.fire('Vale no encontrado','El código no existe en el sistema.','warning');return false;} const vale=snap.val()||{}; if(vale.estado!=='disponible'){Swal.fire('Vale no disponible',vale.estado==='usado'?'Este vale ya fue utilizado.':'Este vale no está disponible.','warning');return false;} if(vale.fechaVencimiento&&new Date(vale.fechaVencimiento+'T23:59:59')<new Date()){Swal.fire('Vale vencido','La vigencia de este vale ha terminado.','warning');return false;} const tel=this.limpiarCelular(this.ventaForm.clienteTelefono||''); const telVale=this.limpiarCelular(vale.clienteTelefono||''); if(telVale&&tel&&telVale!==tel){Swal.fire('Vale no corresponde','Este vale está asociado a otro cliente/teléfono.','warning');return false;} this.valeValidado={codigo,...vale}; this.notificarToast('success','Vale válido y listo para usar'); return true;}catch(error){console.error(error);Swal.fire('No se pudo validar',error?.message||'Firebase rechazó la lectura del vale.','error');return false;}
+                    try{
+                        const snap=await window.fb.get(window.fb.ref(window.db,`valesPromocionales/${codigo}`));
+                        if(!snap.exists()){Swal.fire('Vale no encontrado','El código no existe en el sistema.','warning');return false;}
+                        const vale=snap.val()||{}; const estado=String(vale.estado||'').trim().toLowerCase();
+                        if(estado!=='disponible'){Swal.fire('Vale no disponible',estado==='usado'?'Este vale ya fue utilizado.':'Este vale no está disponible.','warning');return false;}
+                        if(vale.fechaVencimiento&&new Date(vale.fechaVencimiento+'T23:59:59')<new Date()){Swal.fire('Vale vencido','La vigencia de este vale ha terminado.','warning');return false;}
+                        let datosOrigen=vale;
+                        if((!vale.numeroDocumento&&!vale.dni)&&vale.ventaOrigen){
+                            try{const vs=await window.fb.get(window.fb.ref(window.db,'ventas'));const vd=vs.exists()?(vs.val()||{}):{};const origen=Object.values(vd).find(v=>String(v?.ventaGrupoId||'')===String(vale.ventaOrigen));if(origen)datosOrigen={...origen,...vale,numeroDocumento:origen.numeroDocumento||vale.numeroDocumento||vale.dni||'',clienteNombre:vale.clienteNombre||origen.clienteNombre||'',direccionEntrega:vale.direccionEntrega||origen.direccionEntrega||''};}catch(e){console.warn('No se pudo recuperar el DNI de la venta origen del vale:',e);}
+                        }
+                        const dniActual=this.normalizarDniVale(this.ventaForm.numeroDocumento||''), dniVale=this.normalizarDniVale(datosOrigen.numeroDocumento||datosOrigen.dni||'');
+                        if(!dniActual||!dniVale||dniActual!==dniVale){Swal.fire('Vale no corresponde','El DNI debe ser exactamente el mismo de la compra que generó este vale.','warning');return false;}
+                        const nombreActual=this.normalizarNombreVale(this.ventaForm.clienteNombre), nombreVale=this.normalizarNombreVale(datosOrigen.clienteNombre);
+                        if(!nombreActual||!nombreVale||nombreActual!==nombreVale){Swal.fire('Vale no corresponde','El nombre del cliente debe ser el mismo de la compra que generó este vale. Puedes escribirlo con mayúsculas, minúsculas o tildes y el sistema lo interpretará correctamente.','warning');return false;}
+                        const direccionActual=this.normalizarDireccionVale(this.ventaForm.direccionEntrega), direccionVale=this.normalizarDireccionVale(datosOrigen.direccionEntrega);
+                        if(!direccionActual||!direccionVale||direccionActual!==direccionVale){Swal.fire('Vale no corresponde','La dirección de entrega debe ser exactamente la misma de la compra que generó este vale. El sistema ignora mayúsculas, minúsculas, tildes y formatos como N°, Nº o #.','warning');return false;}
+                        this.valeValidado={codigo,...vale,numeroDocumento:dniVale,clienteNombre:datosOrigen.clienteNombre||vale.clienteNombre||'',direccionEntrega:datosOrigen.direccionEntrega||vale.direccionEntrega||''};
+                        this.notificarToast('success','Vale válido y listo para usar'); return true;
+                    }catch(error){console.error(error);Swal.fire('No se pudo validar',error?.message||'Firebase rechazó la lectura del vale.','error');return false;}
                 },
-                async reservarValePromocional(codigo,ventaGrupoId){const ref=window.fb.ref(window.db,`valesPromocionales/${codigo}`);const r=await window.fb.runTransaction(ref,actual=>{if(!actual||actual.estado!=='disponible')return;return{...actual,estado:'reservado',reservadoEn:new Date().toISOString(),reservadoVentaGrupoId:ventaGrupoId};});if(!r.committed)throw new Error('El vale ya no está disponible.');this.valeReservado=true;},
+                async reservarValePromocional(codigo,ventaGrupoId){
+                    const code=this.normalizarCodigoVale(codigo||'');
+                    if(!code) throw new Error('El código del vale no es válido.');
+                    const ref=window.fb.ref(window.db,`valesPromocionales/${code}`);
+                    const ahora=new Date().toISOString();
+                    // Reservamos mediante lectura + actualización directa. En este proyecto
+                    // Firebase permite guardar vales con set/update, pero la transacción
+                    // podía devolver committed:false aun cuando el vale seguía disponible.
+                    const snap=await window.fb.get(ref);
+                    if(!snap.exists()) throw new Error('El vale no existe en Firebase.');
+                    const actual=snap.val()||{};
+                    const estado=String(actual.estado||'').trim().toLowerCase();
+                    if(estado==='reservado'&&String(actual.reservadoVentaGrupoId||'')===String(ventaGrupoId)){
+                        this.valeReservado=true;
+                        return;
+                    }
+                    if(estado!=='disponible') throw new Error('El vale ya no está disponible.');
+                    await window.fb.update(ref,{codigo:actual.codigo||code,estado:'reservado',reservadoEn:ahora,reservadoVentaGrupoId:ventaGrupoId});
+                    const confirmacion=await window.fb.get(ref);
+                    const despues=confirmacion.exists()?(confirmacion.val()||{}):null;
+                    const estadoDespues=String(despues?.estado||'').trim().toLowerCase();
+                    if(estadoDespues==='reservado'&&String(despues?.reservadoVentaGrupoId||'')===String(ventaGrupoId)){
+                        this.valeReservado=true;
+                        return;
+                    }
+                    throw new Error(estadoDespues==='disponible'?'No se pudo reservar el vale. Firebase no confirmó el cambio.':'El vale ya no está disponible.');
+                },
                 async finalizarValePromocional(codigo,ventaGrupoId,totalVenta){if(!codigo)return;await window.fb.update(window.fb.ref(window.db,`valesPromocionales/${codigo}`),{estado:'usado',usadoEn:new Date().toISOString(),usadoVentaGrupoId:ventaGrupoId,montoVenta:Number(totalVenta)||0});this.valeReservado=false;},
                 async liberarValePromocional(codigo,ventaGrupoId){if(!codigo||!this.valeReservado)return;try{await window.fb.runTransaction(window.fb.ref(window.db,`valesPromocionales/${codigo}`),actual=>{if(actual&&actual.estado==='reservado'&&actual.reservadoVentaGrupoId===ventaGrupoId)return{...actual,estado:'disponible',reservadoEn:null,reservadoVentaGrupoId:null};return actual;});}catch(e){console.warn('No se pudo liberar el vale:',e);}this.valeReservado=false;},
                 distritoElegibleParaVale(distrito) {
@@ -2027,7 +2076,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     const d = this.normalizarTextoCliente(distrito || '');
                     return lista.some(x => this.normalizarTextoCliente(x) === d);
                 },
-                async generarValePromocionalParaVenta({clienteId,clienteNombre,clienteTelefono,distrito,direccionEntrega,ventaGrupoId}){let codigo='';for(let i=0;i<8;i++){const candidato=this.generarCodigoValeUnico();const snap=await window.fb.get(window.fb.ref(window.db,`valesPromocionales/${candidato}`));if(!snap.exists()){codigo=candidato;break;}}if(!codigo)throw new Error('No se pudo generar un código único para el vale.');const dias=Math.max(1,Number(this.configNegocio.valeVigenciaDias||30));const venc=new Date();venc.setDate(venc.getDate()+dias);const fechaVencimiento=`${venc.getFullYear()}-${String(venc.getMonth()+1).padStart(2,'0')}-${String(venc.getDate()).padStart(2,'0')}`;const vale={codigo,estado:'disponible',beneficio:'Envío gratis en la próxima compra',clienteId:clienteId||'',clienteNombre:String(clienteNombre||'').trim(),clienteTelefono:this.limpiarCelular(clienteTelefono||''),distrito:String(distrito||'').trim(),direccionEntrega:String(direccionEntrega||'').trim(),ventaOrigen:ventaGrupoId||'',creadoEn:new Date().toISOString(),fechaVencimiento};await window.fb.set(window.fb.ref(window.db,`valesPromocionales/${codigo}`),vale);return vale;},
+                async generarValePromocionalParaVenta({clienteId,clienteNombre,clienteTelefono,distrito,direccionEntrega,numeroDocumento,ventaGrupoId}){let codigo='';for(let i=0;i<8;i++){const candidato=this.generarCodigoValeUnico();const snap=await window.fb.get(window.fb.ref(window.db,`valesPromocionales/${candidato}`));if(!snap.exists()){codigo=candidato;break;}}if(!codigo)throw new Error('No se pudo generar un código único para el vale.');const dias=Math.max(1,Number(this.configNegocio.valeVigenciaDias||30));const venc=new Date();venc.setDate(venc.getDate()+dias);const fechaVencimiento=`${venc.getFullYear()}-${String(venc.getMonth()+1).padStart(2,'0')}-${String(venc.getDate()).padStart(2,'0')}`;const vale={codigo,estado:'disponible',beneficio:'Envío gratis en la próxima compra',clienteId:clienteId||'',clienteNombre:String(clienteNombre||'').trim(),numeroDocumento:this.normalizarDniVale(numeroDocumento||''),clienteTelefono:this.limpiarCelular(clienteTelefono||''),distrito:String(distrito||'').trim(),direccionEntrega:String(direccionEntrega||'').trim(),ventaOrigen:ventaGrupoId||'',creadoEn:new Date().toISOString(),fechaVencimiento};await window.fb.set(window.fb.ref(window.db,`valesPromocionales/${codigo}`),vale);return vale;},
                 async cargarValesPromocionales() {
                     try {
                         const snap = await window.fb.get(window.fb.ref(window.db, 'valesPromocionales'));
@@ -2037,18 +2086,21 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 },
                 estadoValeVisual(vale) {
                     if (!vale) return '—';
-                    if (vale.estado === 'usado') return 'Usado';
+                    const estado=String(vale.estado||'').trim().toLowerCase();
+                    if (estado === 'usado') return 'Usado';
                     if (vale.fechaVencimiento && new Date(vale.fechaVencimiento + 'T23:59:59') < new Date()) return 'Vencido';
-                    if (vale.estado === 'reservado') return 'Reservado';
-                    return 'Disponible';
+                    if (estado === 'reservado') return 'Reservado';
+                    if (estado === 'disponible') return 'Disponible';
+                    return 'No disponible';
                 },
                 contarValesEstado(estado) { return (this.valesPromocionalesData || []).filter(v => this.estadoValeVisual(v) === estado).length; },
                 valesFiltrados() {
-                    const q=String(this.filtroValesTexto||'').trim().toLowerCase(), estado=this.filtroValesEstado||'todos', distrito=this.filtroValesDistrito||'todos', fecha=this.filtroValesFecha||'todos';
+                    const q=String(this.filtroValesTexto||'').trim().toLowerCase(), dni=String(this.filtroValesDni||'').replace(/\D/g,''), estado=this.filtroValesEstado||'todos', distrito=this.filtroValesDistrito||'todos', fecha=this.filtroValesFecha||'todos';
                     const ahora=new Date(); ahora.setHours(0,0,0,0);
                     return (this.valesPromocionalesData||[]).filter(v=>{
-                        const texto=[v.codigo,v.clienteNombre,v.clienteTelefono,v.distrito].map(x=>String(x||'').toLowerCase()).join(' ');
+                        const texto=[v.codigo,v.numeroDocumento,v.dni,v.clienteNombre,v.clienteTelefono,v.distrito].map(x=>String(x||'').toLowerCase()).join(' ');
                         if(q&&!texto.includes(q)) return false;
+                        if(dni&&this.normalizarDniVale(v.numeroDocumento||v.dni||'')!==dni) return false;
                         if(estado!=='todos'&&this.estadoValeVisual(v).toLowerCase()!==estado) return false;
                         if(distrito!=='todos'&&String(v.distrito||'')!==distrito) return false;
                         if(fecha!=='todos'){ const f=v.fechaVencimiento?new Date(v.fechaVencimiento+'T23:59:59'):null; if(!f)return false; const dias=Math.ceil((f-ahora)/86400000); if(fecha==='7'&&(dias<0||dias>7))return false; if(fecha==='30'&&(dias<0||dias>30))return false; if(fecha==='vencidos'&&dias>=0)return false; }
@@ -2058,7 +2110,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 distritosValesDisponibles(){ return [...new Set((this.valesPromocionalesData||[]).map(v=>String(v.distrito||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b)); },
                 copiarCodigoValeDesdeRegistro(codigo){ if(!codigo)return; navigator.clipboard?.writeText(codigo).then(()=>this.notificarToast('success','Código copiado')).catch(()=>this.notificarToast('warning','No se pudo copiar automáticamente.')); },
                 imprimirValeDesdeRegistro(vale){ this.valeGeneradoUltimaVenta=vale; this.imprimirValePromocional(); },
-                exportarValesCSV(){ const filas=this.valesFiltrados(), esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"'; const csv='\ufeff'+[['Código','Cliente','Teléfono','Distrito','Creado','Vencimiento','Estado'],...filas.map(v=>[v.codigo,v.clienteNombre,v.clienteTelefono,v.distrito,v.creadoEn,v.fechaVencimiento,this.estadoValeVisual(v)])].map(r=>r.map(esc).join(';')).join('\n'); const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vales_PetSmart_'+fechaPeruActual()+'.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);this.notificarToast('success',filas.length+' vale(s) exportado(s)'); },
+                exportarValesCSV(){ const filas=this.valesFiltrados(), esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"'; const csv='\ufeff'+[['Código','Cliente','DNI','Teléfono','Distrito','Creado','Vencimiento','Estado'],...filas.map(v=>[v.codigo,v.clienteNombre,v.numeroDocumento||v.dni||'',v.clienteTelefono,v.distrito,v.creadoEn,v.fechaVencimiento,this.estadoValeVisual(v)])].map(r=>r.map(esc).join(';')).join('\n'); const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vales_PetSmart_'+fechaPeruActual()+'.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);this.notificarToast('success',filas.length+' vale(s) exportado(s)'); },
                 async copiarCodigoVale() {
                     const codigo = this.valeGeneradoUltimaVenta?.codigo || '';
                     if (!codigo) return;
@@ -2089,15 +2141,17 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     }
                 },
                 imprimirValePromocional() {
-                    const source=document.getElementById('valeDigitalExport');
-                    const vale=this.valeGeneradoUltimaVenta;if(!source||!vale)return;
+                    const vale=this.valeGeneradoUltimaVenta;if(!vale)return;
+                    const nombre=this.configNegocio.nombre||'PetSmart';
+                    const logo=this.configNegocio.logoUrl?`<img src="${this.configNegocio.logoUrl}" class="logo">`:`<div class="brand">${nombre}</div>`;
                     const w=window.open('','_blank','width=1180,height=900');
                     if(!w){this.notificarToast('warning','Permite ventanas emergentes para imprimir el vale.');return;}
-                    const estilos=Array.from(document.querySelectorAll('link[rel="stylesheet"],style')).map(el=>el.outerHTML).join('\n');
-                    const contenido=source.outerHTML;
                     const esc=(v)=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-                    w.document.open();
-                    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Vale ${esc(vale.codigo)}</title>${estilos}<style>html,body{margin:0!important;padding:0!important;background:#fff!important}body{print-color-adjust:exact;-webkit-print-color-adjust:exact}#valeDigitalExport{width:1120px!important;height:700px!important;min-height:700px!important;max-width:none!important;margin:0 auto!important;transform:none!important;box-shadow:none!important}#valeDigitalExport .vale-left,#valeDigitalExport .vale-right{height:700px!important;min-height:700px!important}@media print{html,body{width:100%;background:#fff!important}#valeDigitalExport{margin:0!important;box-shadow:none!important}}</style></head><body>${contenido}<script>window.onload=function(){setTimeout(function(){window.focus();window.print()},500)}<\/script></body></html>`);
+                    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Vale ${esc(vale.codigo)}</title><style>
+                    *{box-sizing:border-box}body{margin:0;background:#edf3f8;font-family:Inter,Arial,sans-serif;color:#16324f;padding:30px}.ticket{width:1100px;max-width:96vw;margin:auto;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(8,47,95,.18);display:grid;grid-template-columns:34% 66%;min-height:560px}
+                    .left{background:linear-gradient(145deg,#07366d,#0b5aa6);color:#fff;padding:42px 38px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}.left:after{content:"";position:absolute;right:-1px;top:0;width:30px;height:100%;background:#fff;clip-path:polygon(0 0,100% 2%,0 4%,100% 6%,0 8%,100% 10%,0 12%,100% 14%,0 16%,100% 18%,0 20%,100% 22%,0 24%,100% 26%,0 28%,100% 30%,0 32%,100% 34%,0 36%,100% 38%,0 40%,100% 42%,0 44%,100% 46%,0 48%,100% 50%,0 52%,100% 54%,0 56%,100% 58%,0 60%,100% 62%,0 64%,100% 66%,0 68%,100% 70%,0 72%,100% 74%,0 76%,100% 78%,0 80%,100% 82%,0 84%,100% 86%,0 88%,100% 90%,0 92%,100% 94%,0 96%,100% 98%,0 100%)}.logo{max-width:160px;max-height:65px;object-fit:contain}.brand{font-size:25px;font-weight:900}.kicker{font-size:14px;font-weight:900;letter-spacing:.18em;margin-top:38px}.title{font-size:62px;line-height:.9;font-weight:950;letter-spacing:-.05em;margin-top:14px}.copy{font-size:14px;line-height:1.5;max-width:270px;margin-top:20px;opacity:.88}.code-label{font-size:10px;font-weight:900;letter-spacing:.2em;opacity:.7}.sidecode{margin-top:9px;background:#f28b28;color:#082f5f;border-radius:11px;padding:12px 14px;display:inline-block;font:900 18px monospace;letter-spacing:.08em}
+                    .right{padding:32px 40px 26px;position:relative}.right:before{content:"🐾";position:absolute;right:25px;top:25px;font-size:85px;opacity:.08;transform:rotate(20deg)}.pill{display:inline-block;background:#eef5fb;color:#0a4d91;border-radius:99px;padding:8px 14px;font-size:10px;font-weight:900;letter-spacing:.15em}.mini{float:right;font-size:25px}.card{margin-top:25px;border:2px solid #0a4d91;border-radius:24px;padding:30px 32px;box-shadow:10px 12px 0 #f28b28}.bk{font-size:11px;color:#f28b28;font-weight:900;letter-spacing:.2em}.benefit{font-size:48px;line-height:1.03;color:#0a4d91;font-weight:950;text-transform:uppercase;margin-top:8px;letter-spacing:-.04em}.line{height:3px;width:90px;background:#f28b28;margin:22px 0 18px;border-radius:99px}.label{font-size:10px;color:#7d8b9b;font-weight:900;letter-spacing:.2em}.code{font:950 45px monospace;letter-spacing:.1em;margin-top:5px;color:#123a63;overflow-wrap:anywhere}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;margin-top:25px}.box{border-top:1px solid #dbe4ee;padding-top:9px}.v{font-size:14px;font-weight:900;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.foot{margin-top:22px;color:#647589;font-size:11px;display:flex;justify-content:space-between}.paws{color:#f28b28;font-size:21px;letter-spacing:5px}@media print{body{padding:0;background:#fff}.ticket{width:100%;max-width:none;box-shadow:none;border-radius:0}}@media(max-width:900px){.ticket{grid-template-columns:1fr}.left{min-height:320px}.left:after{display:none}.title{font-size:48px}.right{padding:25px}.benefit{font-size:36px}}
+                    </style></head><body><div class="ticket"><div class="left"><div>${logo}</div><div><div class="kicker">VALE PROMOCIONAL</div><div class="title">UN REGALO<br>PARA TI</div><div class="copy">Disfruta un beneficio especial en tu próxima compra.</div></div><div><div class="code-label">CÓDIGO DEL VALE</div><div class="sidecode">${esc(vale.codigo)}</div></div></div><div class="right"><div><span class="pill">${esc(nombre)} · PROMOCIÓN</span><span class="mini">🐶 🐱</span></div><div class="card"><div class="bk">TU BENEFICIO</div><div class="benefit">${esc(vale.beneficio||'Envío gratis en tu próxima compra')}</div><div class="line"></div><div class="label">CÓDIGO</div><div class="code">${esc(vale.codigo)}</div><div class="grid"><div class="box"><div class="label">CLIENTE</div><div class="v">${esc(vale.clienteNombre||'Cliente')}</div></div><div class="box"><div class="label">VÁLIDO HASTA</div><div class="v">${esc(vale.fechaVencimiento||'—')}</div></div><div class="box"><div class="label">DISTRITO</div><div class="v">${esc(vale.distrito||'—')}</div></div><div class="box"><div class="label">USO</div><div class="v">UNA SOLA VEZ</div></div></div></div><div class="foot"><span>Presenta este código en tu próxima compra.</span><span class="paws">🐾 🐾 🐾</span></div></div></div><script>window.onload=function(){setTimeout(function(){window.print()},450)}<\/script></body></html>`);
                     w.document.close();
                 },
                 // =================================================
@@ -2867,9 +2921,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                             onclone: (doc) => {
                                 const root = doc.getElementById('reportePedidoPreview');
                                 if (!root) return;
-                                root.style.width = '794px';
-                                root.style.minWidth = '794px';
-                                root.style.maxWidth = '794px';
+                                root.style.width = getComputedStyle(source).width;
+                                root.style.maxWidth = 'none';
                                 root.querySelectorAll('.pedido-product-img').forEach(img => {
                                     img.style.width = 'auto';
                                     img.style.height = 'auto';
@@ -3172,16 +3225,16 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     return this.formProducto.sku;
                 },
                 generarBarrasFalsas(codigo) {
-                    const digits=String(codigo||'00000000000').replace(/\D/g,'').padStart(11,'0').slice(-11);
-                    const suma=digits.split('').reduce((acc,d,i)=>acc+Number(d)*(i%2===0?3:1),0);
-                    const check=String((10-(suma%10))%10);
-                    const full=digits+check;
-                    const L=['0001101','0011001','0010011','0111101','0100011','0110001','0101111','0111011','0110111','0001011'];
-                    const R=['1110010','1100110','1101100','1000010','1011100','1001110','1010000','1000100','1001000','1110100'];
-                    const bits='101'+full.slice(0,6).split('').map(d=>L[Number(d)]).join('')+'01010'+full.slice(6).split('').map(d=>R[Number(d)]).join('')+'101';
-                    const barras=[]; let actual=bits[0],run=0; const modulo=2;
-                    for(const bit of bits){ if(bit===actual) run++; else { barras.push({w:run*modulo,black:actual==='1'}); actual=bit; run=1; } }
-                    barras.push({w:run*modulo,black:actual==='1'});
+                    const digits = String(codigo || '00000000000').replace(/\D/g, '').padStart(11, '0').slice(-11);
+                    const barras = [];
+                    barras.push({w:2},{w:1},{w:2});
+                    digits.split('').forEach((d, i) => {
+                        const n = Number(d) || 0;
+                        const patrones = [1,2,1,3,1,2,3,1,2,3];
+                        const base = patrones[(n + i) % patrones.length];
+                        barras.push({w:base},{w:1},{w:(n % 3) + 1},{w:1});
+                    });
+                    barras.push({w:2},{w:1},{w:2});
                     return barras;
                 },
                 // =================================================
@@ -3814,6 +3867,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     if (!this.ventaForm.clienteNombre.trim()) { Swal.fire('Atención', 'Debes registrar el nombre del cliente.', 'warning'); return; }
                     if (this.ventaForm.clienteTelefono && this.ventaForm.clienteTelefono.length !== 9) { Swal.fire('Atención', 'El celular debe tener exactamente 9 dígitos.', 'warning'); return; }
                     if (this.ventaForm.canalVenta === 'Facebook' && !this.ventaForm.perfilFacebook) { Swal.fire('Atención', 'Selecciona el perfil de Facebook que realizó la venta.', 'warning'); return; }
+                    if (!this.ventaForm.tipoMascota) { Swal.fire('Atención', 'Selecciona el tipo de mascota.', 'warning'); return; }
                     if (this.ventaForm.generarVale && !this.ventaForm.clienteTelefono) { Swal.fire('Vale promocional', 'Para emitir un vale debes registrar el celular del cliente.', 'warning'); return; }
                     if (this.ventaForm.generarVale && !this.distritoElegibleParaVale(this.ventaForm.distrito)) { Swal.fire('Vale promocional', `El distrito ${this.ventaForm.distrito || 'seleccionado'} no está configurado como distrito promocional. Puedes cambiarlo en Admin → Vales promocionales.`, 'warning'); return; }
                     if (this.ventaForm.usarVale && !this.valeValidado) { Swal.fire('Vale promocional', 'Activa el uso de vale y valida el código antes de registrar la venta.', 'warning'); return; }
@@ -3849,6 +3903,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         const logisticaTotal = canalVenta === 'Falabella' ? Number(this.ventaForm.confLogistico) || 0 : 0;
                         const totalPrecios = seleccionados.reduce((sum, p) => sum + (Number(p.precioVenta) || 0), 0) || 1;
                         const perfilFacebook = canalVenta === 'Facebook' ? (this.ventaForm.perfilFacebook || '') : '';
+                        const tipoMascota = this.ventaForm.tipoMascota || '';
                         const fechaVenta = this.ventaForm.fechaVenta || this.fechaPeru();
                         const clienteNombre = this.ventaForm.clienteNombre.trim();
                         const clienteTelefono = this.ventaForm.clienteTelefono;
@@ -3887,6 +3942,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                                 direccionEntrega: String(this.ventaForm.direccionEntrega || '').trim(),
                                 canalVenta,
                                 perfilFacebook,
+                                tipoMascota,
                                 medioPago: 'Yape',
                                 precioVenta: precio,
                                 comision,
@@ -3920,6 +3976,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                                     clienteTelefono,
                                     clienteId,
                                     canalVenta,
+                                    perfilFacebook,
+                                    tipoMascota,
                                     distrito,
                                     direccionEntrega: String(this.ventaForm.direccionEntrega || '').trim(),
                                     montoTotal: precio,
@@ -3978,7 +4036,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                             this.notificarToast('success', `${seleccionados.length} producto(s) vendidos correctamente`);
                             if (this.ventaForm.generarVale) {
                                 try {
-                                    const vale = await this.generarValePromocionalParaVenta({clienteId, clienteNombre, clienteTelefono, distrito, direccionEntrega: this.ventaForm.direccionEntrega, ventaGrupoId});
+                                    const vale = await this.generarValePromocionalParaVenta({clienteId, clienteNombre, clienteTelefono, distrito, direccionEntrega: this.ventaForm.direccionEntrega, numeroDocumento: this.ventaForm.numeroDocumento, ventaGrupoId});
                                     const valeUpdates = {};
                                     seleccionados.forEach(p => { valeUpdates[`productos/${p.id}/valeCodigo`] = vale.codigo; valeUpdates[`ventas/${p.id}/valeCodigo`] = vale.codigo; });
                                     if (Object.keys(valeUpdates).length) await window.fb.update(window.fb.ref(window.db), valeUpdates);
@@ -4006,6 +4064,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     this.ventaEditando.distrito = this.ventaEditando.distrito || '';
                     this.ventaEditando.canalVenta = this.ventaEditando.canalVenta || 'WhatsApp';
                     this.ventaEditando.perfilFacebook = this.ventaEditando.perfilFacebook || '';
+                    this.ventaEditando.tipoMascota = this.ventaEditando.tipoMascota || '';
                     this.ventaEditando.fechaVenta = this.ventaEditando.fechaVenta || this.fechaPeru();
                     this.ventaEditando.fechaEntrega = this.ventaEditando.fechaEntrega || '';
                     this.ventaEditando.envio = this.ventaEditando.envio || '';
@@ -4026,6 +4085,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                     if (!String(venta.clienteNombre || '').trim()) { Swal.fire('Atención', 'Debes registrar el nombre del cliente.', 'warning'); return; }
                     if (!venta.fechaVenta) { Swal.fire('Atención', 'Debes registrar la fecha de venta.', 'warning'); return; }
                     if (venta.canalVenta === 'Facebook' && !venta.perfilFacebook) { Swal.fire('Atención', 'Selecciona el perfil de Facebook.', 'warning'); return; }
+                    if (!venta.tipoMascota) { Swal.fire('Atención', 'Selecciona el tipo de mascota.', 'warning'); return; }
                     if (venta.tipoComprobante === 'Boleta' && venta.numeroDocumento && !this.documentoValido(venta.tipoDocumento, venta.numeroDocumento)) {
                         Swal.fire('Documento incompleto', `El ${venta.tipoDocumento || 'documento'} debe tener exactamente ${this.maxDigitosDocumento(venta.tipoDocumento)} dígitos.`, 'warning'); return;
                     }
@@ -4035,7 +4095,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                         const comision = venta.canalVenta === 'Falabella' ? Number(venta.comision) || 0 : 0;
                         const confLogistico = venta.canalVenta === 'Falabella' ? Number(venta.confLogistico) || 0 : 0;
                         const perfilFacebook = venta.canalVenta === 'Facebook' ? String(venta.perfilFacebook || '') : '';
-                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, fechaEntrega: String(venta.fechaEntrega || ''), horarioEntrega: String(venta.horarioEntrega || '').trim(), envio: String(venta.envio || '').trim(), clienteNombre: String(venta.clienteNombre || '').trim(), clienteTelefono: this.limpiarCelular(venta.clienteTelefono || ''), distrito: String(venta.distrito || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), latitud: String(venta.latitud || '').trim(), longitud: String(venta.longitud || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim(), tipoComprobante: venta.tipoComprobante || 'Boleta', tipoDocumento: venta.tipoComprobante === 'Boleta' ? (venta.tipoDocumento || 'DNI') : '', numeroDocumento: venta.tipoComprobante === 'Boleta' ? String(venta.numeroDocumento || '').replace(/\D/g, '') : '', ruc: venta.tipoComprobante === 'Factura' ? String(venta.ruc || '').replace(/\D/g, '') : '', razonSocial: venta.tipoComprobante === 'Factura' ? String(venta.razonSocial || '').trim() : '' };
+                        const datos = { estado: 'vendido', fechaVenta: venta.fechaVenta, fechaEntrega: String(venta.fechaEntrega || ''), horarioEntrega: String(venta.horarioEntrega || '').trim(), envio: String(venta.envio || '').trim(), clienteNombre: String(venta.clienteNombre || '').trim(), clienteTelefono: this.limpiarCelular(venta.clienteTelefono || ''), distrito: String(venta.distrito || '').trim(), direccionEntrega: String(venta.direccionEntrega || '').trim(), latitud: String(venta.latitud || '').trim(), longitud: String(venta.longitud || '').trim(), canalVenta: venta.canalVenta, perfilFacebook, tipoMascota: venta.tipoMascota || '', medioPago: 'Yape', precioVenta: precio, comision, confLogistico, observacion: String(venta.observacion || '').trim(), tipoComprobante: venta.tipoComprobante || 'Boleta', tipoDocumento: venta.tipoComprobante === 'Boleta' ? (venta.tipoDocumento || 'DNI') : '', numeroDocumento: venta.tipoComprobante === 'Boleta' ? String(venta.numeroDocumento || '').replace(/\D/g, '') : '', ruc: venta.tipoComprobante === 'Factura' ? String(venta.ruc || '').replace(/\D/g, '') : '', razonSocial: venta.tipoComprobante === 'Factura' ? String(venta.razonSocial || '').trim() : '' };
                         await window.fb.update(window.fb.ref(window.db, `productos/${venta.id}`), datos);
                         await this.guardarRegistroVentaAdicional(venta, datos);
                         Swal.close();
@@ -5179,9 +5239,6 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 </template>
 <template x-if="item.estado === 'vendido'">
 <div class="flex items-center justify-center gap-1.5">
-<button @click="verVenta(item)" class="p-1.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 rounded-lg" title="Ver venta">
-<i class="fa-solid fa-eye"></i>
-</button>
 <button @click="abrirReportePedido(item)" class="p-1.5 bg-violet-500/10 text-violet-600 dark:text-violet-400 hover:bg-violet-500/20 rounded-lg" title="Generar reporte de pedido">
 <i class="fa-solid fa-file-invoice"></i>
 </button>
@@ -5262,6 +5319,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 <th class="py-4 px-4">DNI</th>
 <th class="py-4 px-4">Celular</th>
 <th class="py-4 px-4">Canal Venta</th>
+<th class="py-4 px-4">Mascota</th>
 <th class="py-4 px-4">Distrito</th>
 <th class="py-4 px-4 text-right">Monto Total</th>
 <th class="py-4 px-4 text-center">Pedido</th><th class="py-4 px-4 text-center">Eliminar</th>
@@ -5278,7 +5336,8 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 <td class="py-4 px-4 text-sm font-bold" x-text="item.clienteNombre || 'Sin registrar'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="obtenerDniItem(item) || '—'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="item.clienteTelefono || '—'"></td>
-<td class="py-4 px-4 text-sm font-bold" x-text="item.canalVenta || '—'"></td>
+<td class="py-4 px-4 text-sm font-bold"><div x-text="item.canalVenta || '—'"></div><div x-show="item.canalVenta === 'Facebook' && item.perfilFacebook" class="text-[10px] text-blue-600 dark:text-blue-400 mt-1" x-text="item.perfilFacebook"></div></td>
+<td class="py-4 px-4 text-sm font-bold" x-text="item.tipoMascota || '—'"></td>
 <td class="py-4 px-4 text-sm font-bold" x-text="item.distrito || '—'"></td>
 <td class="py-4 px-4 text-right text-sm font-black text-emerald-600 dark:text-emerald-400">S/ <span x-text="formatMonto(item.precioVenta)"></span></td>
 <td class="py-4 px-4 text-center">
@@ -5297,7 +5356,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
 </tr>
 </template>
 <tr x-show="ventasRegistradas.length === 0">
-<td class="py-12 text-center text-slate-400" colspan="10">No hay ventas registradas todavía.</td>
+<td class="py-12 text-center text-slate-400" colspan="11">No hay ventas registradas todavía.</td>
 </tr>
 </tbody>
 </table>
@@ -5458,7 +5517,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
                 <td class="py-3 px-4 text-center"><button @click="eliminarMovimientoFinanciero(mov)" class="p-2 rounded-lg bg-rose-500/10 text-rose-600 hover:bg-rose-500 hover:text-white" title="Eliminar movimiento"><i class="fa-solid fa-trash"></i></button></td>
               </tr>
             </template>
-            <tr x-show="movimientosFinancieros.length === 0"><td colspan="7" class="py-12 text-center text-slate-400">Todavía no hay movimientos manuales.</td></tr>
+            <tr x-show="movimientosFinancieros.length === 0"><td colspan="8" class="py-12 text-center text-slate-400">Todavía no hay movimientos manuales.</td></tr>
           </tbody>
         </table>
       </div>
@@ -5472,7 +5531,7 @@ Protege todos los datos almacenados en Firebase antes de actualizar el sistema. 
     <div>• Las compras de mercadería y otros pagos se registran como <b>salidas manuales</b> del pozo que tú elijas. No cambian el inventario ni modifican las ventas.</div>
   </div>
 </div>
-</div><div x-show="activeTab === 'vales'" x-transition class="inventory-section"><div class="rounded-3xl overflow-hidden border border-blue-200 dark:border-blue-900/50 bg-white dark:bg-slate-900 shadow-xl"><div class="p-6 md:p-7 bg-gradient-to-br from-blue-800 to-blue-600 text-white relative overflow-hidden"><div class="absolute -right-8 -top-8 text-[130px] opacity-10">🐾</div><div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5"><div><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-black uppercase tracking-widest"><i class="fa-solid fa-ticket"></i> Centro de vales</div><h2 class="text-3xl font-black mt-3">Vales promocionales</h2><p class="text-sm text-blue-100 mt-1 max-w-2xl">Administra aquí todos los vales emitidos. Admin ya no contiene el historial de vales.</p></div><div class="flex flex-wrap gap-2"><button @click="cargarValesPromocionales()" class="px-4 py-3 rounded-xl bg-white/15 font-black text-xs"><i class="fa-solid fa-rotate"></i> Actualizar</button><button @click="exportarValesCSV()" class="px-4 py-3 rounded-xl bg-white text-blue-800 font-black text-xs"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button></div></div></div><div class="p-5 md:p-7"><div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6"><div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800"><div class="text-[10px] uppercase font-black text-slate-400">Total</div><div class="text-2xl font-black" x-text="valesPromocionalesData.length"></div></div><div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20"><div class="text-[10px] uppercase font-black text-emerald-600">Disponibles</div><div class="text-2xl font-black text-emerald-600" x-text="contarValesEstado('Disponible')"></div></div><div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/20"><div class="text-[10px] uppercase font-black text-blue-600">Usados</div><div class="text-2xl font-black text-blue-600" x-text="contarValesEstado('Usado')"></div></div><div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/20"><div class="text-[10px] uppercase font-black text-rose-600">Vencidos</div><div class="text-2xl font-black text-rose-600" x-text="contarValesEstado('Vencido')"></div></div><div class="p-4 rounded-2xl bg-violet-50 dark:bg-violet-950/20"><div class="text-[10px] uppercase font-black text-violet-600">Encontrados</div><div class="text-2xl font-black text-violet-600" x-text="valesFiltrados().length"></div></div></div><div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 mb-6"><div class="flex items-center gap-2 mb-4 font-black"><i class="fa-solid fa-magnifying-glass text-orange-500"></i> Buscador profesional</div><div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3"><div class="relative xl:col-span-2"><i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroValesTexto" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm" placeholder="Buscar por código, cliente, teléfono o distrito..."></div><select x-model="filtroValesEstado" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los estados</option><option value="disponible">Disponibles</option><option value="usado">Usados</option><option value="vencido">Vencidos</option><option value="reservado">Reservados</option></select><select x-model="filtroValesDistrito" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los distritos</option><template x-for="d in distritosValesDisponibles()" :key="d"><option :value="d" x-text="d"></option></template></select></div><div class="flex flex-wrap gap-2 mt-3"><select x-model="filtroValesFecha" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-bold"><option value="todos">Cualquier vencimiento</option><option value="7">Vencen en 7 días</option><option value="30">Vencen en 30 días</option><option value="vencidos">Ya vencidos</option></select><button @click="filtroValesTexto='';filtroValesEstado='todos';filtroValesDistrito='todos';filtroValesFecha='todos'" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-black"><i class="fa-solid fa-eraser"></i> Limpiar filtros</button></div></div><div class="mb-6 p-5 rounded-2xl border border-violet-200 dark:border-violet-900/60 bg-violet-50/70 dark:bg-violet-950/20"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-xl bg-violet-600 text-white flex items-center justify-center shrink-0"><i class="fa-solid fa-link"></i></div><div class="min-w-0"><div class="font-black text-sm">Vincular un vale existente a una venta</div><div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Si eliminaste por error el registro de un vale, puedes volver a crearlo usando exactamente el mismo código y asociarlo al pedido original.</div></div></div><div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr_auto] gap-3 mt-4 items-end"><div><label class="block text-[10px] uppercase tracking-wider font-black mb-1">Código original</label><input x-model="valeReponerCodigo" @input="valeReponerCodigo=normalizarCodigoVale(valeReponerCodigo)" maxlength="20" placeholder="PS-26-XXXXXXX" class="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800 font-mono font-black uppercase"></div><div><label class="block text-[10px] uppercase tracking-wider font-black mb-1">Venta / pedido</label><select x-model="valeReponerVentaGrupoId" class="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800 font-bold"><option value="">Selecciona la venta</option><template x-for="v in ventasRegistradas.filter(x => x.ventaGrupoId && x.clienteNombre).filter((v,i,a)=>a.findIndex(z=>String(z.ventaGrupoId)===String(v.ventaGrupoId))===i)" :key="'vale-link-'+v.ventaGrupoId"><option :value="v.ventaGrupoId" x-text="'#'+(v.comprobanteNumero||'—')+' · '+(v.clienteNombre||'Cliente')+' · '+(v.distrito||'')"></option></template></select></div><button @click="vincularValeExistente()" type="button" class="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-black text-xs"><i class="fa-solid fa-link mr-1"></i>Vincular vale</button></div></div><div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700"><table class="w-full text-left text-xs"><thead class="bg-slate-900 text-white"><tr><th class="px-4 py-4">Vale</th><th class="px-4 py-4">Cliente</th><th class="px-4 py-4">Contacto</th><th class="px-4 py-4">Distrito</th><th class="px-4 py-4">Vence</th><th class="px-4 py-4">Estado</th><th class="px-4 py-4 text-right">Acciones</th></tr></thead><tbody><template x-for="vale in valesFiltrados()" :key="vale.codigo"><tr class="border-t border-slate-100 dark:border-slate-800"><td class="px-4 py-4"><div class="font-mono font-black text-yellow-600" x-text="vale.codigo"></div><div class="text-[9px] text-slate-400" x-text="vale.creadoEn ? new Date(vale.creadoEn).toLocaleString('es-PE') : '—'"></div></td><td class="px-4 py-4 font-black" x-text="vale.clienteNombre || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.clienteTelefono || '—'"></td><td class="px-4 py-4" x-text="vale.distrito || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.fechaVencimiento || '—'"></td><td class="px-4 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-black" :class="estadoValeVisual(vale)==='Disponible'?'bg-emerald-100 text-emerald-700':estadoValeVisual(vale)==='Usado'?'bg-blue-100 text-blue-700':estadoValeVisual(vale)==='Reservado'?'bg-violet-100 text-violet-700':'bg-rose-100 text-rose-700'" x-text="estadoValeVisual(vale)"></span></td><td class="px-4 py-4"><div class="flex justify-end gap-2"><button @click="copiarCodigoValeDesdeRegistro(vale.codigo)" class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-700" title="Copiar código"><i class="fa-solid fa-copy"></i></button><button @click="verValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-blue-700 text-white" title="Ver y descargar vale"><i class="fa-solid fa-image"></i></button><button @click="imprimirValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-orange-500 text-white" title="Imprimir vale"><i class="fa-solid fa-print"></i></button><button @click="eliminarValePromocional(vale.codigo)" class="w-9 h-9 rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-500 hover:text-white" title="Eliminar vale"><i class="fa-solid fa-trash"></i></button></div></td></tr></template><tr x-show="!valesFiltrados().length"><td colspan="7" class="px-6 py-14 text-center"><div class="text-4xl">🐾</div><div class="font-black text-lg mt-2">No encontramos vales</div></td></tr></tbody></table></div><div class="mt-6 p-4 rounded-2xl border border-orange-200 bg-orange-50 dark:bg-orange-950/20 text-xs"><b>Almacenamiento:</b> los vales se guardan en <code>valesPromocionales</code> de Firebase y se gestionan desde esta pestaña, no desde Admin.</div></div></div></div>
+</div><div x-show="activeTab === 'vales'" x-transition class="inventory-section"><div class="rounded-3xl overflow-hidden border border-blue-200 dark:border-blue-900/50 bg-white dark:bg-slate-900 shadow-xl"><div class="p-6 md:p-7 bg-gradient-to-br from-blue-800 to-blue-600 text-white relative overflow-hidden"><div class="absolute -right-8 -top-8 text-[130px] opacity-10">🐾</div><div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5"><div><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-black uppercase tracking-widest"><i class="fa-solid fa-ticket"></i> Centro de vales</div><h2 class="text-3xl font-black mt-3">Vales promocionales</h2><p class="text-sm text-blue-100 mt-1 max-w-2xl">Administra aquí todos los vales emitidos. Admin ya no contiene el historial de vales.</p></div><div class="flex flex-wrap gap-2"><button @click="cargarValesPromocionales()" class="px-4 py-3 rounded-xl bg-white/15 font-black text-xs"><i class="fa-solid fa-rotate"></i> Actualizar</button><button @click="exportarValesCSV()" class="px-4 py-3 rounded-xl bg-white text-blue-800 font-black text-xs"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button></div></div></div><div class="p-5 md:p-7"><div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6"><div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800"><div class="text-[10px] uppercase font-black text-slate-400">Total</div><div class="text-2xl font-black" x-text="valesPromocionalesData.length"></div></div><div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20"><div class="text-[10px] uppercase font-black text-emerald-600">Disponibles</div><div class="text-2xl font-black text-emerald-600" x-text="contarValesEstado('Disponible')"></div></div><div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/20"><div class="text-[10px] uppercase font-black text-blue-600">Usados</div><div class="text-2xl font-black text-blue-600" x-text="contarValesEstado('Usado')"></div></div><div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/20"><div class="text-[10px] uppercase font-black text-rose-600">Vencidos</div><div class="text-2xl font-black text-rose-600" x-text="contarValesEstado('Vencido')"></div></div><div class="p-4 rounded-2xl bg-violet-50 dark:bg-violet-950/20"><div class="text-[10px] uppercase font-black text-violet-600">Encontrados</div><div class="text-2xl font-black text-violet-600" x-text="valesFiltrados().length"></div></div></div><div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 mb-6"><div class="flex items-center gap-2 mb-4 font-black"><i class="fa-solid fa-magnifying-glass text-orange-500"></i> Buscador profesional</div><div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3"><div class="relative xl:col-span-2"><i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroValesTexto" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm" placeholder="Buscar por código, DNI, cliente, teléfono o distrito..."></div><div class="relative"><i class="fa-solid fa-id-card absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i><input x-model="filtroValesDni" @input="filtroValesDni=normalizarDniVale(filtroValesDni)" inputmode="numeric" maxlength="12" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm" placeholder="Filtrar por DNI..."></div><select x-model="filtroValesEstado" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los estados</option><option value="disponible">Disponibles</option><option value="usado">Usados</option><option value="vencido">Vencidos</option><option value="reservado">Reservados</option></select><select x-model="filtroValesDistrito" class="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-bold text-sm"><option value="todos">Todos los distritos</option><template x-for="d in distritosValesDisponibles()" :key="d"><option :value="d" x-text="d"></option></template></select></div><div class="flex flex-wrap gap-2 mt-3"><select x-model="filtroValesFecha" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-bold"><option value="todos">Cualquier vencimiento</option><option value="7">Vencen en 7 días</option><option value="30">Vencen en 30 días</option><option value="vencidos">Ya vencidos</option></select><button @click="filtroValesTexto='';filtroValesDni='';filtroValesEstado='todos';filtroValesDistrito='todos';filtroValesFecha='todos'" class="px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-xs font-black"><i class="fa-solid fa-eraser"></i> Limpiar filtros</button></div></div><div class="mb-6 p-5 rounded-2xl border border-violet-200 dark:border-violet-900/60 bg-violet-50/70 dark:bg-violet-950/20"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-xl bg-violet-600 text-white flex items-center justify-center shrink-0"><i class="fa-solid fa-link"></i></div><div class="min-w-0"><div class="font-black text-sm">Vincular un vale existente a una venta</div><div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Si eliminaste por error el registro de un vale, puedes volver a crearlo usando exactamente el mismo código y asociarlo al pedido original.</div></div></div><div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr_auto] gap-3 mt-4 items-end"><div><label class="block text-[10px] uppercase tracking-wider font-black mb-1">Código original</label><input x-model="valeReponerCodigo" @input="valeReponerCodigo=normalizarCodigoVale(valeReponerCodigo)" maxlength="20" placeholder="PS-26-XXXXXXX" class="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800 font-mono font-black uppercase"></div><div><label class="block text-[10px] uppercase tracking-wider font-black mb-1">Venta / pedido</label><select x-model="valeReponerVentaGrupoId" class="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800 font-bold"><option value="">Selecciona la venta</option><template x-for="v in ventasRegistradas.filter(x => x.ventaGrupoId && x.clienteNombre).filter((v,i,a)=>a.findIndex(z=>String(z.ventaGrupoId)===String(v.ventaGrupoId))===i)" :key="'vale-link-'+v.ventaGrupoId"><option :value="v.ventaGrupoId" x-text="'#'+(v.comprobanteNumero||'—')+' · '+(v.clienteNombre||'Cliente')+' · '+(v.distrito||'')"></option></template></select></div><button @click="vincularValeExistente()" type="button" class="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-black text-xs"><i class="fa-solid fa-link mr-1"></i>Vincular vale</button></div></div><div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700"><table class="w-full text-left text-xs"><thead class="bg-slate-900 text-white"><tr><th class="px-4 py-4">Vale</th><th class="px-4 py-4">Cliente</th><th class="px-4 py-4">DNI</th><th class="px-4 py-4">Contacto</th><th class="px-4 py-4">Distrito</th><th class="px-4 py-4">Vence</th><th class="px-4 py-4">Estado</th><th class="px-4 py-4 text-right">Acciones</th></tr></thead><tbody><template x-for="vale in valesFiltrados()" :key="vale.codigo"><tr class="border-t border-slate-100 dark:border-slate-800"><td class="px-4 py-4"><div class="font-mono font-black text-yellow-600" x-text="vale.codigo"></div><div class="text-[9px] text-slate-400" x-text="vale.creadoEn ? new Date(vale.creadoEn).toLocaleString('es-PE') : '—'"></div></td><td class="px-4 py-4 font-black" x-text="vale.clienteNombre || '—'"></td><td class="px-4 py-4 font-mono font-bold" x-text="vale.numeroDocumento || vale.dni || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.clienteTelefono || '—'"></td><td class="px-4 py-4" x-text="vale.distrito || '—'"></td><td class="px-4 py-4 font-bold" x-text="vale.fechaVencimiento || '—'"></td><td class="px-4 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-black" :class="estadoValeVisual(vale)==='Disponible'?'bg-emerald-100 text-emerald-700':estadoValeVisual(vale)==='Usado'?'bg-blue-100 text-blue-700':estadoValeVisual(vale)==='Reservado'?'bg-violet-100 text-violet-700':'bg-rose-100 text-rose-700'" x-text="estadoValeVisual(vale)"></span></td><td class="px-4 py-4"><div class="flex justify-end gap-2"><button @click="copiarCodigoValeDesdeRegistro(vale.codigo)" class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-700" title="Copiar código"><i class="fa-solid fa-copy"></i></button><button @click="verValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-blue-700 text-white" title="Ver y descargar vale"><i class="fa-solid fa-image"></i></button><button @click="imprimirValeDesdeRegistro(vale)" class="w-9 h-9 rounded-lg bg-orange-500 text-white" title="Imprimir vale"><i class="fa-solid fa-print"></i></button><button @click="eliminarValePromocional(vale.codigo)" class="w-9 h-9 rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-500 hover:text-white" title="Eliminar vale"><i class="fa-solid fa-trash"></i></button></div></td></tr></template><tr x-show="!valesFiltrados().length"><td colspan="7" class="px-6 py-14 text-center"><div class="text-4xl">🐾</div><div class="font-black text-lg mt-2">No encontramos vales</div></td></tr></tbody></table></div><div class="mt-6 p-4 rounded-2xl border border-orange-200 bg-orange-50 dark:bg-orange-950/20 text-xs"><b>Almacenamiento:</b> los vales se guardan en <code>valesPromocionales</code> de Firebase y se gestionan desde esta pestaña, no desde Admin.</div></div></div></div>
 </main></div></div>
 <div class="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 z-[96]" style="display:none;" x-cloak x-show="modalSeguimientoPedido" x-transition.opacity>
   <div class="w-full max-w-3xl ps-admin-track">
